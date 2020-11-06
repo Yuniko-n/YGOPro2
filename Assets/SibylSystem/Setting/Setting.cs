@@ -246,6 +246,7 @@ public class Setting : WindowServant2D
 
     void onClickExit()
     {
+        Program.I().SaveConfig();
         hide();
     }
 

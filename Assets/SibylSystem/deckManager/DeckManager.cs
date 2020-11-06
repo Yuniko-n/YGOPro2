@@ -315,6 +315,7 @@ public class DeckManager : ServantWithCardDescription
         {
             returnAction();
         }
+        Program.I().SaveConfig();
     }
 
     void sort()
