@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -1207,6 +1208,21 @@ public class Ocgcore : ServantWithCardDescription
         Packages.Add(p);
     }
 
+    public IEnumerator BGMHandler()
+    {
+        if (Program.I().room.duelEnded) {
+            yield break;
+        } else if (result == duelResult.disLink && life_0 >= life_1 * 2) {
+            BGMController.Instance.StartBGM(BGMController.BGMType.advantage);
+        } else if (result == duelResult.disLink && life_1 >= life_0 * 2) {
+            BGMController.Instance.StartBGM(BGMController.BGMType.disadvantage);
+        } else if(result == duelResult.disLink) {
+            BGMController.Instance.StartBGM(BGMController.BGMType.duel);
+        }
+
+        yield return new WaitForSeconds(0.125f);
+    }
+
     //handle messages
     enum autoForceChainHandlerType
     {
@@ -1275,11 +1291,13 @@ public class Ocgcore : ServantWithCardDescription
                 keys.Insert(0, currentMessageIndex);
                 if (player == 2)
                 {
+                    BGMController.Instance.StartBGM(BGMController.BGMType.lose);
                     result = duelResult.draw;
                     printDuelLog(InterString.Get("游戏平局！"));
                 }
                 else if (player == 0 || winType == 4)
                 {
+                    BGMController.Instance.StartBGM(BGMController.BGMType.win);
                     result = duelResult.win;
                     if (cookie_matchKill > 0)
                     {
@@ -1294,6 +1312,7 @@ public class Ocgcore : ServantWithCardDescription
                 }
                 else
                 {
+                    BGMController.Instance.StartBGM(BGMController.BGMType.lose);
                     result = duelResult.lose;
                     if (cookie_matchKill > 0)
                     {
@@ -1308,6 +1327,7 @@ public class Ocgcore : ServantWithCardDescription
                 }
                 break;
             case GameMessage.Start:
+                BGMController.Instance.StartBGM(BGMController.BGMType.duel);
                 confirmedCards.Clear();
                 gameField.currentPhase = GameField.ph.dp;
                 result = duelResult.disLink;
@@ -1689,6 +1709,7 @@ public class Ocgcore : ServantWithCardDescription
                 {
                     life_1 -= val;
                 }
+                BGMController.Instance.StartCoroutine(BGMHandler());
                 break;
             case GameMessage.PayLpCost:
                 player = localPlayer(r.ReadByte());
@@ -1710,6 +1731,7 @@ public class Ocgcore : ServantWithCardDescription
                 {
                     life_1 -= val;
                 }
+                BGMController.Instance.StartCoroutine(BGMHandler());
                 break;
             case GameMessage.Recover:
                 ES_hint = InterString.Get("玩家生命值回复时");
@@ -1732,6 +1754,7 @@ public class Ocgcore : ServantWithCardDescription
                 {
                     life_1 += val;
                 }
+                BGMController.Instance.StartCoroutine(BGMHandler());
                 break;
             case GameMessage.LpUpdate:
                 player = localPlayer(r.ReadByte());
@@ -1753,6 +1776,7 @@ public class Ocgcore : ServantWithCardDescription
                 {
                     life_1 = val;
                 }
+                BGMController.Instance.StartCoroutine(BGMHandler());
                 break;
             case GameMessage.RandomSelected:
                 player = localPlayer(r.ReadByte());

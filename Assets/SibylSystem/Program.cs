@@ -864,17 +864,17 @@ public class Program : MonoBehaviour
             aiRoom.hide();
         }
 
-        if (to == backGroundPic && backGroundPic.isShowed == false) backGroundPic.show();
-        if (to == menu && menu.isShowed == false) menu.show();
-        if (to == setting && setting.isShowed == false) setting.show();
-        if (to == selectDeck && selectDeck.isShowed == false) selectDeck.show();
-        if (to == room && room.isShowed == false) room.show();
-        if (to == deckManager && deckManager.isShowed == false) deckManager.show();
-        if (to == ocgcore && ocgcore.isShowed == false) ocgcore.show();
-        if (to == selectServer && selectServer.isShowed == false) selectServer.show();
-        if (to == selectReplay && selectReplay.isShowed == false) selectReplay.show();
-        if (to == puzzleMode && puzzleMode.isShowed == false) puzzleMode.show();
-        if (to == aiRoom && aiRoom.isShowed == false) aiRoom.show();
+        if (to == backGroundPic && backGroundPic.isShowed == false) { backGroundPic.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == menu && menu.isShowed == false) { menu.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == setting && setting.isShowed == false) { setting.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == selectDeck && selectDeck.isShowed == false) { selectDeck.show(); BGMController.Instance.StartBGM(BGMController.BGMType.deck); }
+        if (to == room && room.isShowed == false) { room.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == deckManager && deckManager.isShowed == false) { deckManager.show(); BGMController.Instance.StartBGM(BGMController.BGMType.deck); }
+        if (to == ocgcore && ocgcore.isShowed == false) { ocgcore.show(); BGMController.Instance.StartBGM(BGMController.BGMType.duel); }
+        if (to == selectServer && selectServer.isShowed == false) { selectServer.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == selectReplay && selectReplay.isShowed == false) { selectReplay.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == puzzleMode && puzzleMode.isShowed == false) { puzzleMode.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == aiRoom && aiRoom.isShowed == false) { aiRoom.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
 
     }
 
