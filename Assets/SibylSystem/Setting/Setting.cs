@@ -8,6 +8,8 @@ public class Setting : WindowServant2D
 
     public UIToggle isBGMMute;
 
+    public bool ShowFPS;
+
     public override void initialize()
     {
         gameObject = createWindow(this, Program.I().new_ui_setting);
@@ -31,6 +33,10 @@ public class Setting : WindowServant2D
         isBGMMute = UIHelper.getByName<UIToggle>(gameObject, "muteBGM");
         UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
         UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
+
+        //FPS
+        UIHelper.registEvent(gameObject, "ShowFPS_", onShowFPS);
+        ShowFPS = UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value = UIHelper.fromStringToBool(Config.Get("ShowFPS_", "0"));
 
         if (QualitySettings.GetQualityLevel()<3)
         {
@@ -113,6 +119,12 @@ public class Setting : WindowServant2D
             Program.I().bgm.changeBGMVol(BGMValue());
         }
         catch { }
+    }
+
+    private void onShowFPS()
+    {
+        ShowFPS = !ShowFPS;
+        save();
     }
 
     private void readVales()
@@ -300,6 +312,7 @@ public class Setting : WindowServant2D
         Config.Set("handmPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handmPosition_").value));
         Config.Set("spyer_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "spyer_").value));
         Config.Set("muteBGMAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value));
+        Config.Set("ShowFPS_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value));
         if (UIHelper.getByName<UIToggle>(gameObject, "high_").value)
         {
             QualitySettings.SetQualityLevel(5);

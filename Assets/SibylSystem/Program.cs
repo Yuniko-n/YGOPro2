@@ -279,6 +279,7 @@ public class Program : MonoBehaviour
 
         go(1, () =>
         {
+            GAME_VERSION = PRO_VERSION();
             UIHelper.iniFaces();
             initializeALLcameras();
             fixALLcamerasPreFrame();
@@ -882,6 +883,14 @@ public class Program : MonoBehaviour
 
     #region MonoBehaviors
 
+    private float LastUpdateShowTime = 0f;
+
+    private float UpdateShowDeltaTime = 1f;  //更新帧率
+
+    private int FrameUpdate = 0;
+
+    private float FPS = 0;
+
     void Start()
     {
         if (Screen.width < 100 || Screen.height < 100)
@@ -894,6 +903,8 @@ public class Program : MonoBehaviour
         instance = this;
         initialize();
         go(500, () => { gameStart(); });
+
+        LastUpdateShowTime = Time.realtimeSinceStartup;
     }
 
     int preWid = 0;
@@ -905,14 +916,27 @@ public class Program : MonoBehaviour
     void OnGUI()
     {
         if (Event.current.type == EventType.ScrollWheel)
+        {
             _padScroll = -Event.current.delta.y / 100;
+        }
         else
+        {
             _padScroll = 0;
+        }
+
+        try { if (!setting.ShowFPS) { GUI.Label(new Rect(10, 5, 200, 200), "[Ver " + GAME_VERSION + "] FPS: " + FPS.ToString("000")); } } catch{}
     }
 
     void Update()
     {
-       
+        FrameUpdate++;
+        if(Time.realtimeSinceStartup - LastUpdateShowTime >= UpdateShowDeltaTime)
+        {
+            FPS = FrameUpdate / (Time.realtimeSinceStartup - LastUpdateShowTime);
+            FrameUpdate = 0;
+            LastUpdateShowTime = Time.realtimeSinceStartup;
+        }
+
         if (preWid != Screen.width || preheight != Screen.height)
         {
             Resources.UnloadUnusedAssets();
@@ -1061,6 +1085,14 @@ public class Program : MonoBehaviour
         cardDescription.save();
         setting.save();
         setting.saveWhenQuit();
+    }
+
+    public static string GAME_VERSION;
+    public static string PRO_VERSION()
+    {
+        string version = Config.ClientVersion.ToString("X");
+        string VERSION_ = version.Substring(0, 1) + ".0" + version.Substring(1, 2) + "." + version.Substring(3, 1);
+        return VERSION_;
     }
 
     #endregion
