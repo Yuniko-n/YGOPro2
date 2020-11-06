@@ -164,6 +164,59 @@ public class BGMController : MonoBehaviour
         }
     }
 
+    public bool PlayChant(CHANT chant, int code)
+    {
+        bool SFX = false;
+        if (code == 0 ) return SFX;
+        switch (chant)
+        {
+            case CHANT.SUMMON:
+                SFX = PlayChant("sound/chants/summon/" + code.ToString());
+                if (!SFX)
+                    SFX = PlayChant("sound/chants/summon/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                if (!SFX)
+                    SFX = PlayChant("sound/chants/" + code.ToString());
+                if (!SFX)
+                    SFX = PlayChant("sound/chants/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                break;
+            case CHANT.ATTACK:
+                SFX = PlayChant("sound/chants/attack/" + code.ToString());
+                if (!SFX)
+                    SFX = PlayChant("sound/chants/attack/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                break;
+            case CHANT.ACTIVATE:
+                SFX = PlayChant("sound/chants/activate/" + code.ToString());
+                if (!SFX)
+                    SFX = PlayChant("sound/chants/activate/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                break;
+        }
+        return SFX;
+    }
+
+    public bool PlayChant(string name)
+    {
+        string path =  name + ".mp3";
+        if (File.Exists(path) && audioClip.name != Path.GetFileName(path))
+        {
+            IsPlaying = false;
+            PlayMusic(path);
+            return true;
+        }
+        path = name + ".wav";
+        if (File.Exists(path))
+        {
+            PlaySound(path);
+            return true;
+        }
+        path = name + ".ogg";
+        if (File.Exists(path))
+        {
+            PlaySound(path);
+            return true;
+        }
+        return false;
+    }
+
     public void RefreshBGMDir()
     {
         advantage = new List<string>();

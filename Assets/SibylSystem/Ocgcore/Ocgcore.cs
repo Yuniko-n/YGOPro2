@@ -4530,7 +4530,7 @@ public class Ocgcore : ServantWithCardDescription
                 if (card != null)
                 {
                     card.set_code(code);
-                    UIHelper.playSound("summon", 1f);
+                    if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("summon", 1f);
                     if (Program.I().setting.setting.Vsum.value == true)
                     {
                         GameObject mod = Program.I().mod_ocgcore_ss_spsummon_normal;
@@ -4573,7 +4573,7 @@ public class Ocgcore : ServantWithCardDescription
                             {
                                 mod = Program.I().mod_ocgcore_ss_spsummon_ronghe;
                             }
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Synchro))
                         {
@@ -4581,7 +4581,7 @@ public class Ocgcore : ServantWithCardDescription
                             {
                                 mod = Program.I().mod_ocgcore_ss_spsummon_tongtiao;
                             }
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
 
                         }
                         else if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Ritual))
@@ -4590,7 +4590,7 @@ public class Ocgcore : ServantWithCardDescription
                             {
                                 mod = Program.I().mod_ocgcore_ss_spsummon_yishi;
                             }
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Link))
                         {
@@ -4602,11 +4602,11 @@ public class Ocgcore : ServantWithCardDescription
                                 card.animationEffect(Program.I().mod_ocgcore_ss_spsummon_link);
                                 mod.GetComponent<partical_scaler>().scale = Mathf.Clamp(card.get_data().Attack, 0, 3500) / 3000f * 3f;
                             }
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else
                         {
-                            UIHelper.playSound("specialsummon", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon", 1f);
                             mod.GetComponent<partical_scaler>().scale = Mathf.Clamp(card.get_data().Attack, 0, 3500) / 3000f * 3f;
                         }
                         card.animationEffect(mod);
@@ -4615,19 +4615,19 @@ public class Ocgcore : ServantWithCardDescription
                     {
                         if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Fusion))
                         {
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Synchro))
                         {
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else if (GameStringHelper.differ(card.get_data().Type, (long)CardType.Ritual))
                         {
-                            UIHelper.playSound("specialsummon2", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon2", 1f);
                         }
                         else
                         {
-                            UIHelper.playSound("specialsummon", 1f);
+                            if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("specialsummon", 1f);
                         }
                     }
                     card.animation_show_off( true);
@@ -4644,7 +4644,7 @@ public class Ocgcore : ServantWithCardDescription
                 if (card != null)
                 {
                     card.set_code(code);
-                    UIHelper.playSound("summon", 1f);
+                    if (!BGMController.Instance.PlayChant(BGMController.CHANT.SUMMON, code)) UIHelper.playSound("summon", 1f);
                     if (Program.I().setting.setting.Vflip.value == true)
                     {
                         GameObject mod = Program.I().mod_ocgcore_ss_spsummon_normal;
@@ -4663,7 +4663,7 @@ public class Ocgcore : ServantWithCardDescription
                 if (card != null)
                 {
                     card.set_code(code);
-                    UIHelper.playSound("activate", 1);
+                    if (!BGMController.Instance.PlayChant(BGMController.CHANT.ACTIVATE, code)) UIHelper.playSound("activate", 1);
                     card.animation_show_off( false);
                     if ((card.get_data().Type & (int)CardType.Monster) > 0)
                     {
@@ -5016,11 +5016,13 @@ public class Ocgcore : ServantWithCardDescription
                 Sleep(10);
                 break;
             case GameMessage.Attack:
-                UIHelper.playSound("attack", 1);
+                //UIHelper.playSound("attack", 1);
                 GPS p1 = r.ReadGPS();
                 GPS p2 = r.ReadGPS();
                 VectorAttackCard = get_point_worldposition(p1);
                 VectorAttackTarget = Vector3.zero;
+                card = GCS_cardGet(p1, false);
+                if (!BGMController.Instance.PlayChant(BGMController.CHANT.ATTACK, card.get_data().Id)) UIHelper.playSound("attack", 1);
                 if (p2.location == 0)
                 {
                     bool attacker_bool_me = (p1.controller == 0);
