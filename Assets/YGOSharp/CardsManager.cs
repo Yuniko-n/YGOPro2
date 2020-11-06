@@ -18,9 +18,20 @@ namespace YGOSharp
 
         internal static void initialize(string databaseFullPath)
         {
+            #if UNITY_STANDALONE_WIN     //Windows
+                string platform = "Windows";
+            #elif UNITY_STANDALONE_OSX   //MacOS
+                string platform = "Mac OS X";
+            #elif UNITY_STANDALONE_LINUX //Linux
+                string platform = "Linux";
+            #elif UNITY_ANDROID          //Android
+                string platform = "Android";
+            #elif UNITY_IPHONE           //iPhone
+                string platform = "iPhone";
+            #endif
             nullName = InterString.Get("未知卡片");
             nullString = "";
-            nullString += "欢迎使用 YGOPro2";
+            nullString += "欢迎使用：\r\nYGOPro2 For " + platform;
             nullString += "\r\n\r\n";
             nullString += "官方网站：";
             nullString += "\r\n";
