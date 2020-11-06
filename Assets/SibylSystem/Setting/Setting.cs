@@ -6,6 +6,8 @@ public class Setting : WindowServant2D
 
     public LAZYsetting setting;
 
+    public UIToggle isBGMMute;
+
     public override void initialize()
     {
         gameObject = createWindow(this, Program.I().new_ui_setting);
@@ -24,6 +26,12 @@ public class Setting : WindowServant2D
         UIHelper.getByName<UIToggle>(gameObject, "spyer_").value = UIHelper.fromStringToBool(Config.Get("spyer_", "1"));
         UIHelper.getByName<UIToggle>(gameObject, "resize_").value = UIHelper.fromStringToBool(Config.Get("resize_", "0"));
         UIHelper.getByName<UIToggle>(gameObject, "longField_").value = UIHelper.fromStringToBool(Config.Get("longField_", "0"));
+
+        //BGM
+        isBGMMute = UIHelper.getByName<UIToggle>(gameObject, "muteBGM");
+        UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
+        UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
+
         if (QualitySettings.GetQualityLevel()<3)
         {
             UIHelper.getByName<UIToggle>(gameObject, "high_").value = false;
@@ -44,6 +52,7 @@ public class Setting : WindowServant2D
         UIHelper.registEvent(gameObject, "size_", onChangeSize);
         //UIHelper.registEvent(gameObject, "alpha_", onChangeAlpha);
         UIHelper.registEvent(gameObject, "vSize_", onChangeVsize);
+        UIHelper.registEvent(gameObject, "muteBGM", muteBGM);
         sliderSize = UIHelper.getByName<UISlider>(gameObject, "size_");
         //sliderAlpha = UIHelper.getByName<UISlider>(gameObject, "alpha_");
         sliderVsize = UIHelper.getByName<UISlider>(gameObject, "vSize_");
@@ -78,10 +87,39 @@ public class Setting : WindowServant2D
         setScreenSizeValue();
     }
 
+    private void muteBGM()
+    {
+        if (!isBGMMute.value)
+        {
+            if (Program.I().bgm != null)
+            {
+                Program.I().bgm.PlayNext();
+            }
+        }
+        else
+        {
+            if (Program.I().bgm != null && Program.I().bgm.audioSource != null)
+            {
+                Program.I().bgm.audioSource.Stop();
+            }
+        }
+        save();
+    }
+
+    private void onVolChange()
+    {
+        try
+        {
+            Program.I().bgm.changeBGMVol(BGMValue());
+        }
+        catch { }
+    }
+
     private void readVales()
     {
         try
         {
+            setting.sliderBGMVolum.forceValue(((float)(int.Parse(Config.Get("BGMvol_", "750")))) / 1000f);
             setting.sliderVolum.forceValue(((float)(int.Parse(Config.Get("vol_", "750")))) / 1000f);
             setting.sliderSize.forceValue(((float)(int.Parse(Config.Get("size_", "500")))) / 1000f);
             setting.sliderSizeDrawing.forceValue(((float)(int.Parse(Config.Get("vSize_", "500")))) / 1000f);
@@ -201,11 +239,6 @@ public class Setting : WindowServant2D
         }
     }
 
-    public float vol() 
-    {
-        return UIHelper.getByName<UISlider>(gameObject, "vol_").value;
-    }
-
     public override void preFrameFunction()
     {
         base.preFrameFunction();
@@ -236,6 +269,7 @@ public class Setting : WindowServant2D
 
     public void saveWhenQuit()
     {
+        Config.Set("BGMvol_", ((int)(UIHelper.getByName<UISlider>(gameObject, "BGMvol_").value * 1000)).ToString());
         Config.Set("vol_", ((int)(UIHelper.getByName<UISlider>(gameObject, "vol_").value * 1000)).ToString());
         Config.Set("size_", ((int)(UIHelper.getByName<UISlider>(gameObject, "size_").value * 1000)).ToString());
         Config.Set("vSize_", ((int)(UIHelper.getByName<UISlider>(gameObject, "vSize_").value * 1000)).ToString());
@@ -264,6 +298,7 @@ public class Setting : WindowServant2D
         Config.Set("handPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handPosition_").value));
         Config.Set("handmPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handmPosition_").value));
         Config.Set("spyer_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "spyer_").value));
+        Config.Set("muteBGMAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value));
         if (UIHelper.getByName<UIToggle>(gameObject, "high_").value)
         {
             QualitySettings.SetQualityLevel(5);
@@ -272,6 +307,11 @@ public class Setting : WindowServant2D
         {
             QualitySettings.SetQualityLevel(0);
         }
+    }
+
+    public float BGMValue()
+    {
+        return UIHelper.getByName<UISlider>(gameObject, "BGMvol_").value;
     }
 
     public float soundValue()

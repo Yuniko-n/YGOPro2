@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class LAZYsetting : MonoBehaviour {
+    public UISlider sliderBGMVolum;
     public UISlider sliderVolum;
     public UISlider sliderSizeDrawing;
     public UISlider sliderSize;
