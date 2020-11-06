@@ -783,7 +783,7 @@ public static class UIHelper
             {
                 if (fileInfos[i].Name.Length > 4)
                 {
-                    if (fileInfos[i].Name.Substring(fileInfos[i].Name.Length - 4, 4) == ".png")
+                    if (fileInfos[i].Name.Substring(fileInfos[i].Name.Length - 4, 4) == ".png" || fileInfos[i].Name.Substring(fileInfos[i].Name.Length - 4, 4) == ".jpg")
                     {
                         string name = fileInfos[i].Name.Substring(0, fileInfos[i].Name.Length - 4);
                         if (!faces.ContainsKey(name))
@@ -853,6 +853,34 @@ public static class UIHelper
         return pic;
     }
 
+    public static Texture2D getTexture2D(byte[] data) 
+    {
+        Texture2D pic = null;
+        try
+        {
+            pic = new Texture2D(1024, 600);
+            pic.LoadImage(data);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        return pic;
+    }
+
+    public static Texture2D getTexture2D(string path, string name)
+    {
+        Texture2D re = null;
+        if (File.Exists(path + name))
+        {
+            re = UIHelper.getTexture2D(path + name);
+        }
+        else
+        {
+            re = (Texture2D)Resources.Load(path + name.Substring(0, name.Length - 4));
+        }
+        return re;
+    }
 
     internal static void shiftButton(UIButton btn,bool enabled)
     {
@@ -985,30 +1013,30 @@ public static class UIHelper
         return xInfo.FullName.CompareTo(yInfo.FullName);
     }
 
-    internal static void playSound(string p, float val) 
+    internal static void playSound(string p, float val)
     {
-        if (Ocgcore.inSkiping) 
+        if (Ocgcore.inSkiping)
         {
             return;
         }
-        string path = "sound/" + p + ".mp3";
+        string path = "sound/" + p + ".ogg";
         if (File.Exists(path) == false)
         {
             path = "sound/" + p + ".wav";
         }
         if (File.Exists(path) == false)
         {
-            path = "sound/" + p + ".ogg";
+            path = "sound/" + p + ".mp3";
         }
         if (File.Exists(path) == false)
         {
             return;
         }
         path = Environment.CurrentDirectory.Replace("\\", "/") + "/" + path;
-        path = "file:///" + path;
+        path = new Uri(new Uri("file:///"), path).ToString();
         GameObject audio_helper = Program.I().ocgcore.create_s(Program.I().mod_audio_effect);
         audio_helper.GetComponent<audio_helper>().play(path, Program.I().setting.soundValue());
-        Program.I().destroy(audio_helper,5f);
+        Program.I().destroy(audio_helper, 5f);
     }
 
     internal static string getGPSstringLocation(GPS p1)

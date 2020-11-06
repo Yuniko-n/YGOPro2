@@ -900,7 +900,7 @@ public class GameTextureManager
         return ret;
     }
 
-    public static bool uiLoaded=false;
+    public static bool uiLoaded = false;
 
     public static Texture2D get(string name)
     {
@@ -923,58 +923,64 @@ public class GameTextureManager
             }
         }
         Texture2D re = null;
-        for (int i = 0; i < allUI.size; i++)
+        if (File.Exists("texture/ui/" + name + ".png"))
         {
-            if (allUI[i].name == name)
+            for (int i = 0; i < allUI.size; i++)
             {
-                re = allUI[i].data;
-                break;
+                if (allUI[i].name == name)
+                {
+                    re = allUI[i].data;
+                    break;
+                }
+            }
+            if (re == null)
+            {
             }
         }
-        if (re == null)
+        else
         {
+            re = (Texture2D)Resources.Load("texture/ui/" + name);
         }
         return re;
     }
 
-    public static UnityEngine.Color chainColor= UnityEngine.Color.white;
+    public static UnityEngine.Color chainColor = UnityEngine.Color.white;
 
     internal static void initialize()
     {
-        attack = UIHelper.getTexture2D("texture/duel/attack.png");
-        myBack = UIHelper.getTexture2D("texture/duel/me.jpg");
-        opBack = UIHelper.getTexture2D("texture/duel/opponent.jpg");
-        unknown = UIHelper.getTexture2D("texture/duel/unknown.jpg");
-        negated = UIHelper.getTexture2D("texture/duel/negated.png");
-        bar = UIHelper.getTexture2D("texture/duel/healthBar/bg.png");
-        exBar = UIHelper.getTexture2D("texture/duel/healthBar/excited.png");
-        time = UIHelper.getTexture2D("texture/duel/healthBar/t.png");
-        lp = UIHelper.getTexture2D("texture/duel/healthBar/lp.png");
-        L = UIHelper.getTexture2D("texture/duel/L.png");
-        R = UIHelper.getTexture2D("texture/duel/R.png");
-        LINK = UIHelper.getTexture2D("texture/duel/link.png");
-        LINKm = UIHelper.getTexture2D("texture/duel/linkMask.png");
-        Chain = UIHelper.getTexture2D("texture/duel/chain.png");
-        Mask = UIHelper.getTexture2D("texture/duel/mask.png");
+        attack = UIHelper.getTexture2D("texture/duel/", "attack.png");
+        myBack = UIHelper.getTexture2D("texture/duel/", "me.jpg");
+        opBack = UIHelper.getTexture2D("texture/duel/", "opponent.jpg");
+        unknown = UIHelper.getTexture2D("texture/duel/", "unknown.jpg");
+        negated = UIHelper.getTexture2D("texture/duel/", "negated.png");
 
+        L = UIHelper.getTexture2D("texture/duel/", "L.png");
+        R = UIHelper.getTexture2D("texture/duel/", "R.png");
+        LINK = UIHelper.getTexture2D("texture/duel/", "link.png");
+        LINKm = UIHelper.getTexture2D("texture/duel/", "linkMask.png");
+        Chain = UIHelper.getTexture2D("texture/duel/", "chain.png");
+        Mask = UIHelper.getTexture2D("texture/duel/", "mask.png");
 
-        nt = UIHelper.getTexture2D("texture/duel/phase/nt.png");
-        bp = UIHelper.getTexture2D("texture/duel/phase/bp.png");
-        ep = UIHelper.getTexture2D("texture/duel/phase/ep.png");
-        mp1 = UIHelper.getTexture2D("texture/duel/phase/mp1.png");
-        mp2 = UIHelper.getTexture2D("texture/duel/phase/mp2.png");
-        dp = UIHelper.getTexture2D("texture/duel/phase/dp.png");
-        sp = UIHelper.getTexture2D("texture/duel/phase/sp.png");
+        bar = UIHelper.getTexture2D("texture/duel/healthBar/", "bg.png");
+        exBar = UIHelper.getTexture2D("texture/duel/healthBar/", "excited.png");
+        time = UIHelper.getTexture2D("texture/duel/healthBar/", "t.png");
+        lp = UIHelper.getTexture2D("texture/duel/healthBar/", "lp.png");
 
-        phase = UIHelper.getTexture2D("texture/duel/phase/phase.png");
+        nt = UIHelper.getTexture2D("texture/duel/phase/", "nt.png");
+        bp = UIHelper.getTexture2D("texture/duel/phase/", "bp.png");
+        ep = UIHelper.getTexture2D("texture/duel/phase/", "ep.png");
+        mp1 = UIHelper.getTexture2D("texture/duel/phase/", "mp1.png");
+        mp2 = UIHelper.getTexture2D("texture/duel/phase/", "mp2.png");
+        dp = UIHelper.getTexture2D("texture/duel/phase/", "dp.png");
+        sp = UIHelper.getTexture2D("texture/duel/phase/", "sp.png");
+        phase = UIHelper.getTexture2D("texture/duel/phase/", "phase.png");
+        rs = UIHelper.getTexture2D("texture/duel/phase/", "rs.png");
+        ts = UIHelper.getTexture2D("texture/duel/phase/", "ts.png");
 
-        rs = UIHelper.getTexture2D("texture/duel/phase/rs.png");
-        ts = UIHelper.getTexture2D("texture/duel/phase/ts.png");
-
-        N = new Texture2D(10,10);
-        for (int i = 0; i < 10; i++)    
+        N = new Texture2D(10, 10);
+        for (int i = 0; i < 10; i++)
         {
-            for (int a = 0; a < 10; a++)    
+            for (int a = 0; a < 10; a++)
             {
                 N.SetPixel(i, a, new UnityEngine.Color(0, 0, 0, 0));
             }
@@ -984,7 +990,7 @@ public class GameTextureManager
         {
             ColorUtility.TryParseHtmlString(File.ReadAllText("texture/duel/chainColor.txt"), out chainColor);
         }
-        catch (Exception)   
+        catch (Exception)
         {
 
         }
