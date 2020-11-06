@@ -289,6 +289,7 @@ public class Program : MonoBehaviour
         });
         go(300, () =>
         {
+            initPath();
             InterString.initialize("config/translation.conf");
             GameTextureManager.initialize();
             Config.initialize("config/config.conf");
@@ -404,6 +405,51 @@ public class Program : MonoBehaviour
 
         });
 
+    }
+
+    public void initPath()
+    {
+        //创建文件夹
+        List<string> Resource = new List<string>();
+        Resource.Add("cdb/");
+        Resource.Add("config/");
+        Resource.Add("deck/");
+        Resource.Add("data/");
+        Resource.Add("expansions/pics/field/");
+        Resource.Add("picture/card/");
+        Resource.Add("picture/cardIn8thEdition/");
+        Resource.Add("picture/closeup/");
+        Resource.Add("picture/field/");
+        Resource.Add("puzzle/");
+        Resource.Add("replay/");
+        Resource.Add("script/");
+        Resource.Add("texture/common/");
+        Resource.Add("texture/duel/healthBar/");
+        Resource.Add("texture/face/");
+        Resource.Add("texture/ui/");
+        foreach (string path in Resource)
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+        }
+
+        if (!File.Exists("texture/ui/config.txt"))
+        {
+            string txt = "gameButtonSign.color=3e4043FF\ngameChainCheckArea.color=16181bFF\nallUI.color=16181bFF\nList.color=16181bFF\nlable.color=FFFFFFFF\nlable.color.fadecolor=CCCCCCFF";
+            File.WriteAllText("texture/ui/config.txt", txt);
+        }
+        if (!File.Exists("texture/duel/chainColor.txt"))
+        {
+            string txt = "FFFF00";
+            File.WriteAllText("texture/duel/chainColor.txt", txt);
+        }
+        if (!File.Exists("texture/duel/healthBar/config.txt"))
+        {
+            string txt = "totalSize.width=370\ntotalSize.height=124\nplayerNameLable.x=202\nplayerNameLable.y=31\nplayerNameLable.width=300\nplayerNameLable.height=22\nplayerNameLable.color=FFFFFFFF\nplayerNameLable.alignment=0\nplayerNameLable.effect=1\nhealthLable.x=230.9\nhealthLable.y=60.9\nhealthLable.width=300\nhealthLable.height=32\nhealthLable.color=FFFFFFFF\nhealthLable.alignment=0\nhealthLable.effect=2\ntimeLable.x=217.1\ntimeLable.y=87.8\ntimeLable.width=300\ntimeLable.height=24\ntimeLable.color=FFDAACFF\ntimeLable.alignment=0\ntimeLable.effect=2\nhealth.x=231.2\nhealth.y=62\nhealth.width=220\nhealth.height=30\ntime.x=216.7\ntime.y=87.4\ntime.width=190\ntime.height=20\nface.x=61.5\nface.y=72.6\nface.size=70\nface.type=0";
+            File.WriteAllText("texture/duel/healthBar/config.txt", txt);
+        }
     }
 
     public GameObject mouseParticle;

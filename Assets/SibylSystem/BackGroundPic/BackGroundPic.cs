@@ -7,16 +7,35 @@ public class BackGroundPic : Servant
     public override void initialize()
     {
         backGround = create(Program.I().mod_simple_ngui_background_texture, Vector3.zero, Vector3.zero, false, Program.ui_back_ground_2d);
-        FileStream file = new FileStream("texture/common/desk.jpg", FileMode.Open, FileAccess.Read);
-        file.Seek(0, SeekOrigin.Begin);
-        byte[] data = new byte[file.Length];
-        file.Read(data, 0, (int)file.Length);
-        file.Close();
-        file.Dispose();
-        file = null;
-        Texture2D pic = new Texture2D(1024, 600);
-        pic.LoadImage(data);
+        string path = "texture/common/";
+        LoadPic();
+        if (File.Exists(path + "bg.png"))
+        {
+            LoadJpgOrPng(path + "bg.png");
+        }
+        else if (File.Exists(path + "desk.png"))
+        {
+            LoadJpgOrPng(path + "desk.png");
+        }
+        else if (File.Exists(path + "bg.jpg"))
+        {
+            LoadJpgOrPng(path + "bg.jpg");
+        }
+        else if (File.Exists(path + "desk.jpg"))
+        {
+            LoadJpgOrPng(path + "desk.jpg");
+        }
+    }
+
+    public void LoadPic()
+    {
+        Texture2D pic = (Texture2D)Resources.Load("bg_menu");
         backGround.GetComponent<UITexture>().mainTexture = pic;
+    }
+
+    public void LoadJpgOrPng(string fileName)
+    {
+        backGround.GetComponent<UITexture>().mainTexture = UIHelper.getTexture2D(fileName);
         backGround.GetComponent<UITexture>().depth = -100;
     }
 
