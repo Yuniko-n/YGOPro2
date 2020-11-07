@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using YGOSharp.Network.Enums;
 
 public class Room : WindowServantSP
@@ -95,8 +97,15 @@ public class Room : WindowServantSP
     {
         if (val != "")
         {
-            TcpHelper.CtosMessage_Chat(val);
-            //AddChatMsg(val, -1);
+            if (val == "/bgm" || val == "/BGM")
+            {
+                BGMController.Instance.PlayNext();
+            }
+            else
+            {
+                TcpHelper.CtosMessage_Chat(val);
+                //AddChatMsg(val, -1);
+            }
         }
     }
 
@@ -297,6 +306,192 @@ public class Room : WindowServantSP
                 break;
         }
         RMSshow_none(result);
+    }
+
+    public void StocMessage_RoomList(BinaryReader r)
+    {
+        //requires a dedicated button and a list to show rooms.
+            short count = BitConverter.ToInt16(r.ReadBytes(2), 0);
+            string roomname;
+            string player1 = "";
+            string player2 = "";
+            string hoststr=String.Empty;
+            List<string[]> roomList = new List<string[]>();
+            for (ushort i = 0; i < count; i++)
+            {
+                List<char> chars = new List<char>();
+                byte[] temp = r.ReadBytes(64);
+                roomname = Encoding.UTF8.GetString(temp);
+                roomname = roomname.Trim(new char[] { '\0' });
+                int room_status = Convert.ToInt16(BitConverter.ToString(r.ReadBytes(1), 0),16);
+                int room_duel_count = Convert.ToInt16(BitConverter.ToString(r.ReadBytes(1), 0),16);
+                int room_turn_count = Convert.ToInt16(BitConverter.ToString(r.ReadBytes(1), 0), 16);
+                temp = r.ReadBytes(128);
+                player1 = Encoding.UTF8.GetString(temp);
+                player1 = player1.Trim(new char[] { '\0' });
+                int player1_score = Convert.ToInt16(BitConverter.ToString(r.ReadBytes(1), 0));
+                int player1_lp = BitConverter.ToInt32(r.ReadBytes(4), 0);
+                temp = r.ReadBytes(128);
+                player2 = Encoding.UTF8.GetString(temp);
+                player2 = player2.Trim(new char[] { '\0' });
+                int player2_score = Convert.ToInt16(BitConverter.ToString(r.ReadBytes(1), 0));
+                int player2_lp = BitConverter.ToInt32(r.ReadBytes(4), 0);
+                if (room_status == 0)
+                {
+                    player1 = player1.Replace("???", " ");
+                    player2 = player2.Replace("???", " ");
+                }
+
+            string roomTag = RoomNameFormatter(roomname);
+            string[] strings = new string[]
+            {
+                    room_duel_count.ToString(),
+                    room_turn_count.ToString(),
+                    roomname,
+                    player1_score.ToString(),
+                    player1_lp.ToString(),
+                    player1,
+                    player2,
+                    player2_score.ToString(),
+                    player2_lp.ToString(),
+                    hoststr,
+                    room_status.ToString(),
+                    roomTag
+                };
+            switch (room_status)
+            {
+                case 0:
+                    {
+                        hoststr = "[EFD334][未开始][FFFFFF] " + strings[11] +"[FFFFFF]"+ strings[5] + " VS " + strings[6];
+                        break;
+                    }
+                case 1:
+                    {
+                        
+                        hoststr = "[A978ED][G:" + strings[0] + ",T:" + strings[1] + "][FFFFFF] " + strings[11] +"[FFFFFF]" + strings[5] + " VS " + strings[6];
+                        break;
+                    }
+                case 2:
+                    {
+                        hoststr = "[A978ED][G:" + strings[0] + ",Siding][FFFFFF] " + strings[11] + "[FFFFFF]" + strings[5] + " VS " + strings[6];
+                        break;
+                    }
+                default:
+                    {
+                        hoststr = String.Empty;
+                        break;
+                    }
+            }
+            strings[9] = hoststr;
+            roomList.Add(strings);
+        }
+        Program.I().roomList.UpdateList(roomList);
+        //Do something with the roomList.
+    }
+
+     string RoomNameFormatter(string roomname)
+    {
+        string roomTag=String.Empty;
+        List<string> tags = new List<string>();
+        if (Regex.IsMatch(roomname, @"^S,RANDOM#\d{1,}"))
+        {
+            roomTag = "[8AE57E][Duel] ";
+            return roomTag;
+        }
+        else if(Regex.IsMatch(roomname, @"^M,RANDOM#\d{1,}"))
+        {
+            roomTag = "[42C1EC][Match] ";
+            return roomTag;
+        }
+        else if(Regex.IsMatch(roomname, @"^AI#\S{0,},\d{1,}")|| Regex.IsMatch(roomname, @"^AI\S{0,}#\d{1,}"))
+        {
+            roomTag = "[5E71FF][AI] ";
+            return roomTag;
+        }
+
+        if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}NF[,#])?(?(1)|(^NF[#,]))"))
+        {
+            tags.Add("[C63111][No Banlist] ");
+        }
+        if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}LF\d[,#])?(?(1)|(^LF\d[#,]))"))
+        {
+            int banlist = (int)char.GetNumericValue(roomname[roomname.LastIndexOf("LF") + 2]);
+            YGOSharp.Banlist blist = YGOSharp.BanlistManager.Banlists[banlist - 1];
+            tags.Add("[DDDDAA][" + blist.Name + "]");
+        }
+        if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}OO[,#])?(?(1)|(^OO[#,]))"))
+        {
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}OT[,#])?(?(1)|(^OT[#,]))"))
+            {
+                tags.Add("[11C69C][TCG/OCG]");
+            }
+            else
+            {
+                tags.Add("[B62FB2][OCG]");
+            }
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}S[,#])?(?(1)|(^S[#,]))"))
+            {
+                tags.Add("[8AE57E][Duel] ");
+            }
+            else if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}M[,#])?(?(1)|(^M[#,]))"))
+            {
+                tags.Add("[42C1EC][Match] ");
+            }
+            else if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}T[,#])?(?(1)|(^T[#,]))"))
+            {
+                tags.Add("[D14291][TAG] ");
+
+            }
+        }
+        else if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}TO[,#])?(?(1)|(^TO[#,]))"))
+        {
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}OT[,#])?(?(1)|(^OT[#,]))"))
+            {
+                tags.Add("[11C69C][TCG/OCG]");
+
+            }
+            else
+            {
+                tags.Add("[F58637][TCG]");
+            }
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}S[,#])?(?(1)|(^S[#,]))"))
+            {
+                tags.Add("[8AE57E][Duel] ");
+            }
+            else if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}M[,#])?(?(1)|(^M[#,]))"))
+            {
+                tags.Add("[42C1EC][Match] ");
+            }
+            else if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}T[,#])?(?(1)|(^T[#,]))"))
+            {
+                tags.Add("[D14291][TAG] ");
+            }
+        }
+        else
+        {
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}T[,#])?(?(1)|(^T[#,]))"))
+            {
+                tags.Add("[D14291][TAG]");
+            }
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}M[,#])?(?(1)|(^M[#,]))"))
+            {
+                tags.Add("[42C1EC][Match]");
+            }
+            if (Regex.IsMatch(roomname, @"(\w{1,}[,^]{1}S[,#])?(?(1)|(^S[#,]))")){
+                tags.Add("[8AE57E][Duel]");
+            }
+        }
+
+        roomTag = String.Join("", tags.ToArray())+" ";
+        if (roomTag == " ")
+        {
+            roomTag ="[ "+roomname+" ] ";
+        }
+        if (roomTag.Length > 150)
+        {
+            roomTag = "[CUSTOM] ";
+        }
+        return roomTag;
     }
 
     public void StocMessage_Replay(BinaryReader r)

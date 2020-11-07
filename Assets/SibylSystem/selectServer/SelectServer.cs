@@ -133,6 +133,25 @@ public class SelectServer : WindowServantSP
         KF_onlineGame(Name, ipString, portString, versionString, pswString);
     }
 
+    public void onClickRoomList()
+    {
+        if (!isShowed)
+        {
+            return;
+        }
+        string Name = UIHelper.getByName<UIInput>(gameObject, "name_").value;
+        string ipString = UIHelper.getByName<UIInput>(gameObject, "ip_").value;
+        string portString = UIHelper.getByName<UIInput>(gameObject, "port_").value;
+        string pswString = "L";
+        string versionString = UIHelper.getByName<UIInput>(gameObject, "version_").value;
+        KF_onlineGame(Name, ipString, portString, versionString, pswString);
+    }
+
+    public void onHide(bool Bool)
+    {
+        gameObject.SetActive(!Bool);
+    }
+
     public void KF_onlineGame(string Name,string ipString, string portString, string versionString, string pswString="")
     {
         name = Name;

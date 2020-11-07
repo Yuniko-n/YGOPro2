@@ -16,6 +16,8 @@ public static class TcpHelper
 
     static bool canjoin = true;
 
+    static bool roomListChecking = false;
+
     public static void join(string ipString, string name, string portString, string pswString, string version)
     {
         if (canjoin)
@@ -30,6 +32,14 @@ public static class TcpHelper
                     Thread t = new Thread(receiver);
                     t.Start();
                     CtosMessage_PlayerInfo(name);
+                    if (pswString == "L")
+                    {
+                        roomListChecking = true;
+                    }
+                    else
+                    { 
+                        roomListChecking = false;
+                    }
                     CtosMessage_JoinGame(pswString, version);
                 }
                 catch (Exception e)
@@ -166,6 +176,9 @@ public static class TcpHelper
                             case StocMessage.HsWatchChange:
                                 Program.I().room.StocMessage_HsWatchChange(r);
                                 break;
+                            case YGOSharp.Network.Enums.StocMessage.RoomList:
+                                ((Room)Program.I().room).StocMessage_RoomList(r);
+                                break;
                             default:
                                 break;
                         }
@@ -199,7 +212,10 @@ public static class TcpHelper
                 {
                     Program.I().shiftToServant(Program.I().selectServer);
                 }
-                Program.I().cardDescription.RMSshow_none(InterString.Get("连接被断开。"));
+                if (!roomListChecking)
+                {
+                    Program.I().cardDescription.RMSshow_none(InterString.Get("连接被断开。"));
+                }
                 packagesInRecord.Clear();
             }
             else

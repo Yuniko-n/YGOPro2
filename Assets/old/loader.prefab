@@ -157,6 +157,7 @@ MonoBehaviour:
   new_ui_setting: {fileID: 0}
   new_ui_book: {fileID: 0}
   new_ui_selectServer: {fileID: 0}
+  new_ui_RoomList: {fileID: 166306, guid: 2ee19dceffad869469d4ae6ce0acc3c5, type: 2}
   new_ui_gameInfo: {fileID: 0}
   new_ui_cardDescription: {fileID: 0}
   new_ui_search: {fileID: 0}
