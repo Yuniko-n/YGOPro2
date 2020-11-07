@@ -405,8 +405,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 175576}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1296, y: 153, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 447800}
@@ -477,7 +477,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 16, y: 99.46667, z: 0}
+  m_Size: {x: 26, y: 99.46667, z: 0}
   m_Center: {x: 0, y: 77.26666, z: 0}
 --- !u!65 &6534316
 BoxCollider:
@@ -513,7 +513,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 20, y: 264, z: 0}
+  m_Size: {x: 30, y: 264, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6576256
 BoxCollider:
@@ -661,13 +661,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 0.39215687}
   mPivot: 4
-  mWidth: 16
+  mWidth: 26
   mHeight: 254
   mDepth: 1
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 0.056338027
+  aspectRatio: 0.062992126
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -944,7 +944,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 8.444445
+  aspectRatio: 8.37037
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 6.0869565
+  aspectRatio: 7.130435
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -1188,11 +1188,11 @@ MonoBehaviour:
   leftAnchor:
     target: {fileID: 447800}
     relative: 1
-    absolute: -23
+    absolute: -28
   rightAnchor:
     target: {fileID: 447800}
     relative: 1
-    absolute: -3
+    absolute: 2
   bottomAnchor:
     target: {fileID: 447800}
     relative: 0
@@ -1204,13 +1204,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 20
+  mWidth: 30
   mHeight: 264
   mDepth: 0
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 0.07575758
+  aspectRatio: 0.11363637
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -1412,7 +1412,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3003
+  startingRenderQueue: 3002
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
