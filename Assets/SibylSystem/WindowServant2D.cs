@@ -9,6 +9,7 @@ public class WindowServant2D : Servant
             UIHelper.clearITWeen(gameObject);
             iTween.MoveTo(gameObject, Program.camera_main_2d.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height * 1.5f, 0)), 0.6f);
         }
+        resize();
     }
 
     public override void applyShowArrangement()
@@ -17,6 +18,23 @@ public class WindowServant2D : Servant
         {
             UIHelper.clearITWeen(gameObject);
             iTween.MoveTo(gameObject, Program.camera_main_2d.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 0)), 0.6f);
+        }
+        resize();
+    }
+
+    void resize()
+    {
+        if (gameObject != null)
+        {
+            if (Program.I().setting.setting.resize.value)
+            {
+                float f = Screen.height / 700f;
+                gameObject.transform.localScale = new Vector3(f, f, f);
+            }
+            else
+            {
+                gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
         }
     }
 
