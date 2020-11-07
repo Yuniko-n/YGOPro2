@@ -111,6 +111,7 @@ namespace YGOSharp
             int getDefence_UP,
             int getP_UP,
             int getYear_UP,
+            int getOT,
             string getPack,
             int getBAN,
             Banlist banlist,
@@ -153,9 +154,12 @@ namespace YGOSharp
                                                         {
                                                             if (getBAN == -233 || banlist == null || banlist.GetQuantity(card.Id) == getBAN)
                                                             {
-                                                                if (getPack == "" || card.packFullName == getPack)
+                                                                if (getOT == 0 || getOT == card.Ot)
                                                                 {
-                                                                    returnValue.Add(card);
+                                                                    if (getPack == "" || card.packFullName == getPack)
+                                                                    {
+                                                                        returnValue.Add(card);
+                                                                    }
                                                                 }
                                                             }
                                                         }

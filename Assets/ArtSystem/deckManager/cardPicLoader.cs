@@ -14,6 +14,8 @@ public class cardPicLoader : MonoBehaviour
 
     public ban_icon ico;
 
+    public ban_icon_ot ico_ot;
+
     public void clear()
     {
         loaded_code = 0;
@@ -74,6 +76,16 @@ public class cardPicLoader : MonoBehaviour
                         return;
                     }
                     ico.show(loaded_banlist.GetQuantity(code));
+                }
+                if (ico_ot != null)
+                {
+                    //[1: OCG]、[2: TCG]、[3: OCG&TCG]、[4: Anime]
+                    if (data.Ot == 2 || data.Ot == 4)
+                    {
+                        ico_ot.show(data.Ot);
+                        return;
+                    }
+                    ico_ot.show(3);
                 }
             }
         }

@@ -125,16 +125,16 @@ public class GameStringHelper
         switch(card.Ot)
         {
         case 1:
-            limitot = "[OCG] ";
+            limitot = GameStringManager.get_unsafe(1240);
             break;
         case 2:
-            limitot = "[TCG] ";
+            limitot = GameStringManager.get_unsafe(1241);
             break;
         case 3:
-            limitot = "[OCG/TCG] ";
+            limitot = GameStringManager.get_unsafe(1242);
             break;
         case 4:
-            limitot = "[Anime] ";
+            limitot = GameStringManager.get_unsafe(1243);
             break;
         }
         string re = "";
@@ -142,7 +142,7 @@ public class GameStringHelper
         {
             re += "[b]" + card.Name + "[/b]";
             re += "\n";
-            re += "[sup]" + limitot + "[/sup]";
+            re += "[sup][" + limitot + "] [/sup]";
             re += "\n";
             re += "[sup]" + card.Id.ToString() + "[/sup]";
             re += "\n";
@@ -285,7 +285,7 @@ public class GameStringHelper
                 }
                 else
                 {
-                    re += "[sup]LINK[/sup]" + data.Level.ToString();
+                    re += "[sup]LINK[/sup]" + data.Level.ToString() + LinkMarker(data);
                 }
             }
             else if ((data.Type & 0x2) > 0)
@@ -415,7 +415,7 @@ public class GameStringHelper
                 }
                 else
                 {
-                    re += "[sup]LINK[/sup]" + data.Level.ToString();
+                    re += "[sup]LINK[/sup]" + data.Level.ToString() + LinkMarker(data);
                 }
             }
             else if ((data.Type & 0x2) > 0)
@@ -474,5 +474,27 @@ public class GameStringHelper
             }
         }
         return String.Join("|", returnValue.ToArray());
+    }
+
+    public static string LinkMarker(YGOSharp.Card data)
+    {
+        string LinkMarker = "\n" + GameStringManager.get_unsafe(1374) + ":";
+        if (data.HasLinkMarker(CardLinkMarker.TopLeft))
+            LinkMarker += " [\u2196]";  //↖
+        if (data.HasLinkMarker(CardLinkMarker.Top))
+            LinkMarker += " [\u2191]";  //↑
+        if (data.HasLinkMarker(CardLinkMarker.TopRight))
+            LinkMarker += " [\u2197]";  //↗
+        if (data.HasLinkMarker(CardLinkMarker.Left))
+            LinkMarker += " [\u2190]";  //←
+        if (data.HasLinkMarker(CardLinkMarker.Right))
+            LinkMarker += " [\u2192]";  //→
+        if (data.HasLinkMarker(CardLinkMarker.BottomLeft))
+            LinkMarker += " [\u2199]";  //↙
+        if (data.HasLinkMarker(CardLinkMarker.Bottom))
+            LinkMarker += " [\u2193]";  //↓
+        if (data.HasLinkMarker(CardLinkMarker.BottomRight))
+            LinkMarker += " [\u2198]";  //↘
+        return LinkMarker;
     }
 }

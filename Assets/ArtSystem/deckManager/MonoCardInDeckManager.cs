@@ -23,6 +23,7 @@ public class MonoCardInDeckManager : MonoBehaviour {
         if (Program.I().deckManager.currentBanlist != loaded_banlist)
         {
             ban_icon ico = GetComponentInChildren<ban_icon>();
+            ban_icon_ot ico_ot = GetComponentInChildren<ban_icon_ot>();
             loaded_banlist = Program.I().deckManager.currentBanlist;
             if (loaded_banlist != null)
             {
@@ -32,6 +33,7 @@ public class MonoCardInDeckManager : MonoBehaviour {
             {
                 ico.show(3);
             }
+            ico_ot.show(cardData.Ot);
         }
         if (isDraging)
         {

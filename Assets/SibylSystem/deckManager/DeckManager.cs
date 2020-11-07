@@ -101,6 +101,10 @@ public class DeckManager : ServantWithCardDescription
         UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1316));
         UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1317));
         UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1318));
+        UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1240));
+        UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1241));
+        UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1242));
+        UIPopupList_ban.AddItem(GameStringManager.get_unsafe(1243));
         clearAll();
         UIHelper.registEvent(UIPopupList_main.gameObject, onUIPopupList_main);
         UIHelper.registEvent(UIPopupList_second.gameObject, onUIPopupList_second);
@@ -138,6 +142,8 @@ public class DeckManager : ServantWithCardDescription
         cardPicLoader_.uiTexture = UIHelper.getByName<UITexture>(returnValue, "pic_");
         cardPicLoader_.ico = UIHelper.getByName<ban_icon>(returnValue);
         cardPicLoader_.ico.show(3);
+        cardPicLoader_.ico_ot = UIHelper.getByName<ban_icon_ot>(returnValue);
+        cardPicLoader_.ico_ot.show(3);
         return returnValue;
     }
 
@@ -634,6 +640,7 @@ public class DeckManager : ServantWithCardDescription
                     getDefence_UP(),
                     getP_UP(),
                     getYear_UP(),
+                    getOT(),
                     getPack(),
                     getBanFilter(),
                     currentBanlist,
@@ -830,6 +837,28 @@ public class DeckManager : ServantWithCardDescription
         if (UIPopupList_ban.value == GameStringManager.get_unsafe(1318))
         {
             returnValue = 2;
+        }
+        return returnValue;
+    }
+
+    int getOT()
+    {
+        int returnValue = 0;
+        if (UIPopupList_ban.value == GameStringManager.get_unsafe(1240))
+        {
+            returnValue = 1;
+        }
+        if (UIPopupList_ban.value == GameStringManager.get_unsafe(1241))
+        {
+            returnValue = 2;
+        }
+        if (UIPopupList_ban.value == GameStringManager.get_unsafe(1242))
+        {
+            returnValue = 3;
+        }
+        if (UIPopupList_ban.value == GameStringManager.get_unsafe(1243))
+        {
+            returnValue = 4;
         }
         return returnValue;
     }
@@ -1098,7 +1127,7 @@ public class DeckManager : ServantWithCardDescription
         gameObjectDesk.transform.position = new Vector3(0, 0, 0);
         gameObjectDesk.transform.eulerAngles = new Vector3(90, 0, 0);
         gameObjectDesk.transform.localScale = new Vector3(30, 30, 1);
-        gameObjectDesk.GetComponent<Renderer>().material.mainTexture = Program.GetTextureViaPath("texture/duel/deckTable.png");
+        gameObjectDesk.GetComponent<Renderer>().material.mainTexture = UIHelper.getTexture2D("texture/duel/", "deckTable.png");
         //UIHelper.SetMaterialRenderingMode(gameObjectDesk.GetComponent<Renderer>().material, UIHelper.RenderingMode.Transparent);
         Rigidbody rigidbody = gameObjectDesk.AddComponent<Rigidbody>();
         rigidbody.useGravity = false;
