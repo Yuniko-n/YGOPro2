@@ -9,7 +9,27 @@ public class BackGroundPic : Servant
         backGround = create(Program.I().mod_simple_ngui_background_texture, Vector3.zero, Vector3.zero, false, Program.ui_back_ground_2d);
         string path = "texture/common/";
         LoadPic();
-        if (File.Exists(path + "bg.png"))
+        if (File.Exists(path + "bg.mp4"))
+        {
+            backGround.AddComponent<BackGroundPlayMP4>();
+            BackGroundPlayMP4.Instance.LoadMP4(backGround, path + "bg.mp4");
+        }
+        else if (File.Exists(path + "desk.mp4"))
+        {
+            backGround.AddComponent<BackGroundPlayMP4>();
+            BackGroundPlayMP4.Instance.LoadMP4(backGround, path + "desk.mp4");
+        }
+        else if (File.Exists(path + "bg.ogv"))
+        {
+            backGround.AddComponent<BackGroundPlayOGV>();
+            BackGroundPlayOGV.Instance.LoadOGV(backGround, path + "bg.ogv");
+        }
+        else if (File.Exists(path + "desk.ogv"))
+        {
+            backGround.AddComponent<BackGroundPlayOGV>();
+            BackGroundPlayOGV.Instance.LoadOGV(backGround, path + "desk.ogv");
+        }
+        else if (File.Exists(path + "bg.png"))
         {
             LoadJpgOrPng(path + "bg.png");
         }
