@@ -54,8 +54,15 @@ static public class NGUITools
 	{
 		get
 		{
+#if !UNITY_4_7
+			if (Application.platform == RuntimePlatform.WebGLPlayer) return false;
+#endif
+#if UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3
 			return Application.platform != RuntimePlatform.WindowsWebPlayer &&
 				Application.platform != RuntimePlatform.OSXWebPlayer;
+#else
+			return true;
+#endif
 		}
 	}
 
@@ -191,7 +198,7 @@ static public class NGUITools
 		while (obj.transform.parent != null)
 		{
 			obj = obj.transform.parent.gameObject;
-			path = obj.name + "\\" + path;
+			path = obj.name + "/" + path;
 		}
 		return path;
 	}
