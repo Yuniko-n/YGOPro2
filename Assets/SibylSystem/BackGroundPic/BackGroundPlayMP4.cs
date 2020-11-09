@@ -23,7 +23,16 @@ public class BackGroundPlayMP4 : MonoBehaviour
         string bgFilePath = fileURI.ToString();
 
         videoPlayer = backGround.AddComponent<VideoPlayer>();
-        videoPlayer.url = bgFilePath;
+        //Android 10+ 无法使用“file:///”
+        if (Program.APIVersion < 29)
+        {
+            videoPlayer.url = bgFilePath;
+        }
+        else
+        {
+            HttpListenerApp.HttpProvider.Init("http://localhost:2020/Download/", fileName);
+            videoPlayer.url = "http://localhost:2020/Download/" + fileName;
+        }
         videoPlayer.isLooping = true;
         videoPlayer.Play();
 
@@ -36,6 +45,8 @@ public class BackGroundPlayMP4 : MonoBehaviour
 
         backGround.GetComponent<UITexture>().mainTexture = backGround.GetComponent<VideoPlayer>().texture;
         backGround.GetComponent<UITexture>().depth = -100;
+
+        if (Program.APIVersion < 29 == false) HttpListenerApp.HttpProvider.httpFiledownload.Stop();
     }
 
 }
