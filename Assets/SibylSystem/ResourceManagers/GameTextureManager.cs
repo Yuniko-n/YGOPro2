@@ -27,6 +27,8 @@ public class GameTextureManager
 
     static Dictionary<ulong, bool> addedMap = new Dictionary<ulong, bool>();
 
+    static readonly HttpDldFile df = new HttpDldFile();
+
     public class BitmapHelper
     {
         public System.Drawing.Color[,] colors = null;
@@ -365,6 +367,11 @@ public class GameTextureManager
         {
             EightEdition = true;
             path = "picture/cardIn8thEdition/" + code + ".jpg";
+        }
+        if (!File.Exists(path) && pic.code != 0)
+        {
+            df.Download("http://download.ygo2020.xyz/ygopro2/picture/card/" + pic.code.ToString() + ".jpg", "picture/card/" + pic.code.ToString() + ".jpg");
+            path = "picture/card/" + pic.code.ToString() + ".jpg";
         }
         if (File.Exists(path))
         {
