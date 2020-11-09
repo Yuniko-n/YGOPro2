@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using YGOSharp.OCGWrapper.Enums;
@@ -143,9 +144,9 @@ public class GameField : OCGobject
         }
         else
         {
-            leftT.mainTexture = new Texture2D(100, 100);
-            midT.mainTexture = new Texture2D(100, 100);
-            rightT.mainTexture = new Texture2D(100, 100);
+            leftT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
+            midT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
+            rightT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
         }
         phaseTexure.mainTexture = GameTextureManager.phase;
         gameObject.GetComponentInChildren<lazyBTNMOVER>().shift(false);
@@ -163,9 +164,9 @@ public class GameField : OCGobject
         }
         else
         {
-            leftT.mainTexture = new Texture2D(100, 100);
-            midT.mainTexture = new Texture2D(100, 100);
-            rightT.mainTexture = new Texture2D(100, 100);
+            leftT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
+            midT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
+            rightT.mainTexture = UIHelper.getTexture2D("texture/duel/", "newfield.png");
         }
         phaseTexure.mainTexture = null;
         gameObject.GetComponentInChildren<lazyBTNMOVER>().shift(true);
@@ -447,14 +448,24 @@ public class GameField : OCGobject
                             if (found)
                                 break;
                         }
-                        if (tex == null)
+                        if (tex == null && File.Exists("picture/field/" + code.ToString() + ".png"))
                         {
                             tex = UIHelper.getTexture2D("picture/field/" + code.ToString() + ".png");
                         }
-                        if (tex == null)
+                        if (tex == null && File.Exists("picture/field/" + code.ToString() + ".jpg"))
                         {
                             tex = UIHelper.getTexture2D("picture/field/" + code.ToString() + ".jpg");
                         }
+                        if (tex == null && File.Exists("expansions/pics/field/" + code.ToString() + ".jpg"))
+                        {
+                            tex = UIHelper.getTexture2D("expansions/pics/field/" + code.ToString() + ".jpg");
+                        }
+                        #if !UNITY_EDITOR && UNITY_ANDROID
+                        if (tex == null && Program.AssetsFile.Contains("picture/field/" + code.ToString() + ".jpg"))
+                        {
+                            tex = UIHelper.getTexture2D(Program.AssetsFileToByte("picture/field/" + code.ToString() + ".jpg"));
+                        }
+                        #endif
                         if (tex != null)
                         {
                             UIHelper.getByName<UITexture>(gameObject, "field_" + player.ToString()).mainTexture = tex;

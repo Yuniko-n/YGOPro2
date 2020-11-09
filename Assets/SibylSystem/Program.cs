@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Linq;
 using Ionic.Zip;
 using System.Text;
 
@@ -275,9 +276,32 @@ public class Program : MonoBehaviour
 
     public static float verticleScale = 5f;
 
+    public static string GAME_PATH = "/storage/emulated/0/ygopro2/";
+
+    public static string[] AssetsFile;
+
+    public static int APIVersion = 0;
+
     void initialize()
     {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+        //GAME_PATH = jo.Call<string>("doGetStorageDir", "ygopro2") + "/"; // /storage/emulated/ygopro2/
+        GAME_PATH = jo.Call<string>("doGetFilesDir", "ygopro2") + "/";     // /storage/emulated/0/Android/data/.../files/ygopro2/
+        //获取安卓版本 (当前编译的“libgdiplus”仅对安卓7以上生效)
+        APIVersion = jo.Call<int>("APIVersion");
+#elif !UNITY_EDITOR && UNITY_IPHONE //iPhone
+        GAME_PATH = Application.persistentDataPath + "/ygopro2/";
+#elif !UNITY_EDITOR && UNITY_STANDALONE_OSX //MacOS
+        GAME_PATH = Application.streamingAssetsPath;  // .app/
+#else //UNITY_EDITOR || UNITY_STANDALONE_WIN //编译器、Windows
+        GAME_PATH = Environment.CurrentDirectory + "/";
+#endif
 
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE_OSX)
+        Environment.CurrentDirectory = GAME_PATH;
+        System.IO.Directory.SetCurrentDirectory(GAME_PATH);
+#endif
         go(1, () =>
         {
             GAME_VERSION = PRO_VERSION();
@@ -405,7 +429,22 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
+#if !UNITY_EDITOR && UNITY_ANDROID //Android Java Test
+        AssetsFile = GetAssetsFileList("AssetsFile.txt");
+#endif
+    }
 
+    public string[] GetAssetsFileList(string path)
+    {
+        string file = System.Text.Encoding.UTF8.GetString(AssetsFileToByte(path));
+        return file.Replace("\r", "").Split("\n");
+    }
+
+    public static byte[] AssetsFileToByte(string path)
+    {
+        var www = new WWW(Application.streamingAssetsPath + "/" + path);
+        while (!www.isDone) { }
+        return www.bytes;
     }
 
     public void initPath()
@@ -948,12 +987,23 @@ public class Program : MonoBehaviour
 
     void Start()
     {
+        #if UNITY_EDITOR || UNITY_STANDALONE_WIN //编译器、Windows
         if (Screen.width < 100 || Screen.height < 100)
         {
             Screen.SetResolution(1300, 700, false);
         }
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 144;
+        #elif !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE) //Android、iPhone
+        Screen.SetResolution(1280, 720, true);
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Application.targetFrameRate = 60;
+        #endif
         mouseParticle = Instantiate(new_mouse);
         instance = this;
         initialize();

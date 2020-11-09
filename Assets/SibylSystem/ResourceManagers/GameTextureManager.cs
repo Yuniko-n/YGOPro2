@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 using YGOSharp.OCGWrapper.Enums;
@@ -304,6 +305,7 @@ public class GameTextureManager
         BitmapHelper bitmap = null;
         bool found = false;
         string code = pic.code.ToString();
+        string path = "picture/closeup/" + code + ".png";
         foreach (ZipFile zip in GameZipManager.Zips)
         {
             if (zip.Name.ToLower().EndsWith("script.zip"))
@@ -325,13 +327,61 @@ public class GameTextureManager
         }
         if (!found)
         {
-            string path = "picture/closeup/" + code + ".png";
             if (File.Exists(path))
             {
                 bitmap = new BitmapHelper(path);
             }
         }
+#if !UNITY_EDITOR && UNITY_ANDROID
+        if (!found && !File.Exists(path))
+        {
+            if (Program.AssetsFile.Contains(path))
+            {
+                byte[] data = Program.AssetsFileToByte(path);
+                MemoryStream ms = new MemoryStream(data);
+                bitmap = new BitmapHelper(ms);
+            }
+        }
+#endif
         return bitmap;
+    }
+
+    private static byte[] getCloseups(PictureResource pic)
+    {
+        string code = pic.code.ToString();
+        foreach (ZipFile zip in GameZipManager.Zips)
+        {
+            if (zip.Name.ToLower().EndsWith("script.zip"))
+                continue;
+            foreach (string file in zip.EntryFileNames)
+            {
+                if (Regex.IsMatch(file.ToLower(), "closeup/" + code + "\\.png$"))
+                {
+                    MemoryStream ms = new MemoryStream();
+                    ZipEntry e = zip[file];
+                    e.Extract(ms);
+                    return ms.ToArray();
+                }
+            }
+        }
+        string path = "picture/closeup/" + code + ".png";
+        if (File.Exists(path))
+        {
+            using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                file.Seek(0, SeekOrigin.Begin);
+                var data = new byte[file.Length];
+                file.Read(data, 0, (int)file.Length);
+                return data;
+            }
+        }
+#if !UNITY_EDITOR && UNITY_ANDROID
+        if (!File.Exists(path) && Program.AssetsFile.Contains(path))
+        {
+            return Program.AssetsFileToByte(path);
+        }
+#endif
+        return new byte[0];
     }
 
     private static byte[] getPicture(PictureResource pic, out bool EightEdition)
@@ -345,6 +395,13 @@ public class GameTextureManager
             foreach (string file in zip.EntryFileNames)
             {
                 if (Regex.IsMatch(file.ToLower(), "pics/"+code+ "\\.(jpg|png)$"))
+                {
+                    MemoryStream ms = new MemoryStream();
+                    ZipEntry e = zip[file];
+                    e.Extract(ms);
+                    return ms.ToArray();
+                }
+                if (Regex.IsMatch(file.ToLower(), "card/"+code+ "\\.(jpg|png)$"))
                 {
                     MemoryStream ms = new MemoryStream();
                     ZipEntry e = zip[file];
@@ -368,6 +425,17 @@ public class GameTextureManager
             EightEdition = true;
             path = "picture/cardIn8thEdition/" + code + ".jpg";
         }
+        if (!File.Exists(path))
+        {
+            EightEdition = true;
+            path = "expansions/pics/" + code + ".jpg";
+        }
+#if !UNITY_EDITOR && UNITY_ANDROID
+        if (!File.Exists(path) && Program.AssetsFile.Contains("picture/card/" + code + ".jpg"))
+        {
+            return Program.AssetsFileToByte("picture/card/" + code + ".jpg");
+        }
+#endif
         if (!File.Exists(path) && pic.code != 0)
         {
             df.Download("http://download.ygo2020.xyz/ygopro2/picture/card/" + pic.code.ToString() + ".jpg", "picture/card/" + pic.code.ToString() + ".jpg");
@@ -392,6 +460,22 @@ public class GameTextureManager
         {
             return;
         }
+#if !UNITY_EDITOR && UNITY_ANDROID
+        if (Program.APIVersion < 24)
+        {
+            var data = getCloseups(pic);
+            if (data.Length == 0)
+            {
+                pic.u_data = GameTextureManager.get("ban_3");
+            }
+            else
+            {
+                pic.data = data;
+            }
+            loadedList.Add(hashPic(pic.code, pic.type), pic);
+            return;
+        }
+#endif
         bool EightEdition = false;
         BitmapHelper bitmap = getCloseup(pic);
         if (bitmap != null)
@@ -676,6 +760,22 @@ public class GameTextureManager
         {
             return;
         }
+#if !UNITY_EDITOR && UNITY_ANDROID
+        if (Program.APIVersion < 24)
+        {
+            var data = getCloseups(pic);
+            if (data.Length == 0)
+            {
+                pic.u_data = GameTextureManager.get("ban_3");
+            }
+            else
+            {
+                pic.data = data;
+            }
+            loadedList.Add(hashPic(pic.code, pic.type), pic);
+            return;
+        }
+#endif
         var bitmap = getCloseup(pic);
         if (bitmap == null)
         {

@@ -1,6 +1,7 @@
 ﻿using Ionic.Zip;
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
@@ -164,6 +165,18 @@ public class PrecyOcg
                 ret.len = content.Length;
             }
         }
+        #if !UNITY_EDITOR && UNITY_ANDROID
+        if (!found && !File.Exists(filename))
+        {
+            if (Program.AssetsFile.Contains(filename2))
+            {
+                content = Program.AssetsFileToByte(filename2);
+                Marshal.Copy(content, 0, _buffer, content.Length);
+                ret.buffer = _buffer;
+                ret.len = content.Length;
+            }
+        }
+        #endif
         return ret;
     }
 

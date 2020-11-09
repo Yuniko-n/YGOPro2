@@ -58,3 +58,5 @@ AI_core_vs2017solution/System.Servicemodel.Faltexception.dll
 AI_core_vs2017solution/.vs
 commamd.shell
 Windbot/
+Assets/StreamingAssets/script*
+Assets/StreamingAssets/picture*
