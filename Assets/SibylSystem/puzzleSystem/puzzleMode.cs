@@ -12,6 +12,7 @@ public class puzzleMode : WindowServantSP
     {
         createWindow(Program.I().remaster_puzzleManager);
         UIHelper.registEvent(gameObject, "exit_", onClickExit);
+        UIHelper.registEvent(gameObject, "start_", onSelected);
         superScrollView = gameObject.GetComponentInChildren<UIselectableList>();
         superScrollView.selectedAction = onSelected;
         superScrollView.install();
