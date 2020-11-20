@@ -23,7 +23,7 @@ public class Menu : WindowServantSP
         UIHelper.registEvent(gameObject, "ai_", Program.gugugu);
         UIHelper.registEvent(gameObject, "exit_", onClickExit);
         UIHelper.getByName<UILabel>(gameObject, "version_").text = "YGOPro2 " + Program.GAME_VERSION;
-        Program.I().StartCoroutine(checkUpdate());
+        (new Thread(up)).Start();
     }
 
     public override void show()
@@ -37,51 +37,80 @@ public class Menu : WindowServantSP
         base.hide();
     }
 
+    bool new_url = false;
+    string url = "http://api.ygo2020.xyz/ygopro2/ver_win.txt";
     string upurl = "";
-    string uptxt = "";
-    IEnumerator checkUpdate()
+    string VERSION = "";
+#if !UNITY_EDITOR && UNITY_ANDROID
+    string toPath = Application.persistentDataPath + "/update.zip";
+#else
+    string toPath = "updates/update.zip";
+#endif
+    void up()
     {
-        yield return new WaitForSeconds(1);
-        var verFile = File.ReadAllLines("config/ver.txt", Encoding.UTF8);
-        if (verFile.Length != 2 || !Uri.IsWellFormedUriString(verFile[1], UriKind.Absolute))
-        {
-            Program.PrintToChat(InterString.Get("YGOPro2 自动更新：[ff5555]未设置更新服务器，无法检查更新。[-]@n请从官网重新下载安装完整版以获得更新。"));
-            yield break;
-        }
-        string ver = verFile[0];
-        string url = verFile[1];
-        UnityWebRequest www = UnityWebRequest.Get(url);
-        yield return www.Send();
         try
         {
-            string result = www.downloadHandler.text;
-            string[] lines = result.Replace("\r", "").Split("\n");
-            string[] mats = lines[0].Split(":.:");
-            if (ver != mats[0])
-            {
-                upurl = mats[1];
-                for(int i = 1; i < lines.Length; i++)
-                {
-                    uptxt += lines[i] + "\n";
-                }
-            }
-            else
-            {
-                Program.PrintToChat(InterString.Get("YGOPro2 自动更新：[55ff55]当前已是最新版本。[-]"));
-            }
+            CheckUpgrade();
         }
         catch (System.Exception e)
         {
-            Program.PrintToChat(InterString.Get("YGOPro2 自动更新：[ff5555]检查更新失败！[-]"));
+            if (!new_url)
+            {   //启用备用地址
+                new_url = true;
+                url = "http://download.ygo2020.xyz/ygopro2/ver_win.txt";
+                (new Thread(up)).Start();
+            }
+            UnityEngine.Debug.Log(e);
         }
+    }
+
+    void CheckUpgrade()
+    {
+        ServicePointManager.ServerCertificateValidationCallback = HttpDldFile.MyRemoteCertificateValidationCallback;//支持https
+        WebClient wc = new WebClient();
+        Stream s = wc.OpenRead(url);
+        StreamReader sr = new StreamReader(s, Encoding.UTF8);
+        string result = sr.ReadToEnd();
+        sr.Close();
+        s.Close();
+        string[] lines = result.Replace("\r", "").Split("\n");
+        VERSION = lines[0];
+        if (lines[0] != AppUpdateLog.GAME_VERSION)
+        {
+            upurl = lines[1];
+        }
+        if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(toPath))
+        {
+            HttpDldFile df = new HttpDldFile();
+            df.Download(lines[3], toPath);
+        }
+        if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[4])) > Convert.ToInt32(Config.ClientVersion))
+            Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(lines[4]);
     }
 
     public override void ES_RMS(string hashCode, List<messageSystemValue> result)
     {
         base.ES_RMS(hashCode, result);
-        if (hashCode == "update" && result[0].value == "1")
+        if (hashCode == "RMSshow_onlyYes")
         {
-            Application.OpenURL(upurl);
+            if (result[0].value == "yes")
+            {
+                Application.OpenURL(upurl);
+            }
+        }
+        if (hashCode == "ExtractZIP_onlyYes")
+        {
+            if (result[0].value == "yes")
+            {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+                AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+                jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
+#else
+                Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
+                File.Delete(toPath);
+                showToast("更新包解压完毕，重启后生效！");
+#endif
+            }
         }
     }
 
@@ -89,11 +118,15 @@ public class Menu : WindowServantSP
     public override void preFrameFunction()
     {
         base.preFrameFunction();
+        if (File.Exists(toPath) && outed == false)
+        {
+            outed = true;
+            RMSshow_yesOrNo("ExtractZIP_onlyYes", InterString.Get("发现更新包!@n是否立即解压？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
+        }
         if (upurl != "" && outed == false)
         {
             outed = true;
-            RMSshow_yesOrNo("update", InterString.Get("[b]发现更新！[/b]") + "\n" + uptxt + "\n" + InterString.Get("是否打开下载页面？"),
-                new messageSystemValue { value = "1", hint = "yes" }, new messageSystemValue { value = "0", hint = "no" });
+            RMSshow_yesOrNo("RMSshow_onlyYes", InterString.Get("发现更新!@n是否要下载更新？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
         }
         Menu.checkCommend();
     }
@@ -140,6 +173,11 @@ public class Menu : WindowServantSP
     void onClickSelectDeck()
     {
         Program.I().shiftToServant(Program.I().selectDeck);
+    }
+
+    public void showToast(string content)
+    {
+        RMSshow_onlyYes("showToast", InterString.Get(content), null);
     }
 
     public static void deleteShell()

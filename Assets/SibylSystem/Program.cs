@@ -401,8 +401,9 @@ public class Program : MonoBehaviour
                     if (file.ToLower().EndsWith(".cdb"))
                     {
                         ZipEntry e = zip[file];
-                        string tempfile = Path.Combine(Path.GetTempPath(), file);
-                        e.Extract(Path.GetTempPath(), ExtractExistingFileAction.OverwriteSilently);
+                        string tempfile = "expansions/" + file;
+                        if (File.Exists(tempfile)) File.Delete(tempfile);
+                        e.Extract("expansions/", ExtractExistingFileAction.OverwriteSilently);
                         YGOSharp.CardsManager.initialize(tempfile);
                         File.Delete(tempfile);
                     }
@@ -447,7 +448,61 @@ public class Program : MonoBehaviour
         return www.bytes;
     }
 
-    public void initPath()
+
+    public void ExtractZipFile(string filePath, string outFolder)
+    {
+        ICSharpCode.SharpZipLib.Zip.ZipFile zf = null;
+        try
+        {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+            var www = new WWW(filePath);
+            while (!www.isDone) { }
+            byte[] data = www.bytes;
+#else
+            byte[] data = System.IO.File.ReadAllBytes(filePath);
+#endif
+            //use MemoryStream!!!!
+            using (MemoryStream mstrm = new MemoryStream(data))
+            {
+                zf = new ICSharpCode.SharpZipLib.Zip.ZipFile(mstrm);
+
+                foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry zipEntry in zf)
+                {
+                    if (!zipEntry.IsFile)
+                    {
+                        continue;
+                    }
+
+                    String entryFileName = zipEntry.Name;
+                    byte[] buffer = new byte[4096];     // 4K is optimum
+                    Stream zipStream = zf.GetInputStream(zipEntry);
+
+                    String fullZipToPath = Path.Combine(outFolder, entryFileName);
+                    string directoryName = Path.GetDirectoryName(fullZipToPath);
+                    if (directoryName.Length > 0)
+                        Directory.CreateDirectory(directoryName);
+                    using (FileStream streamWriter = File.Create(fullZipToPath))
+                    {
+                        ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(zipStream, streamWriter, buffer);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+        finally
+        {
+            if (zf != null)
+            {
+                zf.IsStreamOwner = true;
+                zf.Close();
+            }
+        }
+    }
+
+	public void initPath()
     {
         //创建文件夹
         List<string> Resource = new List<string>();
