@@ -41,19 +41,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   main_camera: {fileID: 0}
-  face: {fileID: 0}
+  face: {fileID: 11468716, guid: faf0ce5c46e971049a20f2597b5f6194, type: 2}
   light: {fileID: 0}
   audio: {fileID: 0}
-  zhankai: {fileID: 0}
+  zhankai: {fileID: 8300000, guid: cab912f3009b43843b0a48ac3120c6ad, type: 3}
   mod_ui_2d: {fileID: 115194, guid: 110e0a191727d5f4f8860ae0957652dd, type: 2}
   mod_ui_3d: {fileID: 195504, guid: c5a2efa85dfe2e241aeb34c422f115e5, type: 2}
-  mod_winExplode: {fileID: 0}
-  mod_loseExplode: {fileID: 0}
+  mod_winExplode: {fileID: 100000, guid: d0bd642121bd8624ea5f79bc25a0be69, type: 2}
+  mod_loseExplode: {fileID: 100000, guid: aeb251af760080f47baeb0265cc0e81f, type: 2}
   mod_audio_effect: {fileID: 147400, guid: ef457fec355425b4fbbcaee0c3f8e24e, type: 2}
-  mod_ocgcore_card: {fileID: 100424, guid: b5a84437478652141a934a354b3e3601, type: 2}
+  mod_ocgcore_card: {fileID: 100424, guid: 08fe3824ce347a4489d1818f98bd6989, type: 2}
   mod_ocgcore_card_cloude: {fileID: 110566, guid: b25dd4ff3da664943ac6df33917760df,
     type: 2}
-  mod_ocgcore_card_number_shower: {fileID: 166554, guid: 7bd46bc0bcd905642a0ce222a38c10ef,
+  mod_ocgcore_card_number_shower: {fileID: 166554, guid: e37612c8e3dbad54db0e428866080c5c,
     type: 2}
   mod_ocgcore_card_figure_line: {fileID: 183720, guid: 3114747afcca84e4d81360d5b19e5cab,
     type: 2}
@@ -93,7 +93,7 @@ MonoBehaviour:
   mod_ocgcore_blood: {fileID: 154148, guid: a1ab56112f979df4b8a38ce78f30bdee, type: 2}
   mod_ocgcore_blood_screen: {fileID: 100004, guid: 4826a28e01211e64ab63e8aab65bf799,
     type: 2}
-  mod_ocgcore_bs_atk_decoration: {fileID: 175090, guid: 2f2cada2fe5e43d41ae45f887daa5080,
+  mod_ocgcore_bs_atk_decoration: {fileID: 175090, guid: a3ab6c7363ebb2244958942a1cc2d847,
     type: 2}
   mod_ocgcore_bs_atk_line_earth: {fileID: 151680, guid: cb70567038412554480a054359dad8e2,
     type: 2}
@@ -113,12 +113,18 @@ MonoBehaviour:
   mod_ocgcore_cs_bomb: {fileID: 100000, guid: 3c0d69c6607bfe744b7da0ab6ff53b67, type: 2}
   mod_ocgcore_cs_negated: {fileID: 197450, guid: 060605917b7456e48a265ed2f97acede,
     type: 2}
-  mod_ocgcore_cs_mon_earth: {fileID: 0}
-  mod_ocgcore_cs_mon_water: {fileID: 0}
-  mod_ocgcore_cs_mon_fire: {fileID: 0}
-  mod_ocgcore_cs_mon_wind: {fileID: 0}
-  mod_ocgcore_cs_mon_light: {fileID: 0}
-  mod_ocgcore_cs_mon_dark: {fileID: 0}
+  mod_ocgcore_cs_mon_earth: {fileID: 188516, guid: 403bf6eadecab084d837692d99aa1726,
+    type: 2}
+  mod_ocgcore_cs_mon_water: {fileID: 188516, guid: b047e754820a2474b96b2dfee7860503,
+    type: 2}
+  mod_ocgcore_cs_mon_fire: {fileID: 188516, guid: bae56cf07e83c1149880df9ed7dadd83,
+    type: 2}
+  mod_ocgcore_cs_mon_wind: {fileID: 188516, guid: c3852330021b739439c28049b6fb2763,
+    type: 2}
+  mod_ocgcore_cs_mon_light: {fileID: 188516, guid: c837d314ee4b9db45a738925e4159c9f,
+    type: 2}
+  mod_ocgcore_cs_mon_dark: {fileID: 188516, guid: 204f43277a3085942a86f7275acc0177,
+    type: 2}
   mod_ocgcore_ss_summon_earth: {fileID: 148964, guid: f32dc027b2d1be6459f901a0b050c942,
     type: 2}
   mod_ocgcore_ss_summon_water: {fileID: 100004, guid: c5b9f6599e8c9c9478a02e9985f3b1c3,
@@ -131,12 +137,12 @@ MonoBehaviour:
     type: 2}
   mod_ocgcore_ss_summon_light: {fileID: 100000, guid: cdab8f13fdb5149499cf316800062215,
     type: 2}
-  mod_ocgcore_ol_earth: {fileID: 0}
-  mod_ocgcore_ol_water: {fileID: 0}
-  mod_ocgcore_ol_fire: {fileID: 0}
-  mod_ocgcore_ol_wind: {fileID: 0}
-  mod_ocgcore_ol_dark: {fileID: 0}
-  mod_ocgcore_ol_light: {fileID: 0}
+  mod_ocgcore_ol_earth: {fileID: 198160, guid: 0bf96b39484b0c84882da34e17130819, type: 2}
+  mod_ocgcore_ol_water: {fileID: 126488, guid: 3dad3d277b4f1b44caa32fdf134d60dd, type: 2}
+  mod_ocgcore_ol_fire: {fileID: 106852, guid: 694d7f4e1b6aae34d9a75a59d952582a, type: 2}
+  mod_ocgcore_ol_wind: {fileID: 178198, guid: 127e39fbba512d546a78ebb15efcfa59, type: 2}
+  mod_ocgcore_ol_dark: {fileID: 177540, guid: f8c81e2a945e8684185b6651939f9fff, type: 2}
+  mod_ocgcore_ol_light: {fileID: 161610, guid: 38661326c4038fd488de6981c1d31186, type: 2}
   mod_ocgcore_ss_spsummon_normal: {fileID: 125854, guid: ae7e84d855783134f9a09d0ca5cebfed,
     type: 2}
   mod_ocgcore_ss_spsummon_ronghe: {fileID: 188150, guid: 1e478768a2b045e4bb691d22be794c09,
@@ -145,69 +151,87 @@ MonoBehaviour:
     type: 2}
   mod_ocgcore_ss_spsummon_yishi: {fileID: 100010, guid: f931792496a8f834799e88ea5ded6b80,
     type: 2}
-  mod_ocgcore_ss_spsummon_link: {fileID: 0}
+  mod_ocgcore_ss_spsummon_link: {fileID: 150870, guid: 8feaa1cb8c38fb94ab91d7f27b7d6722,
+    type: 2}
   mod_ocgcore_ss_p_idle_effect: {fileID: 113812, guid: 4eee7fd80ee672d4f8cdaa9179879637,
     type: 2}
   mod_ocgcore_ss_p_sum_effect: {fileID: 192278, guid: 4a755177320618248bc717e4dc49926b,
     type: 2}
-  mod_ocgcore_ss_dark_hole: {fileID: 125294, guid: 7293a93c0f10df4469dff5d874100ce8,
+  mod_ocgcore_ss_dark_hole: {fileID: 170424, guid: b8fc61e501987aa4d836d532a2003eaf,
     type: 2}
-  mod_ocgcore_ss_link_mark: {fileID: 0}
-  new_ui_menu: {fileID: 0}
-  new_ui_setting: {fileID: 0}
-  new_ui_book: {fileID: 0}
-  new_ui_selectServer: {fileID: 0}
+  mod_ocgcore_ss_link_mark: {fileID: 193842, guid: 31f237d5f58cc3d44b8c6f489981cdbe,
+    type: 2}
+  new_ui_menu: {fileID: 167656, guid: 4e3c1289cf09fad40bde488731159a6a, type: 2}
+  new_ui_setting: {fileID: 133012, guid: b1ec81ad075831c4da5c2baaaa65594b, type: 2}
+  new_ui_book: {fileID: 154202, guid: 26b8ac8b01eea214c9aa2dda03224bf8, type: 2}
+  new_ui_selectServer: {fileID: 165948, guid: 66c270580b57825498511f78f7bc78bb, type: 2}
+  new_ui_selectServerAdd: {fileID: 165948, guid: 324cbf218782edb45bdb4506e3d21eb5,
+    type: 2}
   new_ui_RoomList: {fileID: 166306, guid: 2ee19dceffad869469d4ae6ce0acc3c5, type: 2}
-  new_ui_gameInfo: {fileID: 0}
-  new_ui_cardDescription: {fileID: 0}
-  new_ui_search: {fileID: 0}
-  new_ui_searchDetailed: {fileID: 0}
-  new_ui_cardOnSearchList: {fileID: 0}
-  new_bar_changeSide: {fileID: 0}
-  new_bar_duel: {fileID: 0}
-  new_bar_room: {fileID: 0}
-  new_bar_editDeck: {fileID: 0}
-  new_bar_watchDuel: {fileID: 0}
-  new_bar_watchRecord: {fileID: 0}
-  new_mod_cardInDeckManager: {fileID: 0}
-  new_mod_tableInDeckManager: {fileID: 0}
-  new_ui_handShower: {fileID: 0}
-  new_ui_textMesh: {fileID: 0}
-  new_ui_superButton: {fileID: 0}
-  new_ui_superButtonTransparent: {fileID: 0}
-  new_ui_aiRoom: {fileID: 0}
-  new_ocgcore_field: {fileID: 0}
-  new_ocgcore_chainCircle: {fileID: 0}
-  new_ocgcore_wait: {fileID: 0}
-  new_mouse: {fileID: 0}
-  remaster_deckManager: {fileID: 0}
-  remaster_replayManager: {fileID: 0}
-  remaster_puzzleManager: {fileID: 0}
-  remaster_tagRoom: {fileID: 0}
-  remaster_room: {fileID: 0}
-  ES_1: {fileID: 0}
-  ES_2: {fileID: 0}
-  ES_2Force: {fileID: 0}
-  ES_3cancle: {fileID: 0}
-  ES_Single_multiple_window: {fileID: 0}
-  ES_Single_option: {fileID: 0}
-  ES_multiple_option: {fileID: 0}
-  ES_input: {fileID: 0}
-  ES_position: {fileID: 0}
-  ES_Tp: {fileID: 0}
-  ES_Face: {fileID: 0}
-  ES_FS: {fileID: 0}
-  Pro1_CardShower: {fileID: 0}
-  Pro1_superCardShower: {fileID: 0}
-  Pro1_superCardShowerA: {fileID: 0}
-  New_arrow: {fileID: 0}
-  New_selectKuang: {fileID: 0}
-  New_chainKuang: {fileID: 0}
-  New_phase: {fileID: 0}
-  New_decker: {fileID: 0}
-  New_winCaculator: {fileID: 0}
-  New_winCaculatorRecord: {fileID: 0}
-  New_ocgcore_placeSelector: {fileID: 0}
+  new_ui_gameInfo: {fileID: 139962, guid: 0f5784805788a664da2c92f42ec39685, type: 2}
+  new_ui_cardDescription: {fileID: 194658, guid: dd57848b7cec7c441b1e5e16bfaf237f,
+    type: 2}
+  new_ui_search: {fileID: 175576, guid: 589b9f7f12556814fb7cc2371ef35649, type: 2}
+  new_ui_searchDetailed: {fileID: 108072, guid: 78d905a01dddef64b9cb440dc62b50a9,
+    type: 2}
+  new_ui_cardOnSearchList: {fileID: 121738, guid: 2b6ccbb323c719640a5956255df6e60f,
+    type: 2}
+  new_bar_changeSide: {fileID: 122638, guid: 63e044f7c8ec2f941bdf744dfc74c476, type: 2}
+  new_bar_duel: {fileID: 123392, guid: 829bf6713f5afeb40840803e21e03092, type: 2}
+  new_bar_room: {fileID: 154124, guid: 4450e27d91ca638499a5b7792d561372, type: 2}
+  new_bar_editDeck: {fileID: 178988, guid: 765dbdb0e4818974a91597f4abb24ee1, type: 2}
+  new_bar_watchDuel: {fileID: 117332, guid: c31923f847d652f428563c70ae9126c0, type: 2}
+  new_bar_watchRecord: {fileID: 101550, guid: c2bfacfbd9e90a145a2e44e65731cecf, type: 2}
+  new_mod_cardInDeckManager: {fileID: 189694, guid: 6747c695cb6d93142b1f445a7896ea98,
+    type: 2}
+  new_mod_tableInDeckManager: {fileID: 124102, guid: 19e5c6880e40e3a4183c21c56af33744,
+    type: 2}
+  new_ui_handShower: {fileID: 124728, guid: dfb4acd85c948fa44975eab80c157b45, type: 2}
+  new_ui_textMesh: {fileID: 141456, guid: f2d3ae60f92063649838be32d3c95bcf, type: 2}
+  new_ui_superButton: {fileID: 175034, guid: d0dca316780477b4fab4ba9122bdbc5e, type: 2}
+  new_ui_superButtonTransparent: {fileID: 175034, guid: 1a9f43e6666f73d499018b0bc50fa87f,
+    type: 2}
+  new_ui_aiRoom: {fileID: 137880, guid: eaffbd8c582dbcb4b82ee73629e34013, type: 2}
+  new_ocgcore_field: {fileID: 110048, guid: b1633e26122bb4749a19a5c38826336b, type: 2}
+  new_ocgcore_chainCircle: {fileID: 139058, guid: d32a4ff301257644a9d5e19d14ba7010,
+    type: 2}
+  new_ocgcore_wait: {fileID: 192526, guid: ebe9fe8493cc48b4d8fc206976a5e897, type: 2}
+  new_mouse: {fileID: 136044, guid: 19638d3f760fa38429c40cca2b503881, type: 2}
+  remaster_deckManager: {fileID: 175342, guid: e0266c76a82b162439c48c7fe64921ab, type: 2}
+  remaster_replayManager: {fileID: 197804, guid: 0ba65c521a7de0d46a9e31380654c3b4,
+    type: 2}
+  remaster_puzzleManager: {fileID: 186134, guid: 888e20adbca53df4cb24411246bb1b11,
+    type: 2}
+  remaster_tagRoom: {fileID: 154246, guid: 95580b5915bf1eb4eaf9b6b19a82f92d, type: 2}
+  remaster_room: {fileID: 154246, guid: fa04b5d4defb9284aa6b679865c5b9f1, type: 2}
+  ES_1: {fileID: 152348, guid: 49504cab875642a4a89768cf637df4e0, type: 2}
+  ES_2: {fileID: 125396, guid: c5cf793ce3857464eafa8aa15c1cfc06, type: 2}
+  ES_2Force: {fileID: 125396, guid: f687813851d9d9548b710c198d84db01, type: 2}
+  ES_3cancle: {fileID: 136638, guid: b40821dc1a2e1374981ee75e4c966c3f, type: 2}
+  ES_Single_multiple_window: {fileID: 124974, guid: 973d36324e25edb4e937f0d46b67d978,
+    type: 2}
+  ES_Single_option: {fileID: 140558, guid: c67c5053dc1b3c14db4efc960bc8f57c, type: 2}
+  ES_multiple_option: {fileID: 160692, guid: 2f2ccdda83cade9439f7a615e3943a17, type: 2}
+  ES_input: {fileID: 169056, guid: dd31e15b57e5f354e94eb55af88bdaae, type: 2}
+  ES_position: {fileID: 197414, guid: ebf9fc604e38b7348be638f5deaa91db, type: 2}
+  ES_Tp: {fileID: 139314, guid: 3cafe5fcc84bd994cb64aaf0fc2b4ec6, type: 2}
+  ES_Face: {fileID: 195852, guid: b8748dafca1e28c4d9e882fb8b3ff68b, type: 2}
+  ES_FS: {fileID: 150976, guid: e371745b12d178b4ebe42e879820c9bb, type: 2}
+  Pro1_CardShower: {fileID: 166874, guid: 7b9a1520ac854164d80116f4c9cd49f4, type: 2}
+  Pro1_superCardShower: {fileID: 166874, guid: 9c687fe8a2487c34a857f20d148bce8e, type: 2}
+  Pro1_superCardShowerA: {fileID: 166874, guid: ed7ee42be6f2d9742ab3af7f921085ad,
+    type: 2}
+  New_arrow: {fileID: 139724, guid: 65847fa9d4d916b4993e5b907ab5262f, type: 2}
+  New_selectKuang: {fileID: 161760, guid: f72715be2fc64e64a98ae2101b915fd1, type: 2}
+  New_chainKuang: {fileID: 123774, guid: 00f2b7eecbee10a4b8c086ed3d7dc683, type: 2}
+  New_phase: {fileID: 108702, guid: 1150c172f7a9d634a824727a558df871, type: 2}
+  New_decker: {fileID: 156862, guid: 7b12ea4fd69f4184b97c15f847459773, type: 2}
+  New_winCaculator: {fileID: 150246, guid: 139670d91598eab40a849ab0d82b2d41, type: 2}
+  New_winCaculatorRecord: {fileID: 130352, guid: 23c629e0cb8735a4ea8ea3136526cc89,
+    type: 2}
+  New_ocgcore_placeSelector: {fileID: 114714, guid: 86a90872c7957c84db384fd3d2961da2,
+    type: 2}
+  bgm: {fileID: 0}
   mouseParticle: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:

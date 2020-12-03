@@ -88,6 +88,7 @@ public class Program : MonoBehaviour
     public GameObject new_ui_setting;
     public GameObject new_ui_book;
     public GameObject new_ui_selectServer;
+    public GameObject new_ui_selectServerAdd;
     public GameObject new_ui_RoomList;
     public GameObject new_ui_gameInfo;
     public GameObject new_ui_cardDescription;
@@ -928,6 +929,7 @@ public class Program : MonoBehaviour
     public DeckManager deckManager;
     public Ocgcore ocgcore;
     public SelectServer selectServer;
+    public SelectServerAdd selectServerAdd;
     public RoomList roomList;
     public Book book;
     public puzzleMode puzzleMode;
@@ -950,6 +952,8 @@ public class Program : MonoBehaviour
         servants.Add(ocgcore);
         selectServer = new SelectServer();
         servants.Add(selectServer);
+        selectServerAdd = new SelectServerAdd();
+        servants.Add(selectServerAdd);
         roomList = new RoomList();
         servants.Add(roomList);
         book = new Book();
@@ -996,6 +1000,10 @@ public class Program : MonoBehaviour
         {
             selectServer.hide();
         }
+        if (to != selectServerAdd && to != selectServer && selectServerAdd.isShowed)
+        {
+            selectServerAdd.hide();
+        }
         if(to != roomList && to != selectServer && roomList.isShowed)
         {
             roomList.hide();
@@ -1021,6 +1029,7 @@ public class Program : MonoBehaviour
         if (to == deckManager && deckManager.isShowed == false) { deckManager.show(); BGMController.Instance.StartBGM(BGMController.BGMType.deck); }
         if (to == ocgcore && ocgcore.isShowed == false) { ocgcore.show(); BGMController.Instance.StartBGM(BGMController.BGMType.duel); }
         if (to == selectServer && selectServer.isShowed == false) { selectServer.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
+        if (to == selectServerAdd && selectServerAdd.isShowed == false) { selectServerAdd.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
         if (to == roomList && roomList.isShowed) { roomList.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
         if (to == selectReplay && selectReplay.isShowed == false) { selectReplay.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }
         if (to == puzzleMode && puzzleMode.isShowed == false) { puzzleMode.show(); BGMController.Instance.StartBGM(BGMController.BGMType.menu); }

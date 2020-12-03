@@ -339,8 +339,8 @@ public static class TcpHelper
         deckStrings.Clear();
         Package message = new Package();
         message.Fuction = (int)CtosMessage.JoinGame;
-        //Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(version);
-        message.Data.writer.Write((Int16)Config.ClientVersion);
+        uint ClientVersion = (uint)GameStringManager.helper_stringToInt(version);
+        message.Data.writer.Write((Int16)ClientVersion);
         message.Data.writer.Write((byte)204);
         message.Data.writer.Write((byte)204);
         message.Data.writer.Write(0);
