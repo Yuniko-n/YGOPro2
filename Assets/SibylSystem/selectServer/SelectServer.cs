@@ -52,9 +52,9 @@ public class SelectServer : WindowServantSP
     {
         inputVersion.value = "0x" + String.Format("{0:X}", Config.ClientVersion);
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
-      var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("server.conf")).Replace("\r", "").Split("\n");
+        var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("serverlist.conf")).Replace("\r", "").Split("\n");
 #else
-        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/server.conf", Encoding.UTF8);
+        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/serverlist.conf", Encoding.UTF8);
 #endif
         for (int i = 0; i < lines.Length; i++)
         {
@@ -140,9 +140,9 @@ public class SelectServer : WindowServantSP
     {
         serversList.Clear();
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
-      var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("server.conf")).Replace("\r", "").Split("\n");
+        var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("serverlist.conf")).Replace("\r", "").Split("\n");
 #else
-        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/server.conf", Encoding.UTF8);
+        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/serverlist.conf", Encoding.UTF8);
 #endif
         for (int i = 0; i < lines.Length; i++)
         {
@@ -193,9 +193,9 @@ public class SelectServer : WindowServantSP
     void onRmServer()
     {
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
-      var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("server.conf")).Replace("\r", "").Split("\n");
+        var lines = System.Text.Encoding.UTF8.GetString(Program.AssetsFileToByte("serverlist.conf")).Replace("\r", "").Split("\n");
 #else
-        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/server.conf", Encoding.UTF8);
+        var lines = File.ReadAllLines(Application.streamingAssetsPath + "/serverlist.conf", Encoding.UTF8);
 #endif
         for (int i = 0; i < lines.Length; i++)
         {

@@ -118,15 +118,15 @@ public class Menu : WindowServantSP
     public override void preFrameFunction()
     {
         base.preFrameFunction();
-        if (File.Exists(toPath) && outed == false)
-        {
-            outed = true;
-            RMSshow_yesOrNo("ExtractZIP_onlyYes", InterString.Get("发现更新包!@n是否立即解压？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
-        }
         if (upurl != "" && outed == false)
         {
             outed = true;
             RMSshow_yesOrNo("RMSshow_onlyYes", InterString.Get("发现更新!@n是否要下载更新？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
+        }
+        if (File.Exists(toPath) && outed == false)
+        {
+            outed = true;
+            RMSshow_yesOrNo("ExtractZIP_onlyYes", InterString.Get("发现更新包!@n是否立即解压？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
         }
         Menu.checkCommend();
     }
