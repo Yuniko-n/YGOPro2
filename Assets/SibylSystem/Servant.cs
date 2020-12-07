@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using YGOSharp.OCGWrapper.Enums;
 
 public class Servant
@@ -755,6 +756,7 @@ public class Servant
         UIHelper.InterGameObject(currentMSwindow);
         UIHelper.trySetLableText(currentMSwindow, "hint_", hint);
         UIHelper.registEvent(currentMSwindow, "input_", ES_RMSpremono, null, "yes_");
+        UIHelper.registEvent(currentMSwindow, "exit_", ES_RMSpremono, new messageSystemValue());
         UIHelper.getByName<UIInput>(currentMSwindow, "input_").value = default_;
         Program.go(100, () => { UIHelper.getByName<UIInput>(currentMSwindow, "input_").isSelected = true; });
     }
@@ -763,6 +765,12 @@ public class Servant
     {
         Program.I().cardDescription.mLog(hint);
     }
+
+    private UIInput inputUrl;
+
+    private string faceName;
+
+    private GameObject currentMSwindow_Face = null;
 
     public void RMSshow_face(string hashCode, string name)  
     {
@@ -779,10 +787,39 @@ public class Servant
             true,
             new Vector3(((float)Screen.height) / 700f, ((float)Screen.height) / 700f, ((float)Screen.height) / 700f)
             );
+        faceName = name;
+        currentMSwindow_Face = currentMSwindow;
         UIHelper.InterGameObject(currentMSwindow);
+        inputUrl = UIHelper.getByName<UIInput>(currentMSwindow, "input_");
         UIHelper.getByName<UITexture>(currentMSwindow, "face_").mainTexture = UIHelper.getFace(name);
-        UIHelper.registEvent(currentMSwindow, "yes_", ES_RMSpremono, new messageSystemValue());
+        UIHelper.registEvent(currentMSwindow, "exit_", ES_RMSpremono, new messageSystemValue());
+        UIHelper.registEvent(currentMSwindow, "yes_", DownloadFace);
     }
 
+    public void DownloadFace()
+    {
+        string url = "http://q1.qlogo.cn/headimg_dl?dst_uin=" + inputUrl.value + "&spec=100";
+        string path = "texture/face/" + faceName + ".jpg";
+        //开始下载
+        HttpDldFile df = new HttpDldFile();
+        if (inputUrl.value.StartsWith("http"))
+        {
+            url = inputUrl.value;
+            df.Download(url, path);         //使用自定义Url
+        }
+        else
+        {
+            df.Download(url, path);         //使用QQ头像
+        }
+        //刷新头像
+        if (File.Exists(path))
+        {
+            Texture2D Face = UIHelper.getTexture2D(path);
+            UIHelper.faces.Remove(faceName);//防止bug，先删除再添加
+            UIHelper.faces.Add(faceName, Face);
+            UIHelper.getByName<UITexture>(currentMSwindow_Face, "face_").mainTexture = Face;
+            Program.I().selectServer.face.mainTexture = Face;
+        }
+    }
     #endregion
 }

@@ -7,10 +7,10 @@ using Mono.Data.Sqlite;
 public class AppUpdateLog
 {
     //客户端版本
-    public static string GAME_VERSION = Program.PRO_VERSION();
+    public static string GAME_VERSION = Program.PRO_VERSION() + "-1207";
 
     //卡片数量
-    public static int CARDS_NUMBER = 10947;
+    public static int CARDS_NUMBER = 11062;
 
     public static int CheckCards(string path)
     {

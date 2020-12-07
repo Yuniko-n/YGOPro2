@@ -38,7 +38,7 @@ public class Menu : WindowServantSP
     }
 
     bool new_url = false;
-    string url = "http://api.ygo2020.xyz/ygopro2/ver_win.txt";
+    string url = "http://server.ygo2020.link/ygopro2/ver_win.txt";
     string upurl = "";
     string VERSION = "";
 #if !UNITY_EDITOR && UNITY_ANDROID
@@ -57,7 +57,7 @@ public class Menu : WindowServantSP
             if (!new_url)
             {   //启用备用地址
                 new_url = true;
-                url = "http://download.ygo2020.xyz/ygopro2/ver_win.txt";
+                url = "http://dl.ygo2020.link/ygopro2/ver_win.txt";
                 (new Thread(up)).Start();
             }
             UnityEngine.Debug.Log(e);

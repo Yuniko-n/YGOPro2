@@ -438,7 +438,7 @@ public class GameTextureManager
 #endif
         if (!File.Exists(path) && pic.code != 0)
         {
-            df.Download("http://download.ygo2020.xyz/ygopro2/picture/card/" + pic.code.ToString() + ".jpg", "picture/card/" + pic.code.ToString() + ".jpg");
+            df.Download("http://dl.ygo2020.link/ygopro2/picture/card/" + pic.code.ToString() + ".jpg", "picture/card/" + pic.code.ToString() + ".jpg");
             path = "picture/card/" + pic.code.ToString() + ".jpg";
         }
         if (File.Exists(path))
