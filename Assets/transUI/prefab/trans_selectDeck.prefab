@@ -850,8 +850,8 @@ Transform:
   - {fileID: 486262}
   - {fileID: 470774}
   - {fileID: 484798}
-  - {fileID: 477046}
   - {fileID: 470404}
+  - {fileID: 477046}
   - {fileID: 483152}
   - {fileID: 483848}
   m_Father: {fileID: 419230}
@@ -1105,13 +1105,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 338.59998, y: -30, z: 0}
+  m_LocalPosition: {x: 338.59998, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 431914}
   - {fileID: 419984}
   m_Father: {fileID: 430046}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &470774
 Transform:
@@ -1150,13 +1150,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 338.59998, y: 5, z: 0}
+  m_LocalPosition: {x: 338.59998, y: -30, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 492258}
   - {fileID: 430674}
   m_Father: {fileID: 430046}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &480458
 Transform:
@@ -3419,7 +3419,7 @@ MonoBehaviour:
     relative: 1
     absolute: -4
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: 0.39215687, b: 0, a: 1}
   mPivot: 4
   mWidth: 150
   mHeight: 32
@@ -3431,7 +3431,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 12800000, guid: f775853fdfd14bb47934543e95c3bae3, type: 3}
   mFont: {fileID: 0}
-  mText: "\u4EE3\u7801\u7F16\u8F91"
+  mText: "\u5361\u7EC4\u4EE3\u7801"
   mFontSize: 18
   mFontStyle: 0
   mAlignment: 1

@@ -17,8 +17,35 @@ public class selectDeck : WindowServantSP
 
     cardPicLoader[] quickCards = new cardPicLoader[200];
 
+    public GameObject gameObjectEditCode;
+    UIInput inputEditCode;
+    UITextList editTextList;
+    string editPath;
+
     public override void initialize()
     {
+        float f = Screen.height / 700f;
+        gameObjectEditCode = create
+            (
+            Program.I().editDeckCode,
+            Program.camera_main_2d.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height * 2f, 0)),
+            new Vector3(0, 0, 0),
+            false,
+            Program.ui_main_2d,
+            true,
+            new Vector3(f, f, f)
+            );
+            
+        UIHelper.InterGameObject(gameObjectEditCode);
+        UIHelper.registEvent(gameObjectEditCode, "exit_", editExit);
+        UIHelper.registEvent(gameObjectEditCode, "save_", editSave);
+        UIHelper.registEvent(gameObjectEditCode, "clear_", editClear);
+        UIHelper.registEvent(gameObjectEditCode, "copy_", editCopy);
+        UIHelper.registEvent(gameObjectEditCode, "paste_", editPaste);
+        UIHelper.getByName<UISprite>(gameObjectEditCode, "input_").enabled = false;//暂定
+        inputEditCode = UIHelper.getByName<UIInput>(gameObjectEditCode, "input_");
+        editTextList = UIHelper.getByName<UITextList>(gameObjectEditCode, "code_");
+
         createWindow(Program.I().remaster_deckManager);
         deckPanel = gameObject.GetComponentInChildren<UIDeckPanel>();
         UIHelper.registEvent(gameObject, "exit_", onClickExit);
@@ -41,6 +68,84 @@ public class selectDeck : WindowServantSP
         }
         SetActiveFalse();
 
+    }
+
+    void editExit()
+    {
+        gameObjectEditCode.SetActive(false);
+        iTween.MoveTo(gameObjectEditCode, Program.camera_main_2d.ScreenToWorldPoint(
+            new Vector3(Screen.width + 600, Screen.height / 2, 600)), 1.2f);
+    }
+    
+    void editSave()
+    {
+        if (inputEditCode.value.Contains("ygo://deck?"))
+        {
+            Program.PrintToChat(InterString.Get("发现YGOMobile卡组代码，自动转换为YGOPro卡组代码。"));
+            string code = inputEditCode.value;
+            code = code.Replace("ygo://deck?", "#created by ...");
+            code = code.Replace("main=", "\'#main\'");
+            code = code.Replace("&extra=", "\'#extra\'");
+            code = code.Replace("&side=", "\'!side\'");
+            code = code.Replace("'", "\n");
+
+            var lines = code.Replace("\r", "").Split("\n");
+            List<string> codeList = new List<string>();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].Substring(lines[i].Length - 2, 1) == "*")
+                {
+                    int l = Convert.ToInt32(lines[i].Substring(lines[i].Length - 1, 1));
+                    for(int s = 0; s < l; s++)
+                    {
+                        codeList.Add(lines[i].Substring(0, lines[i].Length - 2));
+                    }
+                }
+                else
+                {
+                    codeList.Add(lines[i]);
+                }
+            }
+
+            inputEditCode.value = string.Join("\n", codeList.ToArray());
+        }
+        else if (!inputEditCode.value.Contains("#created by"))
+        {
+            Program.PrintToChat(InterString.Get("无法识别的卡组代码"));
+            return;
+        }
+        File.WriteAllText(editPath, inputEditCode.value);
+        Program.PrintToChat(InterString.Get("已保存：" + editPath));
+        editLoad();
+    }
+
+    void editClear()
+    {
+        inputEditCode.value = "";
+        editTextList.Clear();
+    }
+
+    void editCopy()
+    {
+        GUIUtility.systemCopyBuffer = inputEditCode.value;
+        Program.PrintToChat(InterString.Get("已复制到剪贴板"));
+    }
+
+    void editPaste()
+    {
+        inputEditCode.value = GUIUtility.systemCopyBuffer;
+        editLoad();
+        Program.PrintToChat(InterString.Get("已从剪贴板导入"));
+    }
+
+    void editLoad()
+    {
+        editTextList.Clear();
+        string[] lines = inputEditCode.value.Replace("\r", "").Split("\n");
+        for (int i = 0; i < lines.Length; i++)
+        {
+            editTextList.Add(lines[i]);
+        }
     }
 
     void onSearch()
@@ -246,21 +351,14 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
-        string path = "deck/" + superScrollView.selectedString + ".ydk";
-        if (File.Exists(path))
-        {
-            #if UNITY_EDITOR || UNITY_STANDALONE_WIN //编译器、Windows
-                System.Diagnostics.Process.Start("notepad.exe", path);
-            #elif UNITY_STANDALONE_OSX //Mac OS X
-                System.Diagnostics.Process.Start("open", "-e " + path);
-            #elif UNITY_STANDALONE_LINUX //Linux
-                System.Diagnostics.Process.Start("gedit", path);
-            #elif UNITY_ANDROID //Android
-                AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
-                jo.Call("openFile", Program.GAME_PATH + path);
-            //#elif UNITY_IPHONE //iPhone
-            #endif
-        }
+        editPath = "deck/" + superScrollView.selectedString + ".ydk";
+
+        gameObjectEditCode.SetActive(true);
+
+        inputEditCode.value = File.ReadAllText(editPath);
+        editLoad();
+        iTween.MoveTo(gameObjectEditCode, Program.camera_main_2d.ScreenToWorldPoint(
+            new Vector3(Screen.width / 2, Screen.height / 2, 0)), 1.2f);
     }
 
     private void setSortLable()
@@ -512,6 +610,7 @@ public class selectDeck : WindowServantSP
 
     void onClickExit()
     {
+        editExit();
         Program.I().shiftToServant(Program.I().menu);
     }
 

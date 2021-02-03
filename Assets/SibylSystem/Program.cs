@@ -112,6 +112,7 @@ public class Program : MonoBehaviour
     public GameObject new_ocgcore_chainCircle;
     public GameObject new_ocgcore_wait;
     public GameObject new_mouse;
+    public GameObject editDeckCode;
     public GameObject remaster_deckManager;
     public GameObject remaster_replayManager;
     public GameObject remaster_puzzleManager;

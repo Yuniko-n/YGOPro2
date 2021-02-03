@@ -197,6 +197,7 @@ MonoBehaviour:
     type: 2}
   new_ocgcore_wait: {fileID: 192526, guid: ebe9fe8493cc48b4d8fc206976a5e897, type: 2}
   new_mouse: {fileID: 136044, guid: 19638d3f760fa38429c40cca2b503881, type: 2}
+  editDeckCode: {fileID: 197804, guid: 8de4021681ea4834188352d9fc5b0414, type: 2}
   remaster_deckManager: {fileID: 175342, guid: e0266c76a82b162439c48c7fe64921ab, type: 2}
   remaster_replayManager: {fileID: 197804, guid: 0ba65c521a7de0d46a9e31380654c3b4,
     type: 2}
