@@ -93,12 +93,13 @@ public class selectDeck : WindowServantSP
             List<string> codeList = new List<string>();
             for (int i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Substring(lines[i].Length - 2, 1) == "*")
+                if (lines[i].Contains("*"))
                 {
-                    int l = Convert.ToInt32(lines[i].Substring(lines[i].Length - 1, 1));
-                    for(int s = 0; s < l; s++)
+                    var l = lines[i].Split("*");
+                    int max = Convert.ToInt32(l[1]);
+                    for(int s = 0; s < max; s++)
                     {
-                        codeList.Add(lines[i].Substring(0, lines[i].Length - 2));
+                        codeList.Add(l[0]);
                     }
                 }
                 else
@@ -106,7 +107,6 @@ public class selectDeck : WindowServantSP
                     codeList.Add(lines[i]);
                 }
             }
-
             inputEditCode.value = string.Join("\n", codeList.ToArray());
         }
         else if (!inputEditCode.value.Contains("#created by"))
