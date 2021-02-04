@@ -20,7 +20,6 @@ public class selectDeck : WindowServantSP
     public GameObject gameObjectEditCode;
     UIInput inputEditCode;
     UITextList editTextList;
-    string editPath;
 
     public override void initialize()
     {
@@ -114,9 +113,10 @@ public class selectDeck : WindowServantSP
             Program.PrintToChat(InterString.Get("无法识别的卡组代码"));
             return;
         }
-        File.WriteAllText(editPath, inputEditCode.value);
-        Program.PrintToChat(InterString.Get("已保存：" + editPath));
+        File.WriteAllText("deck/" + superScrollView.selectedString + ".ydk", inputEditCode.value);
+        Program.PrintToChat(InterString.Get("已保存：" + superScrollView.selectedString));
         editLoad();
+        printSelected();
     }
 
     void editClear()
@@ -351,11 +351,10 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
-        editPath = "deck/" + superScrollView.selectedString + ".ydk";
 
         gameObjectEditCode.SetActive(true);
 
-        inputEditCode.value = File.ReadAllText(editPath);
+        inputEditCode.value = File.ReadAllText("deck/" + superScrollView.selectedString + ".ydk");
         editLoad();
         iTween.MoveTo(gameObjectEditCode, Program.camera_main_2d.ScreenToWorldPoint(
             new Vector3(Screen.width / 2, Screen.height / 2, 0)), 1.2f);
