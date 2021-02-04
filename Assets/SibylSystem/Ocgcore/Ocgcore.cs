@@ -3953,10 +3953,6 @@ public class Ocgcore : ServantWithCardDescription
                         if (card.levelForSelect_2 == 0)
                         {
                             card.levelForSelect_2 = card.levelForSelect_1;
-                            if ((card.get_data().Type & (int)CardType.Link) > 0)
-                            {
-                                card.levelForSelect_2 = 1;
-                            }
                         }
                         allCardsInSelectMessage.Add(card);
                         cardsMustBeSelected.Add(card);
@@ -3980,10 +3976,6 @@ public class Ocgcore : ServantWithCardDescription
                         if (card.levelForSelect_2 == 0)
                         {
                             card.levelForSelect_2 = card.levelForSelect_1;
-                            if ((card.get_data().Type & (int)CardType.Link) > 0)
-                            {
-                                card.levelForSelect_2 = 1;
-                            }
                         }
                         allCardsInSelectMessage.Add(card);
                         card.forSelect = true;
