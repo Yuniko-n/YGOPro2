@@ -127,13 +127,23 @@ public class selectDeck : WindowServantSP
 
     void editCopy()
     {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+        jo.Call("doClipBoardCopy", inputEditCode.value);
+#else
         GUIUtility.systemCopyBuffer = inputEditCode.value;
+#endif
         Program.PrintToChat(InterString.Get("已复制到剪贴板"));
     }
 
     void editPaste()
     {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+        inputEditCode.value = jo.Call<string>("doClipBoardPaste");
+#else
         inputEditCode.value = GUIUtility.systemCopyBuffer;
+#endif
         editLoad();
         Program.PrintToChat(InterString.Get("已从剪贴板导入"));
     }
