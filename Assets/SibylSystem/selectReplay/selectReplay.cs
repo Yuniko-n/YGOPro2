@@ -180,6 +180,7 @@ public class selectReplay : WindowServantSP
             reader = new BinaryReader(new MemoryStream(raw));
             if ((returnValue.Flag & 0x2) > 0)
             {
+                Program.I().room.mode = 2;
                 returnValue.playerData.Add(new Percy.YRP.PlayerData());
                 returnValue.playerData.Add(new Percy.YRP.PlayerData());
                 returnValue.playerData.Add(new Percy.YRP.PlayerData());
@@ -342,7 +343,7 @@ public class selectReplay : WindowServantSP
             }
             catch (Exception)
             {
-                RMSshow_none(InterString.Get("非法输入！请检查输入的文件名。"));
+                RMSshow_none(InterString.Get("重命名失败！请检查输入的文件名，以及文件夹权限。"));
             }
         }
         if (hashCode == "onDelete")

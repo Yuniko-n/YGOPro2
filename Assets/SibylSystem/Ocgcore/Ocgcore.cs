@@ -1267,6 +1267,20 @@ public class Ocgcore : ServantWithCardDescription
                 name_1 = r.ReadUnicode(50);
                 name_1_tag = r.ReadUnicode(50);
                 name_1_c = r.ReadUnicode(50);
+                bool isTag = !(name_0_tag == "---" && name_1_tag == "---" && name_0 == name_0_c && name_1 == name_1_c);
+                if (isTag)
+                {
+                    if (isFirst)
+                    {
+                        name_0_c = name_0;
+                        name_1_c = name_1_tag;
+                    }
+                    else
+                    {
+                        name_0_c = name_0_tag;
+                        name_1_c = name_1;
+                    }
+                }
                 if (r.BaseStream.Position < r.BaseStream.Length)
                 {
                     MasterRule = r.ReadInt32();
@@ -3996,188 +4010,146 @@ public class Ocgcore : ServantWithCardDescription
                 min = r.ReadByte();
                 //TODO: can cancel
                 if (min == 0) min = 1;
-                int _field = ~r.ReadInt32();
-                if (Program.I().setting.setting.hand.value == true || Program.I().setting.setting.handm.value == true)
+                uint _field = ~r.ReadUInt32();
+                if (Program.I().setting.setting.hand.value == true || Program.I().setting.setting.handm.value == true || currentMessage == GameMessage.SelectDisfield)
                 {
-                    
                     ES_min = min;
                     for (int i = 0; i < min; i++)
                     {
                         byte[] resp = new byte[3];
-                        bool pendulumZone = false;
-                        int filter;
+                        uint filter;
 
-                        /*if ((field & 0x7f0000) != 0)
+                        for (int j = 0; j < 2; j++)
                         {
-                            resp[0] = (byte)(1 - player);
-                            resp[1] = 0x4;
-                            filter = (field >> 16) & 0x7f;
-                        }
-                        else if ((field & 0x1f000000) != 0)
-                        {
-                            resp[0] = (byte)(1 - player);
-                            resp[1] = 0x8;
-                            filter = (field >> 24) & 0x1f;
-                        }
-                        else if ((field & 0xc0000000) != 0)
-                        {
-                            resp[0] = (byte)(1 - player);
-                            resp[1] = 0x8;
-                            filter = (field >> 30) & 0x3;
-                            pendulumZone = true;
-                        }*/ 
-                    for (int j=0; j<2; j++)
-                    {
-                        resp = new byte[3];
-                        pendulumZone = false;
-                        filter = 0;
-                        int field;
+                            resp = new byte[3];
+                            filter = 0;
+                            uint field;
 
-                        if (j==0)
-                        {
-                            resp[0] = (byte)player;
-                            field = _field & 0xffff;
-                        }
-                        else
-                        {
-                            resp[0] = (byte)(1 - player);
-                            field = _field >> 16;
-                        }
+                            if (j == 0)
+                            {
+                                resp[0] = (byte)player;
+                                field = _field & 0xffff;
+                            }
+                            else
+                            {
+                                resp[0] = (byte)(1 - player);
+                                field = _field >> 16;
+                            }
 
-                        if ((field & 0x7f) != 0)
-                        {
-                            resp[1] = 0x4;
-                            filter = field & 0x7f;
-                        }
-                        else if ((field & 0x1f00) != 0)
-                        {
-                            resp[1] = 0x8;
-                            filter = (field >> 8) & 0x1f;
-                        }
-                        else if ((field & 0xc000) != 0)
-                        {
-                            resp[1] = 0x8;
-                            filter = (field >> 14) & 0x3;
-                            pendulumZone = true;
-                        }
-
-                        if (filter == 0)
-                            continue;
-
-                        if (!pendulumZone)
-                        {
-                            if ((filter & 0x4) != 0)
+                            if ((field & 0x7f) != 0)
                             {
-                                resp[2] = 2;
-                                createPlaceSelector(resp);
-                            }
-                            if ((filter & 0x2) != 0)
-                            {
-                                resp[2] = 1;
-                                createPlaceSelector(resp);
-                            }
-                            if ((filter & 0x8) != 0)
-                            {
-                                resp[2] = 3;
-                                createPlaceSelector(resp);
-                            }
-                            if ((filter & 0x1) != 0)
-                            {
-                                resp[2] = 0;
-                                createPlaceSelector(resp);
-                            }
-                            if ((filter & 0x10) != 0)
-                            {
-                                resp[2] = 4;
-                                createPlaceSelector(resp);
-                            }
-                            if (resp[1] == 0x4)
-                            {
-                                if ((filter & 0x20) != 0)
+                                resp[1] = (byte)CardLocation.MonsterZone;
+                                filter = field & 0x7f;
+                                for (int k = 0; k < 7; k++)
                                 {
-                                    resp[2] = 5;
+                                    if ((filter & (1u << k)) != 0)
+                                    {
+                                        resp[2] = (byte)k;
+                                        createPlaceSelector(resp);
+                                    }
+                                }
+                            }
+                            if ((field & 0x1f00) != 0)
+                            {
+                                resp[1] = (byte)CardLocation.SpellZone;
+                                filter = (field >> 8) & 0x1f;
+                                for (int k = 0; k < 5; k++)
+                                {
+                                    if ((filter & (1u << k)) != 0)
+                                    {
+                                        resp[2] = (byte)k;
+                                        createPlaceSelector(resp);
+                                    }
+                                }
+                            }
+                            if ((field & 0xc000) != 0)
+                            {
+                                resp[1] = (byte)CardLocation.SpellZone;
+                                filter = (field >> 14) & 0x3;
+                                if ((filter & 0x2) != 0)
+                                {
+                                    resp[2] = 7;
                                     createPlaceSelector(resp);
                                 }
-                                if ((filter & 0x40) != 0)
+                                if ((filter & 0x1) != 0)
                                 {
                                     resp[2] = 6;
                                     createPlaceSelector(resp);
                                 }
                             }
                         }
-                        else
-                        {
-                            if ((filter & 0x2) != 0)
-                            {
-                                resp[2] = 7;
-                                createPlaceSelector(resp);
-                            }
-                            if ((filter & 0x1) != 0)
-                            {
-                                resp[2] = 6;
-                                createPlaceSelector(resp);
-                            }
-                        }
-
                     }
 
-                    }
-                    if (Es_selectMSGHintType == 3)
+                    if (currentMessage == GameMessage.SelectPlace)
                     {
-                        if (Es_selectMSGHintPlayer == 0)
+                        if (Es_selectMSGHintType == 3)
                         {
-                            gameField.setHint(InterString.Get("请为我方的「[?]」选择位置。", YGOSharp.CardsManager.Get(Es_selectMSGHintData).Name));
+                            if (Es_selectMSGHintPlayer == 0)
+                            {
+                                gameField.setHint(InterString.Get("请为我方的「[?]」选择位置。", YGOSharp.CardsManager.Get(Es_selectMSGHintData).Name));
+                            }
+                            else
+                            {
+                                gameField.setHint(InterString.Get("请为对方的「[?]」选择位置。", YGOSharp.CardsManager.Get(Es_selectMSGHintData).Name));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ES_selectHint != "")
+                        {
+                            gameField.setHint(ES_selectHint);
                         }
                         else
                         {
-                            gameField.setHint(InterString.Get("请为对方的「[?]」选择位置。", YGOSharp.CardsManager.Get(Es_selectMSGHintData).Name));
+                            gameField.setHint(GameStringManager.get_unsafe(570));
                         }
                     }
                 }
                 else
                 {
-                    int field = _field;
+                    uint field = _field;
                     for (int i = 0; i < min; i++)
                     {
                         byte[] resp = new byte[3];
                         bool pendulumZone = false;
-                        int filter;
+                        uint filter;
 
                         if ((field & 0x7f0000) != 0)
                         {
                             resp[0] = (byte)(1 - player);
-                            resp[1] = 0x4;
+                            resp[1] = (byte)CardLocation.MonsterZone;
                             filter = (field >> 16) & 0x7f;
                         }
                         else if ((field & 0x1f000000) != 0)
                         {
                             resp[0] = (byte)(1 - player);
-                            resp[1] = 0x8;
+                            resp[1] = (byte)CardLocation.SpellZone;
                             filter = (field >> 24) & 0x1f;
                         }
                         else if ((field & 0xc0000000) != 0)
                         {
                             resp[0] = (byte)(1 - player);
-                            resp[1] = 0x8;
+                            resp[1] = (byte)CardLocation.SpellZone;
                             filter = (field >> 30) & 0x3;
                             pendulumZone = true;
                         }
                         else if ((field & 0x7f) != 0)
                         {
                             resp[0] = (byte)player;
-                            resp[1] = 0x4;
+                            resp[1] = (byte)CardLocation.MonsterZone;
                             filter = field & 0x7f;
                         }
                         else if ((field & 0x1f00) != 0)
                         {
                             resp[0] = (byte)player;
-                            resp[1] = 0x8;
+                            resp[1] = (byte)CardLocation.SpellZone;
                             filter = (field >> 8) & 0x1f;
                         }
                         else
                         {
                             resp[0] = (byte)player;
-                            resp[1] = 0x8;
+                            resp[1] = (byte)CardLocation.SpellZone;
                             filter = (field >> 14) & 0x3;
                             pendulumZone = true;
                         }
@@ -4191,7 +4163,7 @@ public class Ocgcore : ServantWithCardDescription
                             else if ((filter & 0x10) != 0) resp[2] = 4;
                             else
                             {
-                                if (resp[1] == 0x4)
+                                if (resp[1] == (byte)CardLocation.MonsterZone)
                                 {
                                     if ((filter & 0x20) != 0) resp[2] = 5;
                                     else if ((filter & 0x40) != 0) resp[2] = 6;
