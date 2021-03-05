@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=YGOPro2
+Type=Application
+Version=1.035.2
+Terminal=false
+Categories=Game;CardGame;
+Path={INSTALL_PATH}
+Exec={INSTALL_PATH}/YGOPro2_linux
+Icon={INSTALL_PATH}/YGOPro2_linux_Data/Resources/UnityPlayer.png

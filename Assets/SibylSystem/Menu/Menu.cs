@@ -105,6 +105,10 @@ public class Menu : WindowServantSP
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
                 jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
+#elif !UNITY_EDITOR && UNITY_STANDALONE_WIN
+                //参数1: 更新包；参数2: 关闭进程(可留空)
+                //Upgrade.exe "upgrade.zip" "YGOPro2.exe"
+                Process.Start("Upgrade.exe", toPath + " YGOPro2.exe");
 #else
                 Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
                 File.Delete(toPath);
@@ -118,7 +122,7 @@ public class Menu : WindowServantSP
     public override void preFrameFunction()
     {
         base.preFrameFunction();
-        if (upurl != "" && outed == false)
+        if (!File.Exists(toPath) && upurl != "" && outed == false)
         {
             outed = true;
             RMSshow_yesOrNo("RMSshow_onlyYes", InterString.Get("发现更新!@n是否要下载更新？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });

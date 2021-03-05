@@ -300,7 +300,7 @@ public class Program : MonoBehaviour
         GAME_PATH = Environment.CurrentDirectory + "/";
 #endif
 
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE_OSX)
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
         Environment.CurrentDirectory = GAME_PATH;
         System.IO.Directory.SetCurrentDirectory(GAME_PATH);
 #endif
