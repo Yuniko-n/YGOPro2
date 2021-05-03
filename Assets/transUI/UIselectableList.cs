@@ -28,7 +28,7 @@ public class UIselectableList : MonoBehaviour {
     }
     public Action selectedAction;
     UIScrollView uIScrollView;
-    float heightOfEach=20;
+    float heightOfEach = 35;
     public float preHeight = 0;
     class selection
     {
@@ -48,7 +48,8 @@ public class UIselectableList : MonoBehaviour {
     public void install()
     {
         uIScrollView = panel.gameObject.AddComponent<UIScrollView>();
-        uIScrollView.can_be_draged = false;
+        uIScrollView.can_be_draged = true;
+        uIScrollView.iOSDragEmulation = true;
         uIScrollView.movement = UIScrollView.Movement.Vertical;
         uIScrollView.contentPivot = UIWidget.Pivot.TopLeft;
         uIScrollView.dragEffect = UIScrollView.DragEffect.Momentum;

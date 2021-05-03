@@ -95,6 +95,7 @@ public class Program : MonoBehaviour
     public GameObject new_ui_search;
     public GameObject new_ui_searchDetailed;
     public GameObject new_ui_cardOnSearchList;
+    public GameObject new_ui_deckCategory;
     public GameObject new_bar_changeSide;
     public GameObject new_bar_duel;
     public GameObject new_bar_room;
@@ -124,6 +125,7 @@ public class Program : MonoBehaviour
     public GameObject ES_3cancle;
     public GameObject ES_Single_multiple_window;
     public GameObject ES_Single_option;
+    public GameObject ES_Menu;
     public GameObject ES_multiple_option;
     public GameObject ES_input;
     public GameObject ES_position;
@@ -278,7 +280,11 @@ public class Program : MonoBehaviour
 
     public static float verticleScale = 5f;
 
+    //public static string LanguageDir = "";
+
     public static string GAME_PATH = "/storage/emulated/0/ygopro2/";
+
+    public static string DECK_PATH = "deck/";
 
     public static string[] AssetsFile;
 
@@ -304,6 +310,20 @@ public class Program : MonoBehaviour
         Environment.CurrentDirectory = GAME_PATH;
         System.IO.Directory.SetCurrentDirectory(GAME_PATH);
 #endif
+
+        AppUpdateLog.CheckVersion();
+        UpdateClientData(GAME_PATH);
+        if (File.Exists(GAME_PATH + "deck.txt"))
+        {
+            StreamReader sr = new StreamReader(GAME_PATH + "deck.txt", System.Text.Encoding.UTF8);
+            string path = sr.ReadToEnd();
+            sr.Close();
+            string[] lines = path.Replace("\r", "").Split("\n");
+            DECK_PATH = lines[0];
+            if (lines[0].Substring(lines[0].Length - 1, 1) != "/")
+                DECK_PATH += "/";
+        }
+
         go(1, () =>
         {
             GAME_VERSION = PRO_VERSION();
@@ -317,6 +337,12 @@ public class Program : MonoBehaviour
         go(300, () =>
         {
             initPath();
+            //if (File.Exists("config/Language.txt")) LanguageDir = AppLanguage.LanguageDir();
+            if (!File.Exists("cdb/cards.cdb") || !File.Exists("config/lflist.conf") || !File.Exists("config/strings.conf") || !File.Exists("config/translation.conf"))
+            {
+                ExtractZipFile(Application.streamingAssetsPath + "/data/data.zip", GAME_PATH);
+            }
+
             InterString.initialize("config/translation.conf");
             GameTextureManager.initialize();
             Config.initialize("config/config.conf");
@@ -461,6 +487,33 @@ public class Program : MonoBehaviour
         return www.bytes;
     }
 
+    public void UpdateClientData(string path)
+    {
+        if (AppUpdateLog.UPDATE_DATA)
+        {
+            string fileUpZip = Application.persistentDataPath + "/update.zip";
+            string filePath = Application.streamingAssetsPath + "/data/data.zip";
+            ExtractZipFile(filePath, path);
+            File.WriteAllText(AppUpdateLog.GAME_FILE, AppUpdateLog.GAME_VERSION);
+            doDeleteDir(path + "script");
+            doDeleteDir(path + "picture/cardIn8thEdition");
+            if (File.Exists(fileUpZip)) File.Delete(fileUpZip);
+        }
+
+        if (AppUpdateLog.UPDATE_SOUND)
+        {
+            string filePath = Application.streamingAssetsPath + "/data/sound.zip";
+            ExtractZipFile(filePath, path);
+            File.WriteAllText(AppUpdateLog.SOUND_FILE, AppUpdateLog.GAME_SOUND_VERSION);
+        }
+
+        if (AppUpdateLog.UPDATE_UI)
+        {
+            string filePath = Application.streamingAssetsPath + "/data/texture.zip";
+            ExtractZipFile(filePath, path);
+            File.WriteAllText(AppUpdateLog.UI_FILE, AppUpdateLog.GAME_UI_VERSION);
+        }
+    }
 
     public void ExtractZipFile(string filePath, string outFolder)
     {
@@ -504,6 +557,7 @@ public class Program : MonoBehaviour
         catch (Exception ex)
         {
             Debug.Log(ex);
+            if (File.Exists(filePath)) File.Delete(filePath);//文件损坏或不支持
         }
         finally
         {
@@ -1069,7 +1123,6 @@ public class Program : MonoBehaviour
             Screen.SetResolution(1300, 700, false);
         }
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 144;
         #elif !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE) //Android、iPhone
         Screen.SetResolution(1280, 720, true);
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -1078,8 +1131,8 @@ public class Program : MonoBehaviour
         Screen.autorotateToLandscapeRight = true;
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
-        Application.targetFrameRate = 60;
         #endif
+
         mouseParticle = Instantiate(new_mouse);
         instance = this;
         initialize();
@@ -1288,6 +1341,50 @@ public class Program : MonoBehaviour
     public static void gugugu()
     {
         PrintToChat(InterString.Get("非常抱歉，因为技术原因，此功能暂时无法使用。请关注官方网站获取更多消息。"));
+    }
+
+    public void doShowToast(string content)
+    {
+        I().menu.showToast(content);
+    }
+
+    public void doRestart(string content)
+    {
+        I().menu.Restart(content);
+    }
+
+    public void doWriteText(string content)
+    {
+        List<string> list = new List<string>(content.Split(','));
+        File.WriteAllText(list[0], list[1]);
+        PrintToChat(InterString.Get("数据补丁解压完成！"));
+    }
+
+    public void doDeleteDir(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                foreach (string file in Directory.GetFileSystemEntries(path))
+                {
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                        Console.WriteLine(file);
+                    }
+                    else
+                    {
+                        doDeleteDir(file);
+                    }
+                }
+                Directory.Delete(path);
+            }
+        }
+        catch
+        {
+
+        }
     }
 
     IEnumerator OnScreenCapture()

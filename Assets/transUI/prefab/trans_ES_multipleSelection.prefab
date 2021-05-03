@@ -26,8 +26,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 160692}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4447, y: -3069, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 64, y: 18, z: 0}
+  m_Size: {x: 96, y: 27, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &11167312
 Animation:
@@ -140,8 +140,8 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 64
-  mHeight: 18
+  mWidth: 96
+  mHeight: 27
   mDepth: 2
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   mTrueTypeFont: {fileID: 12800000, guid: f775853fdfd14bb47934543e95c3bae3, type: 3}
   mFont: {fileID: 0}
   mText: "[u][\u5929\u4F7F\u65CF]"
-  mFontSize: 18
+  mFontSize: 27
   mFontStyle: 0
   mAlignment: 2
   mEncoding: 1

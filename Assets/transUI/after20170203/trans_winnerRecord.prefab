@@ -59,7 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 487282}
   - component: {fileID: 11463556}
-  m_Layer: 18
+  m_Layer: 5
   m_Name: trans_winnerRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 163364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.6, z: 0}
+  m_LocalPosition: {x: 0, y: 14.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 487282}
@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 104348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -17.8, z: 0}
+  m_LocalPosition: {x: 0, y: -26.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 487282}
@@ -128,8 +128,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130352}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2145, y: -449, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 461442}
@@ -161,7 +161,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 400, y: 200, z: 0}
+  m_Size: {x: 600, y: 300, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11457404
 MonoBehaviour:
@@ -193,8 +193,8 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 0, g: 0, b: 0, a: 0.7058824}
   mPivot: 4
-  mWidth: 400
-  mHeight: 200
+  mWidth: 600
+  mHeight: 300
   mDepth: 0
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
@@ -257,8 +257,8 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 350
-  mHeight: 50
+  mWidth: 525
+  mHeight: 75
   mDepth: 1
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
@@ -268,7 +268,7 @@ MonoBehaviour:
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: You Win
-  mFontSize: 48
+  mFontSize: 72
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -323,8 +323,8 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 350
-  mHeight: 20
+  mWidth: 525
+  mHeight: 30
   mDepth: 1
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: "\u6CA1\u6709\u5361\u53EF\u4EE5\u62BD"
-  mFontSize: 18
+  mFontSize: 27
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -351,7 +351,7 @@ MonoBehaviour:
   mSpacingX: 0
   mSpacingY: 0
   mUseFloatSpacing: 1
-  mFloatSpacingX: 2
+  mFloatSpacingX: 3
   mFloatSpacingY: 0
   mOverflowEllipsis: 0
   mShrinkToFit: 0
@@ -409,13 +409,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 352
-  mHeight: 152
+  mWidth: 552
+  mHeight: 252
   mDepth: -100
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.3157895
+  aspectRatio: 2.1904762
   mType: 0
   mFillDirection: 4
   mFillAmount: 1

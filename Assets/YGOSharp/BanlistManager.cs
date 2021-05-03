@@ -46,6 +46,17 @@ namespace YGOSharp
             current = new Banlist();
             current.Name ="N/A";
             Banlists.Add(current);
+
+            #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
+            //移动端显示问题，所以移动端只加载前8个
+            if (Banlists.Count > 10)
+            {
+                for (int i = Banlists.Count - 8; i >= 2; i--)
+                {
+                    Banlists.RemoveAt(Banlists.Count - i);
+                }
+            }
+            #endif
         }
 
         public static int GetIndex(uint hash)

@@ -12,6 +12,9 @@ public class selectDeck : WindowServantSP
     UIInput searchInput = null;
     UIDeckPanel deckPanel = null;
 
+    GameObject gameObjectDeckCategory;
+    UIPopupList decksList;
+
     string sort = "sortByTimeDeck";
 
 
@@ -45,6 +48,21 @@ public class selectDeck : WindowServantSP
         inputEditCode = UIHelper.getByName<UIInput>(gameObjectEditCode, "input_");
         editTextList = UIHelper.getByName<UITextList>(gameObjectEditCode, "code_");
 
+        gameObjectDeckCategory = create
+        (
+            Program.I().new_ui_deckCategory,
+            Program.camera_main_2d.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height * 2f, 0)),
+            new Vector3(0, 0, 0),
+            false,
+            Program.ui_main_2d
+        );
+        UIHelper.registEvent(gameObjectDeckCategory, "exit_", onDeckCategory);
+        UIHelper.registEvent(gameObjectDeckCategory, "new_", onNewCategory);
+        UIHelper.registEvent(gameObjectDeckCategory, "rename_", onRenameCategory);
+        UIHelper.registEvent(gameObjectDeckCategory, "delete_", onDeleteCategory);
+        UIHelper.registEvent(gameObjectDeckCategory, "decks", deckCategory);
+        decksList = UIHelper.getByName<UIPopupList>(gameObjectDeckCategory, "decks");
+
         createWindow(Program.I().remaster_deckManager);
         deckPanel = gameObject.GetComponentInChildren<UIDeckPanel>();
         UIHelper.registEvent(gameObject, "exit_", onClickExit);
@@ -58,6 +76,7 @@ public class selectDeck : WindowServantSP
         UIHelper.registEvent(gameObject, "copy_", onCopy);
         UIHelper.registEvent(gameObject, "rename_", onRename);
         UIHelper.registEvent(gameObject, "code_", onCode);
+        UIHelper.registEvent(gameObject, "category_", onDeckCategory);
         searchInput = UIHelper.getByName<UIInput>(gameObject, "search_");
         superScrollView.install();
         for (int i = 0; i < quickCards.Length; i++)
@@ -65,6 +84,7 @@ public class selectDeck : WindowServantSP
             quickCards[i] = deckPanel.createCard();
             quickCards[i].relayer(i);
         }
+        loadCategory();
         SetActiveFalse();
 
     }
@@ -113,7 +133,7 @@ public class selectDeck : WindowServantSP
             Program.PrintToChat(InterString.Get("无法识别的卡组代码"));
             return;
         }
-        File.WriteAllText("deck/" + superScrollView.selectedString + ".ydk", inputEditCode.value);
+        File.WriteAllText(DECK_PATH + superScrollView.selectedString + ".ydk", inputEditCode.value);
         Program.PrintToChat(InterString.Get("已保存：" + superScrollView.selectedString));
         editLoad();
         printSelected();
@@ -174,6 +194,7 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
+        onHideCategory();
         KF_editDeck(superScrollView.selectedString);
     }
 
@@ -192,7 +213,7 @@ public class selectDeck : WindowServantSP
 
     public void KF_editDeck(string deckName)
     {
-        string path = "deck/" + deckName + ".ydk";
+        string path = DECK_PATH + deckName + ".ydk";
         if (File.Exists(path))
         {
             Config.Set("deckInUse", deckName);
@@ -242,7 +263,7 @@ public class selectDeck : WindowServantSP
         {
             try
             {
-                File.Create("deck/" + result[0].value + ".ydk").Close();
+                File.Create(DECK_PATH + result[0].value + ".ydk").Close();
                 RMSshow_none(InterString.Get("「[?]」创建完毕。", result[0].value));
                 superScrollView.selectedString = result[0].value;
                 printFile();
@@ -252,13 +273,52 @@ public class selectDeck : WindowServantSP
                 RMSshow_none(InterString.Get("创建卡组失败！请检查输入的文件名，以及文件夹权限。"));
             }
         }
+        if (hashCode == "onNewCategory")
+        {
+            try
+            {
+                Directory.CreateDirectory(Program.DECK_PATH + result[0].value);
+                RMSshow_none(InterString.Get("「[?]」创建完毕。", result[0].value));
+                if (!decksList.items.Contains(result[0].value))
+                    decksList.items.Add(result[0].value);
+                decksList.value = result[0].value;
+                onDeckCategory();
+            }
+            catch (Exception)
+            {
+                RMSshow_none(InterString.Get("非法输入！请检查输入的文件名。"));
+            }
+        }
+        if (hashCode == "onRenameCategory")
+        {
+            try
+            {
+                if (!Directory.Exists(Program.DECK_PATH + result[0].value))
+                {
+                    Directory.Move(Program.DECK_PATH + decksList.value, Program.DECK_PATH + result[0].value);
+                    RMSshow_none(InterString.Get("「[?]」重命名完毕。", result[0].value));
+                    decksList.items.Remove(decksList.value);
+                    decksList.items.Add(result[0].value);
+                    decksList.value = result[0].value;
+                    onDeckCategory();
+                }
+                else
+                {
+                    RMSshow_none(InterString.Get("「[?]」该分类已存在，重命名失败。", result[0].value));
+                }
+            }
+            catch (Exception)
+            {
+                RMSshow_none(InterString.Get("非法输入！请检查输入的文件名。"));
+            }
+        }
         if (hashCode == "onDispose")
         {
             if (result[0].value == "yes")
             {
                 try
                 {
-                    File.Delete("deck/" + superScrollView.selectedString + ".ydk");
+                    File.Delete(DECK_PATH + superScrollView.selectedString + ".ydk");
                     RMSshow_none(InterString.Get("「[?]」删除完毕。", superScrollView.selectedString));
                     printFile();
                 }
@@ -268,11 +328,26 @@ public class selectDeck : WindowServantSP
                 }
             }
         }
+        if (hashCode == "onDeleteCategory")
+        {
+            if (result[0].value == "yes")
+            {
+                try
+                {
+                    DeleteDir(Program.DECK_PATH + decksList.value);
+                    onDeckCategory();
+                }
+                catch (Exception)
+                {
+                    RMSshow_none(InterString.Get("非法删除！"));
+                }
+            }
+        }
         if (hashCode == "onCopy")
         {
             try
             {
-                File.Copy("deck/" + superScrollView.selectedString + ".ydk", "deck/" + result[0].value + ".ydk");
+                File.Copy(DECK_PATH + superScrollView.selectedString + ".ydk", DECK_PATH + result[0].value + ".ydk");
                 RMSshow_none(InterString.Get("「[?]」复制完毕。", superScrollView.selectedString));
                 superScrollView.selectedString = result[0].value;
                 printFile();
@@ -286,7 +361,7 @@ public class selectDeck : WindowServantSP
         {
             try
             {
-                File.Move("deck/" + superScrollView.selectedString + ".ydk", "deck/" + result[0].value + ".ydk");
+                File.Move(DECK_PATH + superScrollView.selectedString + ".ydk", DECK_PATH + result[0].value + ".ydk");
                 RMSshow_none(InterString.Get("「[?]」重命名完毕。", superScrollView.selectedString));
                 superScrollView.selectedString = result[0].value;
                 printFile();
@@ -296,6 +371,12 @@ public class selectDeck : WindowServantSP
                 RMSshow_none(InterString.Get("重命名卡组失败！请检查输入的文件名，以及文件夹权限。"));
             }
         }
+    }
+
+    void showToast(string content)
+    {
+        onHideCategory();
+        RMSshow_onlyYes("showToast", InterString.Get(content), null);
     }
 
     void onNew()
@@ -309,7 +390,7 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
-        string path = "deck/" + superScrollView.selectedString + ".ydk";
+        string path = DECK_PATH + superScrollView.selectedString + ".ydk";
         if (File.Exists(path))
         {
             RMSshow_yesOrNo(
@@ -327,13 +408,13 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
-        string path = "deck/" + superScrollView.selectedString + ".ydk";
+        string path = DECK_PATH + superScrollView.selectedString + ".ydk";
         if (File.Exists(path))
         {
             string newname = InterString.Get("[?]的副本", superScrollView.selectedString);
             string newnamer = newname;
             int i = 1;
-            while (File.Exists("deck/" + newnamer + ".ydk"))
+            while (File.Exists(DECK_PATH + newnamer + ".ydk"))
             {
                 newnamer = newname + i.ToString();
                 i++;
@@ -348,7 +429,7 @@ public class selectDeck : WindowServantSP
         {
             return;
         }
-        string path = "deck/" + superScrollView.selectedString + ".ydk";
+        string path = DECK_PATH + superScrollView.selectedString + ".ydk";
         if (File.Exists(path))
         {
             RMSshow_input("onRename", InterString.Get("新的卡组名"), superScrollView.selectedString);
@@ -364,7 +445,7 @@ public class selectDeck : WindowServantSP
 
         gameObjectEditCode.SetActive(true);
 
-        inputEditCode.value = File.ReadAllText("deck/" + superScrollView.selectedString + ".ydk");
+        inputEditCode.value = File.ReadAllText(DECK_PATH + superScrollView.selectedString + ".ydk");
         editLoad();
         iTween.MoveTo(gameObjectEditCode, Program.camera_main_2d.ScreenToWorldPoint(
             new Vector3(Screen.width / 2, Screen.height / 2, 0)), 1.2f);
@@ -412,7 +493,7 @@ public class selectDeck : WindowServantSP
     {
         GameTextureManager.clearUnloaded();
         YGOSharp.Deck deck;
-        DeckManager.FromYDKtoCodedDeck("deck/" + deckSelected + ".ydk", out deck);
+        DeckManager.FromYDKtoCodedDeck(DECK_PATH + deckSelected + ".ydk", out deck);
         int mainAll = 0;
         int mainMonster = 0;
         int mainSpell = 0;
@@ -570,7 +651,7 @@ public class selectDeck : WindowServantSP
     {
         string deckInUse = Config.Get("deckInUse","miaowu");
         superScrollView.clear();
-        FileInfo[] fileInfos = (new DirectoryInfo("deck")).GetFiles();
+        FileInfo[] fileInfos = (new DirectoryInfo(DECK_PATH)).GetFiles();
         if (Config.Get(sort,"1") == "1")
         {
             Array.Sort(fileInfos, UIHelper.CompareTime);
@@ -619,8 +700,122 @@ public class selectDeck : WindowServantSP
 
     void onClickExit()
     {
-        editExit();
+        onHideCategory();
         Program.I().shiftToServant(Program.I().menu);
+    }
+
+    bool categoryShowed = true;
+    public string DECK_PATH = Program.DECK_PATH;
+
+    void onHideCategory()
+    {
+        if (!categoryShowed)
+            onDeckCategory();
+    }
+
+    void onDeckCategory()
+    {
+        float f = Screen.height / 700f;
+        gameObjectDeckCategory.transform.localScale = new Vector3(f, f, f);
+        if (categoryShowed)
+        {
+            categoryShowed = false;
+            gameObjectDeckCategory.transform.position = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            categoryShowed = true;
+            gameObjectDeckCategory.transform.position = new Vector3(0, 5, 0);
+        }
+    }
+
+    void onNewCategory()
+    {
+        onDeckCategory();
+        RMSshow_input("onNewCategory", InterString.Get("请输入卡组分类名"), UIHelper.getTimeString());
+    }
+
+    void onRenameCategory()
+    {
+        if (decksList.value != "[---------------]")
+        {
+            onDeckCategory();
+            RMSshow_input("onRenameCategory", InterString.Get("请输入新的卡组分类名"), UIHelper.getTimeString());
+        }
+        else
+        {
+            showToast("默认分类，无法重命名！");
+        }
+    }
+
+    void onDeleteCategory()
+    {
+        if (decksList.value != "[---------------]")
+        {
+            onDeckCategory();
+            RMSshow_yesOrNo
+            (
+                "onDeleteCategory",
+                InterString.Get("确认删除卡组分类「[?]」吗？", decksList.value),
+                new messageSystemValue { hint = "yes", value = "yes" },
+                new messageSystemValue { hint = "no", value = "no" }
+            );
+        }
+        else
+        {
+            showToast("默认分类，无法删除！");
+        }
+    }
+
+    void loadCategory()
+    {
+        if (!Directory.Exists(Program.DECK_PATH)) Directory.CreateDirectory(Program.DECK_PATH);
+        DirectoryInfo[] directoryInfos = (new DirectoryInfo(Program.DECK_PATH)).GetDirectories();
+        for (int i = 0; i < directoryInfos.Length; i++)
+        {
+            decksList.items.Add(directoryInfos[i].Name);
+        }
+    }
+
+    void deckCategory()
+    {
+        if (decksList.value != "[---------------]")
+        {
+            DECK_PATH = Program.DECK_PATH + decksList.value + "/";
+            printFile();
+        } else {
+            DECK_PATH = Program.DECK_PATH;
+            printFile();
+        }
+    }
+
+    void DeleteDir(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                foreach (string file in Directory.GetFileSystemEntries(path))
+                {
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                        Console.WriteLine(file);
+                    }
+                    else
+                    {
+                        DeleteDir(file);
+                    }
+                }
+                Directory.Delete(path);
+                decksList.items.Remove(decksList.value);
+                decksList.value = "[---------------]";
+            }
+        }
+        catch
+        {
+
+        }
     }
 
 }

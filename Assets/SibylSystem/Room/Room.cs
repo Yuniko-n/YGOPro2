@@ -24,7 +24,7 @@ public class Room : WindowServantSP
         if (selftype < realPlayers.Length && realPlayers[selftype] != null && realPlayers[selftype].getIfPreped())
         {
             TcpHelper.CtosMessage_HsNotReady();
-            TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck("deck/" + superScrollView.selectedString + ".ydk"));
+            TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck(DECK_PATH + superScrollView.selectedString + ".ydk"));
             TcpHelper.CtosMessage_HsReady();
         }
         else
@@ -37,7 +37,7 @@ public class Room : WindowServantSP
     {
         string deckInUse = Config.Get("deckInUse","wizard");
         superScrollView.clear();
-        FileInfo[] fileInfos = (new DirectoryInfo("deck")).GetFiles();
+        FileInfo[] fileInfos = (new DirectoryInfo(DECK_PATH)).GetFiles();
         if (Config.Get(sort,"1") == "1")
         {
             Array.Sort(fileInfos, UIHelper.CompareTime);
@@ -81,7 +81,7 @@ public class Room : WindowServantSP
             Menu.deleteShell();
         }
         base.show();
-        Program.I().ocgcore.returnServant = Program.I().selectServer;
+        Program.I().ocgcore.setDefaultReturnServant();
         Program.I().ocgcore.handler = handler;
         UIHelper.registEvent(toolBar, "input_", onChat);
         Program.charge();
@@ -510,7 +510,7 @@ public class Room : WindowServantSP
     public void StocMessage_DuelStart(BinaryReader r)
     {
         //BGMController.Instance.StartBGM(BGMController.BGMType.menu);
-        Program.I().ocgcore.returnServant = Program.I().selectServer;
+        Program.I().ocgcore.setDefaultReturnServant();
         needSide = false;
         joinWithReconnect = true;
         if (Program.I().deckManager.isShowed)
@@ -755,6 +755,7 @@ public class Room : WindowServantSP
                         RMSshow_onlyYes("", GameStringManager.get_unsafe(1406), null);
                         break;
                 }
+                ColorRed("ready_");//未准备
                 break;
             case 3:
                 RMSshow_onlyYes("", InterString.Get("更换副卡组失败，请检查卡片张数是否一致。"), null);
@@ -877,7 +878,6 @@ public class Room : WindowServantSP
 
     void realize()
     {
-        Config.Set("deckInUse", superScrollView.selectedString);
         string description = "";
         if (mode == 0)
         {
@@ -982,6 +982,30 @@ public class Room : WindowServantSP
                 }
             }
         }
+
+        if (mode != 2)
+        {
+            if (realPlayers[0].getIfPreped() && realPlayers[1].getIfPreped())
+            {
+                ColorGreen("start_");//已准备完成
+            }
+            else
+            {
+                ColorRed("start_");//未准备完成
+            }
+        }
+        else
+        {
+            if (realPlayers[0].getIfPreped() && realPlayers[1].getIfPreped() && realPlayers[2].getIfPreped() && realPlayers[3].getIfPreped())
+            {
+                ColorGreen("start_");//已准备完成
+            }
+            else
+            {
+                ColorRed("start_");//未准备完成
+            }
+        }
+
     }
 
     lazyRoom lazyRoom = null;
@@ -1044,8 +1068,35 @@ public class Room : WindowServantSP
         UIHelper.registUIEventTriggerForClick(duelistButton().gameObject, listenerForClicked);
         UIHelper.registUIEventTriggerForClick(observerButton().gameObject, listenerForClicked);
         UIHelper.registUIEventTriggerForClick(readyButton().gameObject, listenerForClicked);
+        UIHelper.registEvent(gameObject, "decks", deckCategory);
+        decksList = UIHelper.getByName<UIPopupList>(gameObject, "decks");
         realize();
+        loadCategory();
         superScrollView.refreshForOneFrame();
+    }
+
+    UIPopupList decksList;
+    string DECK_PATH = Program.DECK_PATH;
+    void loadCategory()
+    {
+        DirectoryInfo[] directoryInfos = (new DirectoryInfo(DECK_PATH)).GetDirectories();
+        for (int i = 0; i < directoryInfos.Length; i++)
+        {
+            decksList.items.Add(directoryInfos[i].Name);
+        }
+    }
+    private void deckCategory()
+    {
+        if (decksList.value != "[---------------]")
+        {
+            DECK_PATH = Program.DECK_PATH + decksList.value + "/";
+            printFile();
+        }
+        else
+        {
+            DECK_PATH = Program.DECK_PATH;
+            printFile();
+        }
     }
 
     private void onPrepareChanged(int arg1, bool arg2)
@@ -1056,11 +1107,13 @@ public class Room : WindowServantSP
         }
         if (arg2)
         {
-            TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck("deck/" + Config.Get("deckInUse","miaouwu") + ".ydk"));
+            ColorGreen("ready_");//已准备
+            TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck(DECK_PATH + Config.Get("deckInUse","miaouwu") + ".ydk"));
             TcpHelper.CtosMessage_HsReady();
         }
         else
         {
+            ColorRed("ready_");//未准备
             TcpHelper.CtosMessage_HsNotReady();
         }
     }
@@ -1100,6 +1153,7 @@ public class Room : WindowServantSP
         if (gameObjectListened.name == "exit_")
         {
             Program.I().ocgcore.onExit();
+            DECK_PATH = Program.DECK_PATH;
         }
         if (gameObjectListened.name == "ready_")
         {
@@ -1107,11 +1161,13 @@ public class Room : WindowServantSP
             {
                 if (realPlayers[selftype].getIfPreped())
                 {
+                    ColorRed("ready_");//未准备
                     TcpHelper.CtosMessage_HsNotReady();
                 }
                 else
                 {
-                    TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck("deck/" + Config.Get("deckInUse", "wizard") + ".ydk"));
+                    ColorGreen("ready_");//已准备
+                    TcpHelper.CtosMessage_UpdateDeck(new YGOSharp.Deck(DECK_PATH + Config.Get("deckInUse", "wizard") + ".ydk"));
                     TcpHelper.CtosMessage_HsReady();
                 }
             }
@@ -1128,6 +1184,22 @@ public class Room : WindowServantSP
         {
             TcpHelper.CtosMessage_HsStart();
         }
+    }
+
+    void ColorGreen(string button)
+    {
+        try {
+            UIHelper.getByName<UISprite>(gameObject, "Texture_" + button).color = new Color(0, 255, 0, 255);
+            UIHelper.getByName<UILabel>(gameObject, "!lable_" + button).color = new Color(0, 255, 0, 255);
+        } catch {}
+    }
+
+    void ColorRed(string button)
+    {
+        try {
+            UIHelper.getByName<UISprite>(gameObject, "Texture_" + button).color = new Color(255, 0, 0, 255);
+            UIHelper.getByName<UILabel>(gameObject, "!lable_" + button).color = new Color(255, 0, 0, 255);
+        } catch {}
     }
 
     #endregion

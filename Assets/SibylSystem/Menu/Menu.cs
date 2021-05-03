@@ -6,8 +6,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.Networking;
 
 public class Menu : WindowServantSP 
 {
@@ -22,7 +20,7 @@ public class Menu : WindowServantSP
         UIHelper.registEvent(gameObject, "single_", onClickPizzle);
         UIHelper.registEvent(gameObject, "ai_", Program.gugugu);
         UIHelper.registEvent(gameObject, "exit_", onClickExit);
-        UIHelper.getByName<UILabel>(gameObject, "version_").text = "YGOPro2 " + Program.GAME_VERSION;
+        UIHelper.getByName<UILabel>(gameObject, "version_").text = "YGOPro2 Android " + Program.GAME_VERSION;
         (new Thread(up)).Start();
     }
 
@@ -38,9 +36,10 @@ public class Menu : WindowServantSP
     }
 
     bool new_url = false;
-    string url = "http://dl.ygo2020.link/ygopro2/ver_win.txt";
+    string url = "http://dl.ygo2020.link/ygopro2/ver_android.txt";
     string upurl = "";
     string VERSION = "";
+    string QQ_KEY = "";
 #if !UNITY_EDITOR && UNITY_ANDROID
     string toPath = Application.persistentDataPath + "/update.zip";
 #else
@@ -55,9 +54,9 @@ public class Menu : WindowServantSP
         catch (System.Exception e)
         {
             if (!new_url)
-            {   //启用备用地址
+            {
                 new_url = true;
-                url = "http://server.ygo2020.link/ygopro2/ver_win.txt";
+                url = "http://server.ygo2020.link/ygopro2/ver_android.txt";
                 (new Thread(up)).Start();
             }
             UnityEngine.Debug.Log(e);
@@ -79,13 +78,14 @@ public class Menu : WindowServantSP
         {
             upurl = lines[1];
         }
-        if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(toPath))
+        if (lines[2] == "new key") QQ_KEY = lines[3];
+        if (Convert.ToInt32(lines[4]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(toPath))
         {
             HttpDldFile df = new HttpDldFile();
-            df.Download(lines[3], toPath);
+            df.Download(lines[5], toPath);
         }
-        if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[4])) > Convert.ToInt32(Config.ClientVersion))
-            Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(lines[4]);
+        if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[6])) > Convert.ToInt32(Config.ClientVersion))
+            Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(lines[6]);
     }
 
     public override void ES_RMS(string hashCode, List<messageSystemValue> result)
@@ -95,7 +95,10 @@ public class Menu : WindowServantSP
         {
             if (result[0].value == "yes")
             {
-                Application.OpenURL(upurl);
+                if (QQ_KEY != "")
+                    JoinQQGroup(QQ_KEY);
+                else
+                    Application.OpenURL(upurl);
             }
         }
         if (hashCode == "ExtractZIP_onlyYes")
@@ -106,17 +109,35 @@ public class Menu : WindowServantSP
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
                 jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
 #else
-                if (File.Exists("Upgrade.exe"))
-                {
-                    Process.Start("Upgrade.exe", toPath + " YGOPro2.exe");
-                }
-                else
-                {
-                    Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
-                    File.Delete(toPath);
-                    showToast("更新包解压完毕，重启后生效！");
-                }
+                Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
+                if (File.Exists(toPath)) File.Delete(toPath);
+                showToast("更新包解压完毕，重启后生效！");
 #endif
+            }
+        }
+        if (hashCode == "Restart_onlyYes")
+        {
+            if (result[0].value == "yes")
+            {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+                AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+                jo.Call("doRestart");
+#endif
+            }
+        }
+        if (hashCode == "RMSshow_menu")
+        {
+            if (result[0].value == "left")
+            {
+                JoinQQGroup("DnxC66csVht7KgXgN-XYYi74kWa8dOPn");
+            }
+            if (result[0].value == "centre")
+            {
+                onChangeLog();
+            }
+            if (result[0].value == "right")
+            {
+                JoinQQGroup("31x6C1qnG-uYI17jSQcOB8znmNs9FC7s");
             }
         }
     }
@@ -182,9 +203,77 @@ public class Menu : WindowServantSP
         Program.I().shiftToServant(Program.I().selectDeck);
     }
 
+    void JoinQQGroup(string key)
+    {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+        jo.Call("doJoinQQGroup", key);
+#else
+        Application.OpenURL("https://jq.qq.com/?_wv=1027&k=5nq6xJe");
+#endif
+    }
+
+    void onChangeLog()
+    {
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
+        InAppBrowser.OpenLocalFile("/changelog.html");// StreamingAssets/changelog.html
+#else
+        Application.OpenURL(Application.streamingAssetsPath + "/changelog.html");
+#endif
+    }
+
+    void onCheckUpgrade()
+    {
+        Program.PrintToChat(InterString.Get("正在检测是否有新版本！"));
+        try
+        {
+            CheckUpgrade();
+            if (VERSION != AppUpdateLog.GAME_VERSION)
+            {
+                RMSshow_yesOrNo
+                (
+                    "RMSshow_onlyYes",
+                    InterString.Get("发现新版本，是否立即下载？"),
+                    new messageSystemValue { hint = "yes", value = "yes" },
+                    new messageSystemValue { hint = "no", value = "no" }
+                );
+            }
+            else
+            {
+                showToast("已是最新版本！");
+            }
+        }
+        catch (System.Exception e)
+        {
+            showToast("检查更新失败！");
+        }
+    }
+
+    public void onMenu()
+    {
+        RMSshow_menu
+        (
+            "RMSshow_menu",
+            new messageSystemValue { hint = "left", value = "left" },
+            new messageSystemValue { hint = "centre", value = "centre" },
+            new messageSystemValue { hint = "right", value = "right" }
+        );
+    }
+
     public void showToast(string content)
     {
         RMSshow_onlyYes("showToast", InterString.Get(content), null);
+    }
+
+    public void Restart(string content)
+    {
+        RMSshow_yesOrNo
+        (
+            "Restart_onlyYes",
+            InterString.Get(content),
+            new messageSystemValue { hint = "yes", value = "yes" },
+            new messageSystemValue { hint = "no", value = "no" }
+        );
     }
 
     public static void deleteShell()

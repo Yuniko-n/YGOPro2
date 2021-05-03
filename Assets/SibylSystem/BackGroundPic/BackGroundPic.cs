@@ -19,6 +19,7 @@ public class BackGroundPic : Servant
             backGround.AddComponent<BackGroundPlayMP4>();
             BackGroundPlayMP4.Instance.LoadMP4(backGround, path + "desk.mp4");
         }
+/*
         else if (File.Exists(path + "bg.ogv"))
         {
             backGround.AddComponent<BackGroundPlayOGV>();
@@ -29,6 +30,7 @@ public class BackGroundPic : Servant
             backGround.AddComponent<BackGroundPlayOGV>();
             BackGroundPlayOGV.Instance.LoadOGV(backGround, path + "desk.ogv");
         }
+*/
         else if (File.Exists(path + "bg.png"))
         {
             LoadJpgOrPng(path + "bg.png");

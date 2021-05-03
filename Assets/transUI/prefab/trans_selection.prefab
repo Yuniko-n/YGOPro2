@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - component: {fileID: 493318}
   - component: {fileID: 11412316}
-  m_Layer: 18
+  m_Layer: 5
   m_Name: trans_selection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ GameObject:
   m_Component:
   - component: {fileID: 449942}
   - component: {fileID: 11487194}
-  m_Layer: 18
+  m_Layer: 5
   m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120608}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -104,7 +104,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 200, y: 22, z: 0}
+  m_Size: {x: 200, y: 33, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &11148596
 Animation:
@@ -204,17 +204,17 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 200
-  mHeight: 22
+  mHeight: 33
   mDepth: 25
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 9.090909
+  aspectRatio: 6.060606
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 12800000, guid: f775853fdfd14bb47934543e95c3bae3, type: 3}
   mFont: {fileID: 0}
   mText: "\u8FD9\u662F\u4E00\u4E2A\u5361\u7EC4"
-  mFontSize: 18
+  mFontSize: 38
   mFontStyle: 0
   mAlignment: 1
   mEncoding: 1

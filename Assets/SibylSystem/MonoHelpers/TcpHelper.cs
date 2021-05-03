@@ -195,7 +195,7 @@ public static class TcpHelper
         if (onDisConnected == true)
         {
             onDisConnected = false;
-            Program.I().ocgcore.returnServant = Program.I().selectServer;
+            Program.I().ocgcore.setDefaultReturnServant();
             if (TcpHelper.tcpClient != null)
             {
                 if (TcpHelper.tcpClient.Connected)

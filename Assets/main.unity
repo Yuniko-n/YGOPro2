@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667546, g: 0.48427135, b: 0.5645225, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427176, b: 0.56452465, a: 1}
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -760,6 +760,14 @@ Prefab:
       propertyPath: mod_ocgcore_ss_link_mark
       value: 
       objectReference: {fileID: 193842, guid: 31f237d5f58cc3d44b8c6f489981cdbe, type: 2}
+    - target: {fileID: 11419100, guid: 995e2fa1a1156d248955c5fb98502585, type: 2}
+      propertyPath: new_ui_RoomList
+      value: 
+      objectReference: {fileID: 166306, guid: 2ee19dceffad869469d4ae6ce0acc3c5, type: 2}
+    - target: {fileID: 11419100, guid: 995e2fa1a1156d248955c5fb98502585, type: 2}
+      propertyPath: ES_Menu
+      value: 
+      objectReference: {fileID: 139314, guid: a67ff24a1f23567438e53500b11d5ad1, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 995e2fa1a1156d248955c5fb98502585, type: 2}
   m_IsPrefabParent: 0

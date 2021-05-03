@@ -176,6 +176,7 @@ MonoBehaviour:
     type: 2}
   new_ui_cardOnSearchList: {fileID: 121738, guid: 2b6ccbb323c719640a5956255df6e60f,
     type: 2}
+  new_ui_deckCategory: {fileID: 197804, guid: 41966550b91175345a52b6b6a171f0e7, type: 2}
   new_bar_changeSide: {fileID: 122638, guid: 63e044f7c8ec2f941bdf744dfc74c476, type: 2}
   new_bar_duel: {fileID: 123392, guid: 829bf6713f5afeb40840803e21e03092, type: 2}
   new_bar_room: {fileID: 154124, guid: 4450e27d91ca638499a5b7792d561372, type: 2}
@@ -212,6 +213,7 @@ MonoBehaviour:
   ES_Single_multiple_window: {fileID: 124974, guid: 973d36324e25edb4e937f0d46b67d978,
     type: 2}
   ES_Single_option: {fileID: 140558, guid: c67c5053dc1b3c14db4efc960bc8f57c, type: 2}
+  ES_Menu: {fileID: 139314, guid: a67ff24a1f23567438e53500b11d5ad1, type: 2}
   ES_multiple_option: {fileID: 160692, guid: 2f2ccdda83cade9439f7a615e3943a17, type: 2}
   ES_input: {fileID: 169056, guid: dd31e15b57e5f354e94eb55af88bdaae, type: 2}
   ES_position: {fileID: 197414, guid: ebf9fc604e38b7348be638f5deaa91db, type: 2}

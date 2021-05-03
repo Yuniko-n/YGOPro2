@@ -34,9 +34,10 @@ public class Setting : WindowServant2D
         UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
         UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
 
-        //FPS
+        //显示与限制FPS
         UIHelper.registEvent(gameObject, "ShowFPS_", onShowFPS);
         ShowFPS = UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value = UIHelper.fromStringToBool(Config.Get("ShowFPS_", "0"));
+        UIHelper.registEvent(setting.LimitFPS.gameObject, onchangeFPS);
 
         if (QualitySettings.GetQualityLevel()<3)
         {
@@ -68,7 +69,7 @@ public class Setting : WindowServant2D
         {
             if (collection[i].name.Length > 0 && collection[i].name[0] == '*')
             {
-                if (collection[i].name== "*mouseParticle" || collection[i].name == "*showOff" || collection[i].name == "*Efield") 
+                if (collection[i].name == "*mouseParticle" || collection[i].name == "*showOff" || collection[i].name == "*Efield" || collection[i].name == "*AutoPicDownload")
                 {
                     collection[i].value = UIHelper.fromStringToBool(Config.Get(collection[i].name, "1"));
                 }
@@ -80,11 +81,13 @@ public class Setting : WindowServant2D
         }
         setting.showoffATK.value = Config.Get("showoffATK","1800");
         setting.showoffStar.value = Config.Get("showoffStar", "5");
+        setting.LimitFPS.value = Config.Get("LimitFPS", "60");
         UIHelper.registEvent(setting.showoffATK.gameObject, onchangeClose);
         UIHelper.registEvent(setting.showoffStar.gameObject, onchangeClose);
         UIHelper.registEvent(setting.mouseEffect.gameObject, onchangeMouse);
         UIHelper.registEvent(setting.closeUp.gameObject, onchangeCloseUp);
         UIHelper.registEvent(setting.cloud.gameObject, onchangeCloud);  
+        UIHelper.registEvent(setting.autoPicDownload.gameObject, onchangeDownload);
         UIHelper.registEvent(setting.Vpedium.gameObject, onCP);
         UIHelper.registEvent(setting.Vfield.gameObject, onCP);
         UIHelper.registEvent(setting.Vlink.gameObject, onCP);
@@ -121,6 +124,19 @@ public class Setting : WindowServant2D
         catch { }
     }
 
+    private void onchangeFPS()
+    {
+        try
+        {
+            int FPS = int.Parse(setting.LimitFPS.value);
+            Application.targetFrameRate = FPS;
+        }
+        catch
+        {
+            Application.targetFrameRate = 144;
+        }
+    }
+
     private void onShowFPS()
     {
         ShowFPS = !ShowFPS;
@@ -150,6 +166,11 @@ public class Setting : WindowServant2D
         Program.MonsterCloud = setting.cloud.value;
     }
 
+    public void onchangeDownload()
+    {
+        GameTextureManager.AutoPicDownload = setting.autoPicDownload.value;
+    }
+
     public void onchangeMouse()
     {
         Program.I().mouseParticle.SetActive(setting.mouseEffect.value);
@@ -160,7 +181,8 @@ public class Setting : WindowServant2D
     public void setScreenSizeValue()
     {
         //dontResizeTwice = 3;
-        UIHelper.getByName<UIPopupList>(gameObject, "screen_").value = Screen.width.ToString() + "*" + Screen.height.ToString();
+        //UIHelper.getByName<UIPopupList>(gameObject, "screen_").value = Screen.width.ToString() + "*" + Screen.height.ToString();
+        UIHelper.getByName<UIPopupList>(gameObject, "screen_").value = Config.Get("screen_", Screen.width.ToString() + "*" + Screen.height.ToString());
     }
 
     void onCP()
@@ -275,6 +297,7 @@ public class Setting : WindowServant2D
         string[] mats = UIHelper.getByName<UIPopupList>(gameObject, "screen_").value.Split(new string[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
         if (mats.Length == 2)
         {
+            Config.Set("screen_", mats[0] + "*" + mats[1]);
             Screen.SetResolution(int.Parse(mats[0]), int.Parse(mats[1]), UIHelper.getByName<UIToggle>(gameObject, "full_").value);
         }
         Program.go(100, () => { Program.I().fixScreenProblems(); });
@@ -298,6 +321,7 @@ public class Setting : WindowServant2D
         }
         Config.Set("showoffATK", setting.showoffATK.value.ToString());
         Config.Set("showoffStar", setting.showoffStar.value.ToString());
+        Config.Set("LimitFPS", setting.LimitFPS.value.ToString());
         Config.Set("resize_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "resize_").value));
         Config.Set("maximize_", UIHelper.fromBoolToString(UIHelper.isMaximized()));
     }

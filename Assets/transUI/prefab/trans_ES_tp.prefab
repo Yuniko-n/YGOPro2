@@ -233,9 +233,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 449694}
-  - {fileID: 460298}
   - {fileID: 469404}
   - {fileID: 443180}
+  - {fileID: 460298}
   m_Father: {fileID: 487304}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -274,12 +274,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 98, y: 3, z: 0}
+  m_LocalPosition: {x: -3, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 496978}
   m_Father: {fileID: 428130}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &449694
 Transform:
@@ -314,12 +314,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 178052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 3, z: 0}
+  m_LocalPosition: {x: 147, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 442904}
   m_Father: {fileID: 428130}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &469404
 Transform:
@@ -328,12 +328,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 181374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -102, y: 3, z: 0}
+  m_LocalPosition: {x: -153, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 442446}
   m_Father: {fileID: 428130}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &477590
 Transform:
@@ -367,7 +367,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139314}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -413,7 +413,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 110, y: 110, z: 0}
+  m_Size: {x: 165, y: 165, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6521226
 BoxCollider:
@@ -425,7 +425,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 110, y: 110, z: 0}
+  m_Size: {x: 165, y: 165, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6531260
 BoxCollider:
@@ -437,7 +437,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 370, y: 160, z: 0}
+  m_Size: {x: 555, y: 240, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6568168
 BoxCollider:
@@ -449,7 +449,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 110, y: 110, z: 0}
+  m_Size: {x: 165, y: 165, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &11104836
 Animation:
@@ -563,9 +563,9 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 80
-  mHeight: 80
-  mDepth: 22
+  mWidth: 120
+  mHeight: 120
+  mDepth: 33
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -802,8 +802,8 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 0, g: 0, b: 0, a: 0.8627451}
   mPivot: 4
-  mWidth: 370
-  mHeight: 160
+  mWidth: 555
+  mHeight: 240
   mDepth: 0
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
@@ -852,9 +852,9 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 80
-  mHeight: 80
-  mDepth: 22
+  mWidth: 120
+  mHeight: 120
+  mDepth: 33
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -926,9 +926,9 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 80
-  mHeight: 80
-  mDepth: 22
+  mWidth: 120
+  mHeight: 120
+  mDepth: 33
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
@@ -985,13 +985,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 322
-  mHeight: 112
+  mWidth: 507
+  mHeight: 192
   mDepth: -100
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.755814
+  aspectRatio: 2.640625
   mType: 0
   mFillDirection: 4
   mFillAmount: 1

@@ -113,19 +113,19 @@ public class gameInfo : MonoBehaviour
         me.transform.localScale = ks;
         if (!swaped) 
         {
-            opponent.transform.localPosition = new Vector3(Screen.width / 2-14, Screen.height / 2 - 14);
+            opponent.transform.localPosition = new Vector3(Screen.width / 2 - 14, Screen.height / 2 - 14);
             me.transform.localPosition = new Vector3(Screen.width / 2 - 14, Screen.height / 2 - 14 - k * (float)(opponent.under.height));
         }
         else
         {
             me.transform.localPosition = new Vector3(Screen.width / 2 - 14, Screen.height / 2 - 14);
-            opponent.transform.localPosition = new Vector3(Screen.width / 2-14, Screen.height / 2 - 14 - k * (float)(opponent.under.height));
+            opponent.transform.localPosition = new Vector3(Screen.width / 2 - 14, Screen.height / 2 - 14 - k * (float)(opponent.under.height));
         }
 
-        width = (150 * kb) + 15f;
-        float localPositionPanX = (((float)Screen.width - 150 * kb) / 2) - 15f;
-        instance_btnPan.transform.localPosition = new Vector3(localPositionPanX, 145, 0);
-        instance_lab.transform.localPosition = new Vector3(Screen.width/2-315, -Screen.height / 2+90, 0);
+        width = (225 * kb) + 15f;
+        float localPositionPanX = (((float)Screen.width - 225 * kb) / 2) - 15f;
+        instance_btnPan.transform.localPosition = new Vector3(localPositionPanX, 120, 0);
+        instance_lab.transform.localPosition = new Vector3(Screen.width / 2 - 315, -Screen.height / 2 + 90, 0);
         int j = 0;
         for (int i = 0; i < HashedButtons.Count; i++)
         {
@@ -139,7 +139,7 @@ public class gameInfo : MonoBehaviour
                 }
                 else
                 {
-                    HashedButtons[i].gameObject.transform.localPosition += (new Vector3(0, -145 - j * 50, 0) - HashedButtons[i].gameObject.transform.localPosition) * Program.deltaTime * 10f;
+                    HashedButtons[i].gameObject.transform.localPosition += (new Vector3(0, -220 - j * 75, 0) - HashedButtons[i].gameObject.transform.localPosition) * Program.deltaTime * 10f;
                     j++;
                 }
             }
@@ -151,10 +151,10 @@ public class gameInfo : MonoBehaviour
             if (HashedButtons[i].dead)
                 HashedButtons.RemoveAt(i);
         }
-        float height = 132 + 50 * j;
+        float height = 198 + 75 * j;
         if (j == 0)
         {
-            height = 116;
+            height = 174;
         }
         instance_btnPan.height += (int)(((float)height - (float)instance_btnPan.height) * 0.2f);
         if (Program.TimePassed() - lastTickTime > 1000)
@@ -312,7 +312,7 @@ public class gameInfo : MonoBehaviour
     }
 
 
-    public void setTimeStill(int player)    
+    public void setTimeStill(int player)
     {
         time[0] = Program.I().ocgcore.timeLimit;
         time[1] = Program.I().ocgcore.timeLimit;

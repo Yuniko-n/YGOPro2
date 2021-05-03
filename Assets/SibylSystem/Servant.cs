@@ -821,5 +821,27 @@ public class Servant
             Program.I().selectServer.face.mainTexture = Face;
         }
     }
+
+    public void RMSshow_menu(string hashCode, messageSystemValue left, messageSystemValue centre, messageSystemValue right)
+    {
+        RMSshow_clear();
+        currentMShash = hashCode;
+        currentMStype = messageSystemType.tp;
+        currentMSwindow = create
+            (
+            Program.I().ES_Menu,
+            MSentre(),
+            Vector3.zero,
+            true,
+            Program.ui_main_2d,
+            true,
+            new Vector3(((float)Screen.height) / 700f, ((float)Screen.height) / 700f, ((float)Screen.height) / 700f)
+            );
+        UIHelper.InterGameObject(currentMSwindow);
+        UIHelper.registEvent(currentMSwindow, "left_", ES_RMSpremono, left);
+        UIHelper.registEvent(currentMSwindow, "centre_", ES_RMSpremono, centre);
+        UIHelper.registEvent(currentMSwindow, "right_", ES_RMSpremono, right);
+        UIHelper.registEvent(currentMSwindow, "exit_", ES_RMSpremono, new messageSystemValue());
+    }
     #endregion
 }

@@ -33,6 +33,9 @@ namespace YGOSharp
             nullString = "";
             nullString += "欢迎使用：\r\nYGOPro2 For " + platform;
             nullString += "\r\n\r\n";
+            nullString += "软件下载：";
+            nullString += "\r\n①：[url=https://pan.baidu.com/s/1PEulJRq8ztugD7PtH0ZSlA][u]https://pan.baidu.com/s/1PEulJRq8ztugD7PtH0ZSlA[/u][/url]";
+            nullString += "\r\n\r\n\r\n";
             nullString += "欢迎加入QQ群：";
             nullString += "\r\n①：[url=https://jq.qq.com/?_wv=1027&k=EwT8cP6I][u]871650810[/u][/url]";
             nullString += "\r\n③：[url=https://jq.qq.com/?_wv=1027&k=5uSuCF3][u]902439805[/u][/url]";
@@ -111,6 +114,7 @@ namespace YGOSharp
             int getP_UP,
             int getYear_UP,
             int getOT,
+            int getLinkMarker,
             string getPack,
             int getBAN,
             Banlist banlist,
@@ -159,9 +163,12 @@ namespace YGOSharp
                                                             {
                                                                 if (getOT == -233 || getOT == card.Ot)
                                                                 {
-                                                                    if (getPack == "" || card.packFullName == getPack)
+                                                                    if (getLinkMarker == 0 || (card.Type & (int)CardType.Link) != 0 && (card.LinkMarker & getLinkMarker) == getLinkMarker)
                                                                     {
-                                                                        returnValue.Add(card);
+                                                                        if (getPack == "" || card.packFullName == getPack)
+                                                                        {
+                                                                            returnValue.Add(card);
+                                                                        }
                                                                     }
                                                                 }
                                                             }
