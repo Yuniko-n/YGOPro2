@@ -460,9 +460,7 @@ public class GameTextureManager
         {
             return;
         }
-#if !UNITY_EDITOR && UNITY_ANDROID
-        if (Program.APIVersion < 24)
-        {
+#if !UNITY_EDITOR && UNITY_IOS
             var data = getCloseups(pic);
             if (data.Length == 0)
             {
@@ -474,7 +472,6 @@ public class GameTextureManager
             }
             loadedList.Add(hashPic(pic.code, pic.type), pic);
             return;
-        }
 #endif
         bool EightEdition = false;
         BitmapHelper bitmap = getCloseup(pic);
@@ -760,9 +757,7 @@ public class GameTextureManager
         {
             return;
         }
-#if !UNITY_EDITOR && UNITY_ANDROID
-        if (Program.APIVersion < 24)
-        {
+#if !UNITY_EDITOR && UNITY_IOS
             var data = getCloseups(pic);
             if (data.Length == 0)
             {
@@ -774,7 +769,6 @@ public class GameTextureManager
             }
             loadedList.Add(hashPic(pic.code, pic.type), pic);
             return;
-        }
 #endif
         var bitmap = getCloseup(pic);
         if (bitmap == null)

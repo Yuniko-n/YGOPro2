@@ -149,17 +149,17 @@ public class BGMController : MonoBehaviour
             if (soundRoutine != null) { StopCoroutine(soundRoutine); }
             if (soundPlayNext != null) { StopCoroutine(soundPlayNext); }
 
+            if (bgmName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+            {
             #if UNITY_ANDROID || UNITY_IPHONE
                 soundRoutine = StartCoroutine(LoadBGM());
             #else
-                if (bgmName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
-                {
-                    soundFilePath = bgmName;
-                    soundRoutine = StartCoroutine(LoadMP3());
-                } else {
-                    soundRoutine = StartCoroutine(LoadBGM());
-                }
+                soundFilePath = bgmName;
+                soundRoutine = StartCoroutine(LoadMP3());
             #endif
+            } else {
+                soundRoutine = StartCoroutine(LoadBGM());
+            }
             IsPlaying = true;
         }
     }

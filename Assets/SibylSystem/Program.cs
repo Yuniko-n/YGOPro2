@@ -290,7 +290,7 @@ public class Program : MonoBehaviour
         AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
         //GAME_PATH = jo.Call<string>("doGetStorageDir", "ygopro2") + "/"; // /storage/emulated/ygopro2/
         GAME_PATH = jo.Call<string>("doGetFilesDir", "ygopro2") + "/";     // /storage/emulated/0/Android/data/.../files/ygopro2/
-        //获取安卓版本 (当前编译的“libgdiplus”仅对安卓7以上生效)
+        //获取安卓版本
         APIVersion = jo.Call<int>("APIVersion");
 #elif !UNITY_EDITOR && UNITY_IPHONE //iPhone
         GAME_PATH = Application.persistentDataPath + "/ygopro2/";
@@ -1105,6 +1105,11 @@ public class Program : MonoBehaviour
             _padScroll = 0;
         }
 
+        if (Event.current.Equals(Event.KeyboardEvent("F12")))
+        {
+            StartCoroutine(OnScreenCapture());
+        }
+
         try { if (!setting.ShowFPS) { GUI.Label(new Rect(10, 5, 200, 200), "[Ver " + GAME_VERSION + "] FPS: " + FPS.ToString("000")); } } catch{}
     }
 
@@ -1284,4 +1289,29 @@ public class Program : MonoBehaviour
     {
         PrintToChat(InterString.Get("非常抱歉，因为技术原因，此功能暂时无法使用。请关注官方网站获取更多消息。"));
     }
+
+    IEnumerator OnScreenCapture()
+    {
+        yield return new WaitForEndOfFrame();
+        try
+        {
+            if (!Directory.Exists("screenshots/")) Directory.CreateDirectory("screenshots/");
+            string imageName = "screenshots/" + DateTime.Now.ToString("yyyy-MM-dd(HH’mm’ss)") + ".png";
+
+            int width = Screen.width;
+            int height = Screen.height;
+            Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            tex.ReadPixels (new Rect (0, 0, width, height), 0, 0, true);
+            byte[] imageBytes = tex.EncodeToPNG();
+            tex.Compress(false);
+            File.WriteAllBytes(imageName, imageBytes);
+
+            PrintToChat(InterString.Get("触发截屏，文件位于资源目录下：screenshots/"));
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e);
+        }
+    }
+
 }

@@ -33,6 +33,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.jks
 
 # ygopro
 ai/
@@ -58,5 +59,7 @@ AI_core_vs2017solution/System.Servicemodel.Faltexception.dll
 AI_core_vs2017solution/.vs
 commamd.shell
 Windbot/
+updates/
+Assets/StreamingAssets/data*
 Assets/StreamingAssets/script*
 Assets/StreamingAssets/picture*

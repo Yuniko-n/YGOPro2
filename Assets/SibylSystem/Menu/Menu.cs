@@ -105,14 +105,17 @@ public class Menu : WindowServantSP
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
                 jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
-#elif !UNITY_EDITOR && UNITY_STANDALONE_WIN
-                //参数1: 更新包；参数2: 关闭进程(可留空)
-                //Upgrade.exe "upgrade.zip" "YGOPro2.exe"
-                Process.Start("Upgrade.exe", toPath + " YGOPro2.exe");
 #else
-                Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
-                File.Delete(toPath);
-                showToast("更新包解压完毕，重启后生效！");
+                if (File.Exists("Upgrade.exe"))
+                {
+                    Process.Start("Upgrade.exe", toPath + " YGOPro2.exe");
+                }
+                else
+                {
+                    Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
+                    File.Delete(toPath);
+                    showToast("更新包解压完毕，重启后生效！");
+                }
 #endif
             }
         }
