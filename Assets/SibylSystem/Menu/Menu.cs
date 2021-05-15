@@ -106,9 +106,10 @@ public class Menu : WindowServantSP
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
                 jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
 #else
-                if (File.Exists("Upgrade.exe"))
+                string tools = Application.streamingAssetsPath + "/Upgrade.exe";
+                if (File.Exists(tools))
                 {
-                    Process.Start("Upgrade.exe", toPath + " YGOPro2.exe");
+                    Process.Start(tools, toPath + " " + Program.GAME_PATH + " YGOPro2.exe");
                 }
                 else
                 {
