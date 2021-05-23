@@ -42,9 +42,9 @@ public class Menu : WindowServantSP
     string upurl = "";
     string VERSION = "";
 #if !UNITY_EDITOR && UNITY_ANDROID
-    string toPath = Application.persistentDataPath + "/update.zip";
+    string upFile = Application.persistentDataPath + "/update.zip";
 #else
-    string toPath = "updates/update.zip";
+    string upFile = "updates/update.zip";
 #endif
     void up()
     {
@@ -79,10 +79,10 @@ public class Menu : WindowServantSP
         {
             upurl = lines[1];
         }
-        if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(toPath))
+        if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(upFile))
         {
             HttpDldFile df = new HttpDldFile();
-            df.Download(lines[3], toPath);
+            df.Download(lines[3], upFile);
         }
         if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[4])) > Convert.ToInt32(Config.ClientVersion))
             Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(lines[4]);
@@ -104,17 +104,17 @@ public class Menu : WindowServantSP
             {
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
-                jo.Call("doExtractZipFile", toPath, Program.GAME_PATH);
+                jo.Call("doExtractZipFile", upFile, Program.GAME_PATH);
 #else
                 string tools = Application.streamingAssetsPath + "/Upgrade.exe";
                 if (File.Exists(tools))
                 {
-                    Process.Start(tools, toPath + " " + Program.GAME_PATH + " YGOPro2.exe");
+                    Process.Start(tools, upFile + " " + Program.GAME_PATH + " YGOPro2.exe");
                 }
                 else
                 {
-                    Program.I().ExtractZipFile(toPath, Program.GAME_PATH);
-                    File.Delete(toPath);
+                    Program.I().ExtractZipFile(upFile, Program.GAME_PATH);
+                    File.Delete(upFile);
                     showToast("更新包解压完毕，重启后生效！");
                 }
 #endif
@@ -126,12 +126,12 @@ public class Menu : WindowServantSP
     public override void preFrameFunction()
     {
         base.preFrameFunction();
-        if (!File.Exists(toPath) && upurl != "" && outed == false)
+        if (!File.Exists(upFile) && upurl != "" && outed == false)
         {
             outed = true;
             RMSshow_yesOrNo("RMSshow_onlyYes", InterString.Get("发现更新!@n是否要下载更新？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });
         }
-        if (File.Exists(toPath) && outed == false)
+        if (File.Exists(upFile) && outed == false)
         {
             outed = true;
             RMSshow_yesOrNo("ExtractZIP_onlyYes", InterString.Get("发现更新包!@n是否立即解压？"), new messageSystemValue { hint = "yes", value = "yes" }, new messageSystemValue { hint = "no", value = "no" });

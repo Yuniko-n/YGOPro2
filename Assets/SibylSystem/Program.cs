@@ -302,7 +302,7 @@ public class Program : MonoBehaviour
 
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
         Environment.CurrentDirectory = GAME_PATH;
-        System.IO.Directory.SetCurrentDirectory(GAME_PATH);
+        Directory.SetCurrentDirectory(GAME_PATH);
 #endif
         go(1, () =>
         {
@@ -443,7 +443,7 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
-#if !UNITY_EDITOR && UNITY_ANDROID //Android Java Test
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
         AssetsFile = GetAssetsFileList("AssetsFile.txt");
 #endif
     }
@@ -456,11 +456,15 @@ public class Program : MonoBehaviour
 
     public static byte[] AssetsFileToByte(string path)
     {
-        var www = new WWW(Application.streamingAssetsPath + "/" + path);
+        string file = Application.streamingAssetsPath + "/" + path;
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        var www = new WWW(file);
         while (!www.isDone) { }
         return www.bytes;
+#else
+        return File.ReadAllBytes(file);
+#endif
     }
-
 
     public void ExtractZipFile(string filePath, string outFolder)
     {
@@ -472,7 +476,7 @@ public class Program : MonoBehaviour
             while (!www.isDone) { }
             byte[] data = www.bytes;
 #else
-            byte[] data = System.IO.File.ReadAllBytes(filePath);
+            byte[] data = File.ReadAllBytes(filePath);
 #endif
             //use MemoryStream!!!!
             using (MemoryStream mstrm = new MemoryStream(data))
