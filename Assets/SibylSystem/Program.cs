@@ -280,6 +280,8 @@ public class Program : MonoBehaviour
 
     public static string GAME_PATH = "/storage/emulated/0/ygopro2/";
 
+    public static string[] AudioClipFile;
+
     public static string[] AssetsFile;
 
     public static int APIVersion = 0;
@@ -443,6 +445,7 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
+        AudioClipFile = GetAssetsFileList("AudioClipFile.txt");
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
         AssetsFile = GetAssetsFileList("AssetsFile.txt");
 #endif

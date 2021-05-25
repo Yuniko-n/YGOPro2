@@ -1,0 +1,190 @@
+AudioClip/summon/10000000.wav
+AudioClip/summon/10000010.wav
+AudioClip/summon/10000020.wav
+AudioClip/summon/10000040.wav
+AudioClip/summon/14778250.wav
+AudioClip/summon/15610297 (1).wav
+AudioClip/summon/15610297.wav
+AudioClip/summon/19333131.wav
+AudioClip/summon/20137754.wav
+AudioClip/summon/21521304.wav
+AudioClip/summon/30208479.wav
+AudioClip/summon/30270176 (1).wav
+AudioClip/summon/30270176.wav
+AudioClip/summon/31320433.wav
+AudioClip/summon/31764700 (2).wav
+AudioClip/summon/31764700.wav
+AudioClip/summon/32003338.wav
+AudioClip/summon/32491822.wav
+AudioClip/summon/37279508.wav
+AudioClip/summon/3775068.wav
+AudioClip/summon/38033121.wav
+AudioClip/summon/40392714.wav
+AudioClip/summon/40640057.wav
+AudioClip/summon/41114306.wav
+AudioClip/summon/43378048.wav
+AudioClip/summon/43892408.wav
+AudioClip/summon/46986414.wav
+AudioClip/summon/4779091.wav
+AudioClip/summon/4998619.wav
+AudioClip/summon/51735257.wav
+AudioClip/summon/52653092.wav
+AudioClip/summon/53315891.wav
+AudioClip/summon/5405694.wav
+AudioClip/summon/55727845.wav
+AudioClip/summon/56832966.wav
+AudioClip/summon/56840427.wav
+AudioClip/summon/6007213.wav
+AudioClip/summon/62517849.wav
+AudioClip/summon/65676461.wav
+AudioClip/summon/66970002.wav
+AudioClip/summon/69610924.wav
+AudioClip/summon/69890967.wav
+AudioClip/summon/70781052.wav
+AudioClip/summon/72664875.wav
+AudioClip/summon/73445448.wav
+AudioClip/summon/75380687.wav
+AudioClip/summon/77387463.wav
+AudioClip/summon/78371393 (2).wav
+AudioClip/summon/78371393.wav
+AudioClip/summon/78509901.wav
+AudioClip/summon/80019195.wav
+AudioClip/summon/80117527.wav
+AudioClip/summon/81330115 (1).wav
+AudioClip/summon/81330115.wav
+AudioClip/summon/83743222.wav
+AudioClip/summon/84013237.wav
+AudioClip/summon/84124261.wav
+AudioClip/summon/8512558.wav
+AudioClip/summon/86532744.wav
+AudioClip/summon/87911394.wav
+AudioClip/summon/95442074.wav
+AudioClip/attack/10000000.wav
+AudioClip/attack/10000010.wav
+AudioClip/attack/10000020.wav
+AudioClip/attack/15610297.wav
+AudioClip/attack/19333131 (1).wav
+AudioClip/attack/19333131.wav
+AudioClip/attack/20137754 (1).wav
+AudioClip/attack/20137754.wav
+AudioClip/attack/21521304 (1).wav
+AudioClip/attack/21521304.wav
+AudioClip/attack/30208479.wav
+AudioClip/attack/30270176.wav
+AudioClip/attack/31764700.wav
+AudioClip/attack/32003338.wav
+AudioClip/attack/32491822 (0).wav
+AudioClip/attack/32491822.wav
+AudioClip/attack/3775068.wav
+AudioClip/attack/38033121.wav
+AudioClip/attack/40392714.wav
+AudioClip/attack/41114306.wav
+AudioClip/attack/43378048.wav
+AudioClip/attack/43892408.wav
+AudioClip/attack/46986414.wav
+AudioClip/attack/4779091.wav
+AudioClip/attack/4998619.wav
+AudioClip/attack/51735257 (1).wav
+AudioClip/attack/51735257.wav
+AudioClip/attack/52653092 (1).wav
+AudioClip/attack/52653092.wav
+AudioClip/attack/55727845 (1).wav
+AudioClip/attack/55727845.wav
+AudioClip/attack/56832966 (1).wav
+AudioClip/attack/56832966.wav
+AudioClip/attack/56840427 (1).wav
+AudioClip/attack/56840427.wav
+AudioClip/attack/6007213 (0).wav
+AudioClip/attack/6007213.wav
+AudioClip/attack/62517849 (1).wav
+AudioClip/attack/62517849.wav
+AudioClip/attack/66970002 (1).wav
+AudioClip/attack/66970002.wav
+AudioClip/attack/69610924 (1).wav
+AudioClip/attack/69610924.wav
+AudioClip/attack/69890967 (0).wav
+AudioClip/attack/69890967.wav
+AudioClip/attack/70781052.wav
+AudioClip/attack/72664875.wav
+AudioClip/attack/73445448 (1).wav
+AudioClip/attack/73445448.wav
+AudioClip/attack/75380687.wav
+AudioClip/attack/77387463.wav
+AudioClip/attack/78371393.wav
+AudioClip/attack/78509901.wav
+AudioClip/attack/80019195.wav
+AudioClip/attack/80117527.wav
+AudioClip/attack/84013237 (1).wav
+AudioClip/attack/84013237.wav
+AudioClip/attack/84124261 (1).wav
+AudioClip/attack/84124261.wav
+AudioClip/attack/8512558.wav
+AudioClip/attack/86532744  (1).wav
+AudioClip/attack/86532744.wav
+AudioClip/attack/87911394 (1).wav
+AudioClip/attack/87911394.wav
+AudioClip/activate/10000000 (2).wav
+AudioClip/activate/10000000.wav
+AudioClip/activate/10000010.wav
+AudioClip/activate/10000020 (2).wav
+AudioClip/activate/10000020.wav
+AudioClip/activate/10000090.wav
+AudioClip/activate/15381252.wav
+AudioClip/activate/1784686.wav
+AudioClip/activate/19333131.wav
+AudioClip/activate/21521304 (1).wav
+AudioClip/activate/21521304 (2).wav
+AudioClip/activate/21521304 (3).wav
+AudioClip/activate/24094653.wav
+AudioClip/activate/25774450.wav
+AudioClip/activate/28553439.wav
+AudioClip/activate/31764700.wav
+AudioClip/activate/32003338 (1).wav
+AudioClip/activate/32003338.wav
+AudioClip/activate/32491822.wav
+AudioClip/activate/32754886.wav
+AudioClip/activate/40640057.wav
+AudioClip/activate/42776960.wav
+AudioClip/activate/44095762.wav
+AudioClip/activate/4779091.wav
+AudioClip/activate/48179391.wav
+AudioClip/activate/51735257 (1).wav
+AudioClip/activate/51735257 .wav
+AudioClip/activate/52653092 (1).wav
+AudioClip/activate/52653092.wav
+AudioClip/activate/55727845 (1).wav
+AudioClip/activate/55727845.wav
+AudioClip/activate/55761792.wav
+AudioClip/activate/56832966.wav
+AudioClip/activate/56840427 (1).wav
+AudioClip/activate/56840427.wav
+AudioClip/activate/6007213.wav
+AudioClip/activate/62279055.wav
+AudioClip/activate/62517849.wav
+AudioClip/activate/63391643.wav
+AudioClip/activate/66970002 (1).wav
+AudioClip/activate/66970002 (2).wav
+AudioClip/activate/66970002 (3).wav
+AudioClip/activate/66970002.wav
+AudioClip/activate/69610924.wav
+AudioClip/activate/69890967.wav
+AudioClip/activate/72302403.wav
+AudioClip/activate/73445448.wav
+AudioClip/activate/76792184.wav
+AudioClip/activate/78371393 (2).wav
+AudioClip/activate/78371393.wav
+AudioClip/activate/80117527 (2).wav
+AudioClip/activate/80117527.wav
+AudioClip/activate/83764718.wav
+AudioClip/activate/84013237 (1).wav
+AudioClip/activate/84013237.wav
+AudioClip/activate/84124261.wav
+AudioClip/activate/8512558.wav
+AudioClip/activate/86532744 (1).wav
+AudioClip/activate/86532744.wav
+AudioClip/activate/87911394 (1).wav
+AudioClip/activate/87911394.wav
+AudioClip/activate/89397517 (2).wav
+AudioClip/activate/89397517.wav
+AudioClip/activate/9287078.wav
+AudioClip/activate/94770493.wav

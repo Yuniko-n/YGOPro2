@@ -127,20 +127,20 @@ public class BGMController : MonoBehaviour
         currentPlaying = kind;
     }
 
-    public void PlaySound(string sound, bool assets = false)
+    public void PlaySound(string sound, bool resources = false)
     {
         Uri www;
-        if (Ocgcore.inSkiping || (!File.Exists(sound) && !assets))
+        if (Ocgcore.inSkiping || (!File.Exists(sound) && !resources))
         {
             return;
         }
-        if (assets)
-            www = new Uri(new Uri("file:///"), Application.streamingAssetsPath.Replace("\\", "/") + "/" + sound);
-        else
+        if (!resources)
+        {
             www = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + sound);
-        sound = www.ToString();
+            sound = www.ToString();
+        }
         GameObject audio_helper = Program.I().ocgcore.create_s(Program.I().mod_audio_effect);
-        audio_helper.GetComponent<audio_helper>().play(sound, Program.I().setting.soundValue());
+        audio_helper.GetComponent<audio_helper>().play(sound, Program.I().setting.soundValue(), resources);
         Program.I().destroy(audio_helper, 20f);
     }
 
@@ -175,52 +175,55 @@ public class BGMController : MonoBehaviour
         switch (chant)
         {
             case CHANT.SUMMON:
-                SFX = PlayChant("sound/chants/summon/" + code.ToString());
+                SFX = PlayChant("summon", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/summon/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("summon", YGOSharp.CardsManager.Get(code).Alias);
                 break;
             case CHANT.ATTACK:
-                SFX = PlayChant("sound/chants/attack/" + code.ToString());
+                SFX = PlayChant("attack", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/attack/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("attack", YGOSharp.CardsManager.Get(code).Alias);
                 break;
             case CHANT.ACTIVATE:
-                SFX = PlayChant("sound/chants/activate/" + code.ToString());
+                SFX = PlayChant("activate", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/activate/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("activate", YGOSharp.CardsManager.Get(code).Alias);
                 break;
         }
         return SFX;
     }
 
-    public bool PlayChant(string name)
+    public bool PlayChant(string type, int code)
     {
-        string path =  name + ".mp3";
-        if (File.Exists(path) && audioClip.name != Path.GetFileName(path))
+        List<string> chantType = new List<string>();
+        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".mp3");
+        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".ogg");
+        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".wav");
+        foreach (string path in chantType)
         {
-            IsPlaying = false;
-            PlayMusic(path);
+            if (File.Exists(path))
+            {
+                if (path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) && audioClip.name != Path.GetFileName(path))
+                {
+                    IsPlaying = false;
+                    PlayMusic(path);
+                    return true;
+                }
+                else
+                {
+                    PlaySound(path);
+                    return true;
+                }
+            }
+        }
+
+        string chant = "AudioClip/" + type + "/" + code.ToString() + ".wav";
+        if (Program.AudioClipFile.Contains(chant))
+        {
+            PlaySound(chant, true);
             return true;
         }
-        path = name + ".ogg";
-        if (File.Exists(path))
-        {
-            PlaySound(path);
-            return true;
-        }
-        path = name + ".wav";
-        if (File.Exists(path))
-        {
-            PlaySound(path);
-            return true;
-        }
-#if !UNITY_EDITOR && UNITY_ANDROID //Android
-        if (Program.AssetsFile.Contains(path))
-        {
-            PlaySound(path, true);
-            return true;
-        }
-#endif
+
         return false;
     }
 
