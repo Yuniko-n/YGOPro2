@@ -108,7 +108,7 @@ public class selectDeck : WindowServantSP
             }
             inputEditCode.value = string.Join("\n", codeList.ToArray());
         }
-        else if (!inputEditCode.value.Contains("#created by"))
+        else if (!inputEditCode.value.Contains("#create"))
         {
             Program.PrintToChat(InterString.Get("无法识别的卡组代码"));
             return;

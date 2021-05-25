@@ -445,16 +445,12 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
-        AudioClipFile = GetAssetsFileList("AudioClipFile.txt");
+        TextAsset t = Resources.Load<TextAsset>("AudioClipFile");
+        AudioClipFile = t.text.Replace("\r", "").Split("\n");
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
-        AssetsFile = GetAssetsFileList("AssetsFile.txt");
+        t = Resources.Load<TextAsset>("AssetsFile");
+        AssetsFile = t.text.Replace("\r", "").Split("\n");
 #endif
-    }
-
-    public string[] GetAssetsFileList(string path)
-    {
-        string file = System.Text.Encoding.UTF8.GetString(AssetsFileToByte(path));
-        return file.Replace("\r", "").Split("\n");
     }
 
     public static byte[] AssetsFileToByte(string path)
@@ -522,7 +518,7 @@ public class Program : MonoBehaviour
         }
     }
 
-	public void initPath()
+    public void initPath()
     {
         //创建文件夹
         List<string> Resource = new List<string>();
