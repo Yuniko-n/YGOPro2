@@ -1101,7 +1101,11 @@ public class Program : MonoBehaviour
             StartCoroutine(OnScreenCapture());
         }
 
-        try { if (!setting.ShowFPS) { GUI.Label(new Rect(10, 5, 200, 200), "[Ver " + GAME_VERSION + "] FPS: " + FPS.ToString("000")); } } catch{}
+        try {
+            if (!setting.ShowFPS) {
+                GUI.Label(new Rect(10, 5, 200, 200), string.Format("[Ver {0}] FPS: {1:###}", GAME_VERSION, FPS));
+            }
+        } catch {}
     }
 
     void Update()

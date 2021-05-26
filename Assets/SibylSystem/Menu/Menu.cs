@@ -109,7 +109,7 @@ public class Menu : WindowServantSP
                 string tools = Application.streamingAssetsPath + "/Upgrade.exe";
                 if (File.Exists(tools))
                 {
-                    Process.Start(tools, upFile + " " + Program.GAME_PATH + " YGOPro2.exe");
+                    Process.Start(string.Format("{0} {1} {2} {3}", tools, upFile, Program.GAME_PATH, "YGOPro2.exe"));
                 }
                 else
                 {

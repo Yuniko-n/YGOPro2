@@ -129,14 +129,13 @@ public class BGMController : MonoBehaviour
 
     public void PlaySound(string sound, bool resources = false)
     {
-        Uri www;
         if (Ocgcore.inSkiping || (!File.Exists(sound) && !resources))
         {
             return;
         }
         if (!resources)
         {
-            www = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + sound);
+            Uri www = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + sound);
             sound = www.ToString();
         }
         GameObject audio_helper = Program.I().ocgcore.create_s(Program.I().mod_audio_effect);
@@ -196,9 +195,9 @@ public class BGMController : MonoBehaviour
     public bool PlayChant(string type, int code)
     {
         List<string> chantType = new List<string>();
-        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".mp3");
-        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".ogg");
-        chantType.Add("sound/chants/" + type + "/" + code.ToString() + ".wav");
+        chantType.Add(string.Format("AudioClip/{0}/(1).mp3", type, code));
+        chantType.Add(string.Format("AudioClip/{0}/(1).ogg", type, code));
+        chantType.Add(string.Format("AudioClip/{0}/(1).wav", type, code));
         foreach (string path in chantType)
         {
             if (File.Exists(path))
@@ -217,7 +216,7 @@ public class BGMController : MonoBehaviour
             }
         }
 
-        string chant = "AudioClip/" + type + "/" + code.ToString() + ".wav";
+        string chant = string.Format("AudioClip/{0}/{1}.wav", type, code);
         if (Program.AudioClipFile.Contains(chant))
         {
             PlaySound(chant, true);
