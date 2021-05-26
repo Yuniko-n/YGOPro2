@@ -1013,29 +1013,40 @@ public static class UIHelper
         return xInfo.FullName.CompareTo(yInfo.FullName);
     }
 
-    internal static void playSound(string p, float val)
+    internal static void playSound(string p, float val, bool resources = false)
     {
         if (Ocgcore.inSkiping)
         {
             return;
         }
-        string path = "sound/" + p + ".ogg";
+        string path = "sound/" + p + ".mp3";
         if (File.Exists(path) == false)
         {
             path = "sound/" + p + ".wav";
         }
         if (File.Exists(path) == false)
         {
-            path = "sound/" + p + ".mp3";
+            path = "sound/" + p + ".ogg";
         }
         if (File.Exists(path) == false)
         {
-            return;
+            string sounds = Program.LoadResourcesText("sounds.txt");
+            if (sounds.Contains(path))
+            {
+                resources = true;
+            }
+            else
+            {
+                return;
+            }
         }
-        path = Environment.CurrentDirectory.Replace("\\", "/") + "/" + path;
-        path = new Uri(new Uri("file:///"), path).ToString();
+        if (resources == false)
+        {
+            path = Environment.CurrentDirectory.Replace("\\", "/") + "/" + path;
+            path = new Uri(new Uri("file:///"), path).ToString();
+        }
         GameObject audio_helper = Program.I().ocgcore.create_s(Program.I().mod_audio_effect);
-        audio_helper.GetComponent<audio_helper>().play(path, Program.I().setting.soundValue());
+        audio_helper.GetComponent<audio_helper>().play(path, Program.I().setting.soundValue(), resources);
         Program.I().destroy(audio_helper, 5f);
     }
 
