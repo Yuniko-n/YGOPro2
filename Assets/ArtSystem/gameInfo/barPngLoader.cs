@@ -20,7 +20,11 @@ public class barPngLoader : MonoBehaviour {
         api_timeBar.mainTexture = GameTextureManager.time;
         try
         {
-            string[] allLines = (File.ReadAllText("texture/duel/healthBar/config.txt").Replace("\r", "").Replace(" ", "").Split("\n"));
+            string[] allLines;
+            if (File.Exists("texture/ui/config.txt"))
+                allLines = (File.ReadAllText("texture/duel/healthBar/config.txt").Replace("\r", "").Replace(" ", "").Split("\n"));
+            else
+                allLines = (Program.LoadResourcesText("texture/duel/healthBar/config.txt").Replace("\r", "").Replace(" ", "").Split("\n"));
             foreach (var item in allLines)
             {
                 string[] mats = item.Split("=");
@@ -248,9 +252,9 @@ public class barPngLoader : MonoBehaviour {
             Debug.LogError(e);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    
+    // Update is called once per frame
+    void Update () {
+    
+    }
 }

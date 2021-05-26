@@ -1089,7 +1089,10 @@ public class GameTextureManager
         N.Apply();
         try
         {
-            ColorUtility.TryParseHtmlString(File.ReadAllText("texture/duel/chainColor.txt"), out chainColor);
+            if (File.Exists("texture/duel/chainColor.txt"))
+                ColorUtility.TryParseHtmlString(File.ReadAllText("texture/duel/chainColor.txt"), out chainColor);
+            else
+                ColorUtility.TryParseHtmlString(Program.LoadResourcesText("texture/duel/chainColor.txt"), out chainColor);
         }
         catch (Exception)
         {
