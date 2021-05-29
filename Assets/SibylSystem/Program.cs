@@ -428,6 +428,8 @@ public class Program : MonoBehaviour
             GameStringManager.initialize("config/strings.conf");
             YGOSharp.BanlistManager.initialize("config/lflist.conf");
 
+            YGOSharp.CardsManager.updateSetNames();
+
             if (Directory.Exists("pack"))
             {
                 fileInfos = (new DirectoryInfo("pack")).GetFiles();
