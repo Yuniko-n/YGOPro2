@@ -7,6 +7,7 @@ public class Setting : WindowServant2D
     public LAZYsetting setting;
 
     public UIToggle isBGMMute;
+    public UIToggle isChantMute;
 
     public bool ShowFPS;
 
@@ -33,6 +34,10 @@ public class Setting : WindowServant2D
         isBGMMute = UIHelper.getByName<UIToggle>(gameObject, "muteBGM");
         UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
         UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
+
+        //卡片音效
+        isChantMute = UIHelper.getByName<UIToggle>(gameObject, "muteChant");
+        UIHelper.getByName<UIToggle>(gameObject, "muteChant").value = UIHelper.fromStringToBool(Config.Get("muteChantAudio", "0"));
 
         //FPS
         UIHelper.registEvent(gameObject, "ShowFPS_", onShowFPS);
@@ -312,6 +317,7 @@ public class Setting : WindowServant2D
         Config.Set("handmPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handmPosition_").value));
         Config.Set("spyer_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "spyer_").value));
         Config.Set("muteBGMAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value));
+        Config.Set("muteChantAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteChant").value));
         Config.Set("ShowFPS_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value));
         if (UIHelper.getByName<UIToggle>(gameObject, "high_").value)
         {

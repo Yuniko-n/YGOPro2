@@ -170,6 +170,9 @@ public class BGMController : MonoBehaviour
     public bool PlayChant(CHANT chant, int code)
     {
         bool SFX = false;
+        if (Program.I().setting.isChantMute.value)
+            return SFX;
+
         if (code == 0 ) return SFX;
         switch (chant)
         {
