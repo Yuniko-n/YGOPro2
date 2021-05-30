@@ -7,6 +7,7 @@ public class Setting : WindowServant2D
     public LAZYsetting setting;
 
     public UIToggle isBGMMute;
+    public UIToggle isChantMute;
 
     public bool ShowFPS;
 
@@ -34,7 +35,11 @@ public class Setting : WindowServant2D
         UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
         UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
 
-        //显示与限制FPS
+        //卡片音效
+        isChantMute = UIHelper.getByName<UIToggle>(gameObject, "muteChant");
+        UIHelper.getByName<UIToggle>(gameObject, "muteChant").value = UIHelper.fromStringToBool(Config.Get("muteChantAudio", "0"));
+
+        //FPS
         UIHelper.registEvent(gameObject, "ShowFPS_", onShowFPS);
         ShowFPS = UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value = UIHelper.fromStringToBool(Config.Get("ShowFPS_", "0"));
         UIHelper.registEvent(setting.LimitFPS.gameObject, onchangeFPS);
@@ -69,7 +74,7 @@ public class Setting : WindowServant2D
         {
             if (collection[i].name.Length > 0 && collection[i].name[0] == '*')
             {
-                if (collection[i].name == "*mouseParticle" || collection[i].name == "*showOff" || collection[i].name == "*Efield" || collection[i].name == "*AutoPicDownload")
+                if (collection[i].name== "*mouseParticle" || collection[i].name == "*showOff" || collection[i].name == "*Efield") 
                 {
                     collection[i].value = UIHelper.fromStringToBool(Config.Get(collection[i].name, "1"));
                 }
@@ -87,7 +92,6 @@ public class Setting : WindowServant2D
         UIHelper.registEvent(setting.mouseEffect.gameObject, onchangeMouse);
         UIHelper.registEvent(setting.closeUp.gameObject, onchangeCloseUp);
         UIHelper.registEvent(setting.cloud.gameObject, onchangeCloud);  
-        UIHelper.registEvent(setting.autoPicDownload.gameObject, onchangeDownload);
         UIHelper.registEvent(setting.Vpedium.gameObject, onCP);
         UIHelper.registEvent(setting.Vfield.gameObject, onCP);
         UIHelper.registEvent(setting.Vlink.gameObject, onCP);
@@ -164,11 +168,6 @@ public class Setting : WindowServant2D
     public void onchangeCloud()
     {
         Program.MonsterCloud = setting.cloud.value;
-    }
-
-    public void onchangeDownload()
-    {
-        GameTextureManager.AutoPicDownload = setting.autoPicDownload.value;
     }
 
     public void onchangeMouse()
@@ -336,6 +335,7 @@ public class Setting : WindowServant2D
         Config.Set("handmPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handmPosition_").value));
         Config.Set("spyer_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "spyer_").value));
         Config.Set("muteBGMAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value));
+        Config.Set("muteChantAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteChant").value));
         Config.Set("ShowFPS_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value));
         if (UIHelper.getByName<UIToggle>(gameObject, "high_").value)
         {

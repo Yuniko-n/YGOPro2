@@ -106,7 +106,7 @@ public class selectDeck : WindowServantSP
             code = code.Replace("main=", "\'#main\'");
             code = code.Replace("&extra=", "\'#extra\'");
             code = code.Replace("&side=", "\'!side\'");
-            code = code.Replace("'", "\n");
+            code = code.Replace("'", "_").Replace("_", "\n");
 
             var lines = code.Replace("\r", "").Split("\n");
             List<string> codeList = new List<string>();
@@ -128,7 +128,7 @@ public class selectDeck : WindowServantSP
             }
             inputEditCode.value = string.Join("\n", codeList.ToArray());
         }
-        else if (!inputEditCode.value.Contains("#created by"))
+        else if (!inputEditCode.value.Contains("#create"))
         {
             Program.PrintToChat(InterString.Get("无法识别的卡组代码"));
             return;
@@ -440,6 +440,7 @@ public class selectDeck : WindowServantSP
     {
         if (!superScrollView.Selected())
         {
+            Program.PrintToChat(InterString.Get("未选中卡组，请先创建或选中卡组。"));
             return;
         }
 

@@ -127,16 +127,19 @@ public class BGMController : MonoBehaviour
         currentPlaying = kind;
     }
 
-    public void PlaySound(string sound) 
+    public void PlaySound(string sound, bool resources = false)
     {
-        if (Ocgcore.inSkiping || !File.Exists(sound)) 
+        if (Ocgcore.inSkiping || (!File.Exists(sound) && !resources))
         {
             return;
         }
-        Uri www = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + sound);
-        sound = www.ToString();
+        if (!resources)
+        {
+            Uri www = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + sound);
+            sound = www.ToString();
+        }
         GameObject audio_helper = Program.I().ocgcore.create_s(Program.I().mod_audio_effect);
-        audio_helper.GetComponent<audio_helper>().play(sound, Program.I().setting.soundValue());
+        audio_helper.GetComponent<audio_helper>().play(sound, Program.I().setting.soundValue(), resources);
         Program.I().destroy(audio_helper, 20f);
     }
 
@@ -167,53 +170,62 @@ public class BGMController : MonoBehaviour
     public bool PlayChant(CHANT chant, int code)
     {
         bool SFX = false;
+        if (Program.I().setting.isChantMute.value)
+            return SFX;
+
         if (code == 0 ) return SFX;
         switch (chant)
         {
             case CHANT.SUMMON:
-                SFX = PlayChant("sound/chants/summon/" + code.ToString());
+                SFX = PlayChant("summon", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/summon/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
-                if (!SFX)
-                    SFX = PlayChant("sound/chants/" + code.ToString());
-                if (!SFX)
-                    SFX = PlayChant("sound/chants/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("summon", YGOSharp.CardsManager.Get(code).Alias);
                 break;
             case CHANT.ATTACK:
-                SFX = PlayChant("sound/chants/attack/" + code.ToString());
+                SFX = PlayChant("attack", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/attack/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("attack", YGOSharp.CardsManager.Get(code).Alias);
                 break;
             case CHANT.ACTIVATE:
-                SFX = PlayChant("sound/chants/activate/" + code.ToString());
+                SFX = PlayChant("activate", code);
                 if (!SFX)
-                    SFX = PlayChant("sound/chants/activate/" + YGOSharp.CardsManager.Get(code).Alias.ToString());
+                    SFX = PlayChant("activate", YGOSharp.CardsManager.Get(code).Alias);
                 break;
         }
         return SFX;
     }
 
-    public bool PlayChant(string name)
+    public bool PlayChant(string type, int code)
     {
-        string path =  name + ".mp3";
-        if (File.Exists(path) && audioClip.name != Path.GetFileName(path))
+        List<string> chantType = new List<string>();
+        chantType.Add(string.Format("AudioClip/{0}/(1).mp3", type, code));
+        chantType.Add(string.Format("AudioClip/{0}/(1).ogg", type, code));
+        chantType.Add(string.Format("AudioClip/{0}/(1).wav", type, code));
+        foreach (string path in chantType)
         {
-            IsPlaying = false;
-            PlayMusic(path);
+            if (File.Exists(path))
+            {
+                if (path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) && audioClip.name != Path.GetFileName(path))
+                {
+                    IsPlaying = false;
+                    PlayMusic(path);
+                    return true;
+                }
+                else
+                {
+                    PlaySound(path);
+                    return true;
+                }
+            }
+        }
+
+        string chant = string.Format("AudioClip/{0}/{1}.wav", type, code);
+        if (Program.AudioClipFile.Contains(chant))
+        {
+            PlaySound(chant, true);
             return true;
         }
-        path = name + ".wav";
-        if (File.Exists(path))
-        {
-            PlaySound(path);
-            return true;
-        }
-        path = name + ".ogg";
-        if (File.Exists(path))
-        {
-            PlaySound(path);
-            return true;
-        }
+
         return false;
     }
 
@@ -227,32 +239,33 @@ public class BGMController : MonoBehaviour
         menu = new List<string>();
         win = new List<string>();
 
-        string soundPath = "sound/BGM/";
+        string soundPath = "sound/";
+        string bgmPath = soundPath + "BGM/";
         dirPath(soundPath);
         //Unity 能使用的音频格式：.aif .wav .mp3 .ogg
-        advantage.AddRange(Directory.GetFiles(string.Concat(soundPath, "advantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        deck.AddRange(Directory.GetFiles(string.Concat(soundPath, "deck"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        disadvantage.AddRange(Directory.GetFiles(string.Concat(soundPath, "disadvantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        duel.AddRange(Directory.GetFiles(string.Concat(soundPath, "duel"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        lose.AddRange(Directory.GetFiles(string.Concat(soundPath, "lose"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        menu.AddRange(Directory.GetFiles(string.Concat(soundPath, "menu"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
-        win.AddRange(Directory.GetFiles(string.Concat(soundPath, "win"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        advantage.AddRange(Directory.GetFiles(string.Concat(bgmPath, "advantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        deck.AddRange(Directory.GetFiles(string.Concat(bgmPath, "deck"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        disadvantage.AddRange(Directory.GetFiles(string.Concat(bgmPath, "disadvantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        duel.AddRange(Directory.GetFiles(string.Concat(bgmPath, "duel"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        lose.AddRange(Directory.GetFiles(string.Concat(bgmPath, "lose"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        menu.AddRange(Directory.GetFiles(string.Concat(bgmPath, "menu"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
+        win.AddRange(Directory.GetFiles(string.Concat(bgmPath, "win"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
     }
 
     public void dirPath(string path)
     {
         List<string> BGMdir = new List<string>();
         //音乐文件夹
-        BGMdir.Add("advantage/");
-        BGMdir.Add("deck/");
-        BGMdir.Add("disadvantage/");
-        BGMdir.Add("duel/");
-        BGMdir.Add("lose/");
-        BGMdir.Add("menu/");
-        BGMdir.Add("win/");
-        BGMdir.Add("../chants/attack/");
-        BGMdir.Add("../chants/activate/");
-        BGMdir.Add("../chants/summon/");
+        BGMdir.Add("BGM/advantage/");
+        BGMdir.Add("BGM/deck/");
+        BGMdir.Add("BGM/disadvantage/");
+        BGMdir.Add("BGM/duel/");
+        BGMdir.Add("BGM/lose/");
+        BGMdir.Add("BGM/menu/");
+        BGMdir.Add("BGM/win/");
+        BGMdir.Add("chants/attack/");
+        BGMdir.Add("chants/activate/");
+        BGMdir.Add("chants/summon/");
         //创建文件夹
         foreach (string dir in BGMdir)
         {

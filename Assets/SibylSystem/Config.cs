@@ -51,7 +51,11 @@ public static class Config
         if (loaded == false)
         {
             loaded = true;
-            string[] lines = File.ReadAllText("texture/ui/config.txt").Replace("\r", "").Replace(" ", "").Split("\n");
+            string[] lines;
+            if (File.Exists("texture/ui/config.txt"))
+                lines = File.ReadAllText("texture/ui/config.txt").Replace("\r", "").Replace(" ", "").Split("\n");
+            else
+                lines = Program.LoadResourcesText("texture/ui/config.txt").Replace("\r", "").Replace(" ", "").Split("\n");
             for (int i = 0; i < lines.Length; i++)
             {
                 string[] mats = lines[i].Split("=");

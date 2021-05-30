@@ -286,6 +286,8 @@ public class Program : MonoBehaviour
 
     public static string DECK_PATH = "deck/";
 
+    public static string[] AudioClipFile;
+
     public static string[] AssetsFile;
 
     public static int APIVersion = 0;
@@ -308,7 +310,7 @@ public class Program : MonoBehaviour
 
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
         Environment.CurrentDirectory = GAME_PATH;
-        System.IO.Directory.SetCurrentDirectory(GAME_PATH);
+        Directory.SetCurrentDirectory(GAME_PATH);
 #endif
 
         AppUpdateLog.CheckVersion();
@@ -452,6 +454,8 @@ public class Program : MonoBehaviour
             GameStringManager.initialize("config/strings.conf");
             YGOSharp.BanlistManager.initialize("config/lflist.conf");
 
+            YGOSharp.CardsManager.updateSetNames();
+
             if (Directory.Exists("pack"))
             {
                 fileInfos = (new DirectoryInfo("pack")).GetFiles();
@@ -469,22 +473,28 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
-#if !UNITY_EDITOR && UNITY_ANDROID //Android Java Test
-        AssetsFile = GetAssetsFileList("AssetsFile.txt");
+        AudioClipFile = LoadResourcesText("AudioClipFile.txt").Replace("\r", "").Split("\n");
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AssetsFile = LoadResourcesText("AssetsFile.txt").Replace("\r", "").Split("\n");
 #endif
-    }
-
-    public string[] GetAssetsFileList(string path)
-    {
-        string file = System.Text.Encoding.UTF8.GetString(AssetsFileToByte(path));
-        return file.Replace("\r", "").Split("\n");
     }
 
     public static byte[] AssetsFileToByte(string path)
     {
-        var www = new WWW(Application.streamingAssetsPath + "/" + path);
+        string file = Application.streamingAssetsPath + "/" + path;
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        var www = new WWW(file);
         while (!www.isDone) { }
         return www.bytes;
+#else
+        return File.ReadAllBytes(file);
+#endif
+    }
+
+    public static string LoadResourcesText(string path)
+    {
+        TextAsset t = Resources.Load<TextAsset>(path.Substring(0, path.Length - 4));
+        return t.text;
     }
 
     public void UpdateClientData(string path)
@@ -525,7 +535,7 @@ public class Program : MonoBehaviour
             while (!www.isDone) { }
             byte[] data = www.bytes;
 #else
-            byte[] data = System.IO.File.ReadAllBytes(filePath);
+            byte[] data = File.ReadAllBytes(filePath);
 #endif
             //use MemoryStream!!!!
             using (MemoryStream mstrm = new MemoryStream(data))
@@ -557,7 +567,6 @@ public class Program : MonoBehaviour
         catch (Exception ex)
         {
             Debug.Log(ex);
-            if (File.Exists(filePath)) File.Delete(filePath);//文件损坏或不支持
         }
         finally
         {
@@ -569,7 +578,7 @@ public class Program : MonoBehaviour
         }
     }
 
-	public void initPath()
+    public void initPath()
     {
         //创建文件夹
         List<string> Resource = new List<string>();
@@ -595,22 +604,6 @@ public class Program : MonoBehaviour
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
-        }
-
-        if (!File.Exists("texture/ui/config.txt"))
-        {
-            string txt = "gameButtonSign.color=3e4043FF\ngameChainCheckArea.color=16181bFF\nallUI.color=16181bFF\nList.color=16181bFF\nlable.color=FFFFFFFF\nlable.color.fadecolor=CCCCCCFF";
-            File.WriteAllText("texture/ui/config.txt", txt);
-        }
-        if (!File.Exists("texture/duel/chainColor.txt"))
-        {
-            string txt = "FFFF00";
-            File.WriteAllText("texture/duel/chainColor.txt", txt);
-        }
-        if (!File.Exists("texture/duel/healthBar/config.txt"))
-        {
-            string txt = "totalSize.width=370\ntotalSize.height=124\nplayerNameLable.x=202\nplayerNameLable.y=31\nplayerNameLable.width=300\nplayerNameLable.height=22\nplayerNameLable.color=FFFFFFFF\nplayerNameLable.alignment=0\nplayerNameLable.effect=1\nhealthLable.x=230.9\nhealthLable.y=60.9\nhealthLable.width=300\nhealthLable.height=32\nhealthLable.color=FFFFFFFF\nhealthLable.alignment=0\nhealthLable.effect=2\ntimeLable.x=217.1\ntimeLable.y=87.8\ntimeLable.width=300\ntimeLable.height=24\ntimeLable.color=FFDAACFF\ntimeLable.alignment=0\ntimeLable.effect=2\nhealth.x=231.2\nhealth.y=62\nhealth.width=220\nhealth.height=30\ntime.x=216.7\ntime.y=87.4\ntime.width=190\ntime.height=20\nface.x=61.5\nface.y=72.6\nface.size=70\nface.type=0";
-            File.WriteAllText("texture/duel/healthBar/config.txt", txt);
         }
     }
 
@@ -1132,7 +1125,6 @@ public class Program : MonoBehaviour
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         #endif
-
         mouseParticle = Instantiate(new_mouse);
         instance = this;
         initialize();
@@ -1163,7 +1155,11 @@ public class Program : MonoBehaviour
             StartCoroutine(OnScreenCapture());
         }
 
-        try { if (!setting.ShowFPS) { GUI.Label(new Rect(10, 5, 200, 200), "[Ver " + GAME_VERSION + "] FPS: " + FPS.ToString("000")); } } catch{}
+        try {
+            if (!setting.ShowFPS) {
+                GUI.Label(new Rect(10, 5, 200, 200), string.Format("[Ver {0}] FPS: {1:###}", GAME_VERSION, FPS));
+            }
+        } catch {}
     }
 
     void Update()

@@ -30,8 +30,6 @@ public class GameTextureManager
 
     static readonly HttpDldFile df = new HttpDldFile();
 
-    public static bool AutoPicDownload;
-
     public class BitmapHelper
     {
         public System.Drawing.Color[,] colors = null;
@@ -438,7 +436,7 @@ public class GameTextureManager
             return Program.AssetsFileToByte("picture/card/" + code + ".jpg");
         }
 #endif
-        if (!File.Exists(path) && pic.code != 0 && AutoPicDownload)
+        if (!File.Exists(path) && pic.code != 0)
         {
             df.Download("http://dl.ygo2020.link/ygopro2/picture/card/" + pic.code.ToString() + ".jpg", "picture/card/" + pic.code.ToString() + ".jpg");
             path = "picture/card/" + pic.code.ToString() + ".jpg";
@@ -1091,7 +1089,10 @@ public class GameTextureManager
         N.Apply();
         try
         {
-            ColorUtility.TryParseHtmlString(File.ReadAllText("texture/duel/chainColor.txt"), out chainColor);
+            if (File.Exists("texture/duel/chainColor.txt"))
+                ColorUtility.TryParseHtmlString(File.ReadAllText("texture/duel/chainColor.txt"), out chainColor);
+            else
+                ColorUtility.TryParseHtmlString(Program.LoadResourcesText("texture/duel/chainColor.txt"), out chainColor);
         }
         catch (Exception)
         {
