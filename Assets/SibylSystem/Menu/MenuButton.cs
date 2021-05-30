@@ -107,7 +107,7 @@ public class MenuButton : MonoBehaviour
                 }
 #endif
             } else {
-                Program.I().menu.showToast("当前先行卡已是最新！");
+                Program.I().menu.showToast("当前[先行卡]已是最新！\n\n(长按按键5秒可移除[先行卡])");
             }
         }
         catch (System.Exception e)
