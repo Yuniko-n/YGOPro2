@@ -12,7 +12,7 @@ public class AppUpdateLog
     public static string toPath = "updates";
 #endif
     //客户端版本
-    public static string GAME_VERSION = Program.PRO_VERSION() + "-0530";
+    public static string GAME_VERSION = Program.PRO_VERSION() + "-0531";
     public static string GAME_FILE = toPath + "/version.txt";
     public static bool UPDATE_DATA = false;
 

@@ -198,9 +198,9 @@ public class BGMController : MonoBehaviour
     public bool PlayChant(string type, int code)
     {
         List<string> chantType = new List<string>();
-        chantType.Add(string.Format("AudioClip/{0}/(1).mp3", type, code));
-        chantType.Add(string.Format("AudioClip/{0}/(1).ogg", type, code));
-        chantType.Add(string.Format("AudioClip/{0}/(1).wav", type, code));
+        chantType.Add(string.Format("sound/chants/{0}/{1}.mp3", type, code));
+        chantType.Add(string.Format("sound/chants/{0}/{1}.ogg", type, code));
+        chantType.Add(string.Format("sound/chants/{0}/{1}.wav", type, code));
         foreach (string path in chantType)
         {
             if (File.Exists(path))
