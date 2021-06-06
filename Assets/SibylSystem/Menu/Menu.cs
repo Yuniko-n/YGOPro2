@@ -66,13 +66,8 @@ public class Menu : WindowServantSP
 
     void CheckUpgrade()
     {
-        ServicePointManager.ServerCertificateValidationCallback = HttpDldFile.MyRemoteCertificateValidationCallback;//支持https
-        WebClient wc = new WebClient();
-        Stream s = wc.OpenRead(url);
-        StreamReader sr = new StreamReader(s, Encoding.UTF8);
-        string result = sr.ReadToEnd();
-        sr.Close();
-        s.Close();
+        HttpDldFile df = new HttpDldFile();
+        string result = df.DownloadString(url);
         string[] lines = result.Replace("\r", "").Split("\n");
         VERSION = lines[0];
         if (lines[0] != AppUpdateLog.GAME_VERSION)
@@ -81,7 +76,6 @@ public class Menu : WindowServantSP
         }
         if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(upFile))
         {
-            HttpDldFile df = new HttpDldFile();
             df.Download(lines[3], upFile);
         }
         if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[4])) > Convert.ToInt32(Config.ClientVersion))

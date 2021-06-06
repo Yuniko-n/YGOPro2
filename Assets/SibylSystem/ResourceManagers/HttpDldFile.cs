@@ -62,6 +62,14 @@ public class HttpDldFile
         }
         return flag;
     }
+    public string DownloadString(string url)
+    {
+        using (var client = new TimeoutWebClient())
+        {
+            ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
+            return client.DownloadString(new Uri(url));
+        }
+    }
     public static bool MyRemoteCertificateValidationCallback(System.Object sender,
     X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
     {
