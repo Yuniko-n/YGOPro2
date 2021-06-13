@@ -565,6 +565,10 @@ public class gameCard : OCGobject
 
     private void ES_excited_handler_button_shower()
     {
+        float f = 0f;
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
+        float f = 250f;
+#endif
         if (opMonsterWithBackGroundCard)   
         {
             Vector3 vector_of_begin = Vector3.zero;
@@ -579,7 +583,7 @@ public class gameCard : OCGobject
             vector_of_begin = Program.camera_game_main.WorldToScreenPoint(vector_of_begin);
             for (int i = 0; i < buttons.Count; i++)
             {
-                buttons[i].show(vector_of_begin - i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / 700f)) - (new Vector3(0, 20f * 0.7f * (float)Screen.height / 700f)));
+                buttons[i].show(vector_of_begin - i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / (700f - f))) - (new Vector3(0, 20f * 0.7f * (float)Screen.height / 700f)));
             }
             return;
         }
@@ -590,7 +594,7 @@ public class gameCard : OCGobject
             vector_of_begin = Program.camera_game_main.WorldToScreenPoint(vector_of_begin);
             for (int i = 0; i < buttons.Count; i++)
             {
-                buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / 700f)) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
+                buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / (700f - f))) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
             }
             return;
         }
@@ -611,7 +615,7 @@ public class gameCard : OCGobject
                 vector_of_begin = Program.camera_game_main.WorldToScreenPoint(vector_of_begin);
                 for (int i = 0; i < buttons.Count; i++)
                 {
-                    buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / 700f)) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
+                    buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / (700f - f))) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
                 }
             }
             else
@@ -623,7 +627,7 @@ public class gameCard : OCGobject
                 vector_of_begin = Program.camera_game_main.WorldToScreenPoint(vector_of_begin);
                 for (int i = 0; i < buttons.Count; i++)
                 {
-                    buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / 700f)) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
+                    buttons[i].show(vector_of_begin + i * (new Vector3(0, 65f * 0.7f * (float)Screen.height / (700f - f))) + (new Vector3(0, 35f * 0.7f * (float)Screen.height / 700f)));
                 }
             }
             return;

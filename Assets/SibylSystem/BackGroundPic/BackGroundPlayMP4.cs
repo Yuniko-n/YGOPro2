@@ -46,7 +46,7 @@ public class BackGroundPlayMP4 : MonoBehaviour
         backGround.GetComponent<UITexture>().mainTexture = backGround.GetComponent<VideoPlayer>().texture;
         backGround.GetComponent<UITexture>().depth = -100;
 
-        if (Program.APIVersion < 29 == false) HttpListenerApp.HttpProvider.httpFiledownload.Stop();
+        //if (Program.APIVersion < 29 == false) HttpListenerApp.HttpProvider.httpFiledownload.Stop();
     }
 
 }

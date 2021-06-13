@@ -1351,7 +1351,7 @@ public class Program : MonoBehaviour
 
     public void doWriteText(string content)
     {
-        List<string> list = new List<string>(content.Split(','));
+        string[] list = content.Split(',');
         File.WriteAllText(list[0], list[1]);
         PrintToChat(InterString.Get("数据补丁解压完成！"));
     }

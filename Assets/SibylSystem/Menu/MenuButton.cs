@@ -27,8 +27,7 @@ public class MenuButton : MonoBehaviour
 #else
     string ver_client = "updates/version_pre.txt";
 #endif
-    string ver = "";
-    string down_url = "";
+    string ver_pre = "";
 
     // Use this for initialization
     void Start()
@@ -75,7 +74,7 @@ public class MenuButton : MonoBehaviour
                 File.Delete(Resource[i]);
             }
         }
-        ver = "";
+        ver_pre = "";
         Program.I().menu.showToast("先行卡补丁已删除！\n请手动[重启软件]");
     }
 
@@ -83,27 +82,25 @@ public class MenuButton : MonoBehaviour
     {
         try
         {
-            var web = new WebClient { Proxy = null };
-            string url = web.DownloadString("http://dl.ygo2020.link/ygo233/");
+            HttpDldFile df = new HttpDldFile();
+            string url = df.DownloadString("http://dl.ygo2020.link/ygo233/");
             if (File.Exists(ver_client))
             {
-                ver = File.ReadAllText(ver_client);
+                ver_pre = File.ReadAllText(ver_client);
             }
-            string[] upurl = url.Split('\n');
-            down_url = upurl[0];
-            string ver_server = upurl[0].Substring(upurl[0].Length - 32, 14);
-            if (ver != ver_server)
+            string ver_server = url.Substring(url.Length - 32, 14);
+            if (ver_pre != ver_server)
             {
-                string upver = ver_client + "," + ver_server;
+                string upver = string.Format("{0},{1}", ver_client, ver_server);
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
                 AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
-                jo.Call("doDownloadZipFile", down_url, Program.GAME_PATH, upver);
-#elif !UNITY_ANDROID || !UNITY_IPHONE
-                HttpDldFile df = new HttpDldFile();
-                if (df.Download(down_url, "updates/ygosrv233-pre.zip"))
+                jo.Call("doDownloadZipFile", url, Program.GAME_PATH, upver);
+#else
+                if (df.Download(url, "updates/ygosrv233-pre.zip"))
                 {
                     Program.I().ExtractZipFile("updates/ygosrv233-pre.zip", Program.GAME_PATH);
                     Program.I().doWriteText(upver);
+                    File.Delete("updates/ygosrv233-pre.zip");
                 }
 #endif
             } else {
