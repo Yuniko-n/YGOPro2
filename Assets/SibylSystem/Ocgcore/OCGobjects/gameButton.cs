@@ -30,9 +30,9 @@ public class gameButton : OCGobject
     {
         if (gameObject == null)
         {
-            float f = 0f;
+            float f = 700f;
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
-            float f = 250f;
+            f = 450f;
 #endif
             gameObject = create(Program.I().new_ui_superButton, Program.camera_main_2d.ScreenToWorldPoint(v), Vector3.zero, false, Program.ui_main_2d, true);
             gameObjectEvent = UIHelper.getRealEventGameObject(gameObject);
@@ -40,7 +40,7 @@ public class gameButton : OCGobject
             gameObject.GetComponent<iconSetForButton>().setTexture(type);
             gameObject.GetComponent<iconSetForButton>().setText(hint);
             gameObject.transform.localScale = Vector3.zero;
-            iTween.ScaleTo(gameObject, new Vector3(0.7f * (float)Screen.height / 700f, 0.7f * (float)Screen.height / (700f - f), 0.7f * (float)Screen.height / 700f), 0.2f);
+            iTween.ScaleTo(gameObject, new Vector3(0.7f * (float)Screen.height / 700f, 0.7f * (float)Screen.height / f, 0.7f * (float)Screen.height / 700f), 0.2f);
         }
         gameObject.transform.position = Program.camera_main_2d.ScreenToWorldPoint(v);
     }

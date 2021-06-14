@@ -147,7 +147,7 @@ public class BGMController : MonoBehaviour
     {
         SoundURI = new Uri(new Uri("file:///"), Environment.CurrentDirectory.Replace("\\", "/") + "/" + bgmName);
         soundFilePath = SoundURI.ToString();
-        if (Program.I().setting != null && !Program.I().setting.isBGMMute.value)
+        if (Program.I().setting != null && Program.I().setting.isEnableBGM.value)
         {
             if (soundRoutine != null) { StopCoroutine(soundRoutine); }
             if (soundPlayNext != null) { StopCoroutine(soundPlayNext); }
@@ -170,7 +170,7 @@ public class BGMController : MonoBehaviour
     public bool PlayChant(CHANT chant, int code)
     {
         bool SFX = false;
-        if (Program.I().setting.isChantMute.value)
+        if (!Program.I().setting.isEnableChantSound.value)
             return SFX;
 
         if (code == 0 ) return SFX;
@@ -220,7 +220,7 @@ public class BGMController : MonoBehaviour
         }
 
         string chant = string.Format("AudioClip/{0}/{1}.wav", type, code);
-        if (Program.AudioClipFile.Contains(chant))
+        if (Program.AudioClipFile.Contains(chant) && Program.I().setting.isEnableBuiltInSound.value)
         {
             PlaySound(chant, true);
             return true;
