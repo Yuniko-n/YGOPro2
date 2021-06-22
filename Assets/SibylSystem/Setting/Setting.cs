@@ -6,8 +6,9 @@ public class Setting : WindowServant2D
 
     public LAZYsetting setting;
 
-    public UIToggle isBGMMute;
-    public UIToggle isChantMute;
+    public UIToggle isEnableBGM;
+    public UIToggle isEnableBuiltInSound;
+    public UIToggle isEnableChantSound;
 
     public bool ShowFPS;
 
@@ -31,13 +32,15 @@ public class Setting : WindowServant2D
         UIHelper.getByName<UIToggle>(gameObject, "longField_").value = UIHelper.fromStringToBool(Config.Get("longField_", "0"));
 
         //BGM
-        isBGMMute = UIHelper.getByName<UIToggle>(gameObject, "muteBGM");
-        UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value = UIHelper.fromStringToBool(Config.Get("muteBGMAudio", "0"));
+        isEnableBGM = UIHelper.getByName<UIToggle>(gameObject, "EnableBGM");
+        UIHelper.getByName<UIToggle>(gameObject, "EnableBGM").value = UIHelper.fromStringToBool(Config.Get("EnableBGM", "1"));
         UIHelper.registEvent(gameObject, "BGMvol_", onVolChange);
 
         //卡片音效
-        isChantMute = UIHelper.getByName<UIToggle>(gameObject, "muteChant");
-        UIHelper.getByName<UIToggle>(gameObject, "muteChant").value = UIHelper.fromStringToBool(Config.Get("muteChantAudio", "0"));
+        isEnableBuiltInSound = UIHelper.getByName<UIToggle>(gameObject, "EnableBuiltInSound");
+        UIHelper.getByName<UIToggle>(gameObject, "EnableBuiltInSound").value = UIHelper.fromStringToBool(Config.Get("EnableBuiltInSound", "1"));
+        isEnableChantSound = UIHelper.getByName<UIToggle>(gameObject, "EnableChantSound");
+        UIHelper.getByName<UIToggle>(gameObject, "EnableChantSound").value = UIHelper.fromStringToBool(Config.Get("EnableChantSound", "1"));
 
         //FPS
         UIHelper.registEvent(gameObject, "ShowFPS_", onShowFPS);
@@ -64,7 +67,7 @@ public class Setting : WindowServant2D
         UIHelper.registEvent(gameObject, "size_", onChangeSize);
         //UIHelper.registEvent(gameObject, "alpha_", onChangeAlpha);
         UIHelper.registEvent(gameObject, "vSize_", onChangeVsize);
-        UIHelper.registEvent(gameObject, "muteBGM", muteBGM);
+        UIHelper.registEvent(gameObject, "EnableBGM", EnableBGM);
         sliderSize = UIHelper.getByName<UISlider>(gameObject, "size_");
         //sliderAlpha = UIHelper.getByName<UISlider>(gameObject, "alpha_");
         sliderVsize = UIHelper.getByName<UISlider>(gameObject, "vSize_");
@@ -100,9 +103,9 @@ public class Setting : WindowServant2D
         setScreenSizeValue();
     }
 
-    private void muteBGM()
+    private void EnableBGM()
     {
-        if (!isBGMMute.value)
+        if (isEnableBGM.value)
         {
             if (Program.I().bgm != null)
             {
@@ -334,8 +337,9 @@ public class Setting : WindowServant2D
         Config.Set("handPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handPosition_").value));
         Config.Set("handmPosition_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "handmPosition_").value));
         Config.Set("spyer_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "spyer_").value));
-        Config.Set("muteBGMAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteBGM").value));
-        Config.Set("muteChantAudio", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "muteChant").value));
+        Config.Set("EnableBGM", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "EnableBGM").value));
+        Config.Set("EnableBuiltInSound", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "EnableBuiltInSound").value));
+        Config.Set("EnableChantSound", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "EnableChantSound").value));
         Config.Set("ShowFPS_", UIHelper.fromBoolToString(UIHelper.getByName<UIToggle>(gameObject, "ShowFPS_").value));
         if (UIHelper.getByName<UIToggle>(gameObject, "high_").value)
         {

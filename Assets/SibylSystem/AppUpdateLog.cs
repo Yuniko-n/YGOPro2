@@ -12,7 +12,7 @@ public class AppUpdateLog
     public static string toPath = "updates";
 #endif
     //客户端版本
-    public static string GAME_VERSION = Program.PRO_VERSION() + "-0531";
+    public static string GAME_VERSION = Program.PRO_VERSION() + "-0622";
     public static string GAME_FILE = toPath + "/version.txt";
     public static bool UPDATE_DATA = false;
 
@@ -27,7 +27,7 @@ public class AppUpdateLog
     public static bool UPDATE_UI = false;
 
     //卡片数量
-    public static int CARDS_NUMBER = 11397;
+    public static int CARDS_NUMBER = 11458;
 
     public static int CheckCards(string path)
     {

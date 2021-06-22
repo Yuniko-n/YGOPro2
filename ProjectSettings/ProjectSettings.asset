@@ -125,7 +125,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.035.2 (0531)
+  bundleVersion: 1.035.2 (0622)
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -150,7 +150,7 @@ PlayerSettings:
     tvOS: cn.ygopro2.ygopro2android
   buildNumber:
     iOS: 
-  AndroidBundleVersionCode: 59
+  AndroidBundleVersionCode: 60
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 0

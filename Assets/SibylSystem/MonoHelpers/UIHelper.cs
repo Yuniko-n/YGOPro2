@@ -1028,7 +1028,7 @@ public static class UIHelper
         {
             path = "sound/" + p + ".ogg";
         }
-        if (File.Exists(path) == false)
+        if (File.Exists(path) == false && Program.I().setting.isEnableBuiltInSound.value)
         {
             string sounds = Program.LoadResourcesText("sounds.txt");
             if (sounds.Contains(path))
