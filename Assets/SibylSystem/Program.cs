@@ -447,9 +447,9 @@ public class Program : MonoBehaviour
             loadResources();
 
         });
-        AudioClipFile = LoadResourcesText("AudioClipFile.txt").Replace("\r", "").Split("\n");
+        AudioClipFile = LoadResourcesText("AudioClip/AudioClipFile.txt").Replace("\r", "").Split("\n");
 #if !UNITY_EDITOR && UNITY_ANDROID //Android
-        AssetsFile = LoadResourcesText("AssetsFile.txt").Replace("\r", "").Split("\n");
+        AssetsFile = Encoding.UTF8.GetString(AssetsFileToByte("AssetsFile.txt")).Replace("\r", "").Split("\n");
 #endif
     }
 
@@ -467,8 +467,15 @@ public class Program : MonoBehaviour
 
     public static string LoadResourcesText(string path)
     {
-        TextAsset t = Resources.Load<TextAsset>(path.Substring(0, path.Length - 4));
-        return t.text;
+        try
+        {
+            TextAsset t = Resources.Load<TextAsset>(path.Substring(0, path.Length - 4));
+            return t.text;
+        }
+        catch
+        {
+            return "";
+        }
     }
 
     public void ExtractZipFile(string filePath, string outFolder)
@@ -1097,7 +1104,12 @@ public class Program : MonoBehaviour
         {
             _padScroll = 0;
         }
-
+#if UNITY_STANDALONE_LINUX //Linux
+        if (Event.current.Equals(Event.KeyboardEvent("F11")))
+        {
+            System.Diagnostics.Process.Start("bash " + Application.streamingAssetsPath + "/Linux_Chinese_inpu.sh");
+        }
+#endif
         if (Event.current.Equals(Event.KeyboardEvent("F12")))
         {
             StartCoroutine(OnScreenCapture());
