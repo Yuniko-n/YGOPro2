@@ -1107,7 +1107,7 @@ public class Program : MonoBehaviour
 #if UNITY_STANDALONE_LINUX //Linux
         if (Event.current.Equals(Event.KeyboardEvent("F11")))
         {
-            System.Diagnostics.Process.Start("bash " + Application.streamingAssetsPath + "/Linux_Chinese_inpu.sh");
+            System.Diagnostics.Process.Start("bash", Application.streamingAssetsPath + "/Linux_Chinese_inpu.sh");
         }
 #endif
         if (Event.current.Equals(Event.KeyboardEvent("F12")))
