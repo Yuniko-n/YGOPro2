@@ -38,9 +38,10 @@ public class Menu : WindowServantSP
     }
 
     bool new_url = false;
-    string url = "http://dl.ygo2020.link/ygopro2/ver_win.txt";
+    string url = "http://dl.ygo2020.link/ygopro2/api.json";
     string upurl = "";
-    string VERSION = "";
+    string game_version = "";
+    string QQ_KEY = "";
 #if !UNITY_EDITOR && UNITY_ANDROID
     string upFile = Application.persistentDataPath + "/update.zip";
 #else
@@ -57,29 +58,51 @@ public class Menu : WindowServantSP
             if (!new_url)
             {   //启用备用地址
                 new_url = true;
-                url = "http://server.ygo2020.link/ygopro2/ver_win.txt";
+                url = "http://server.ygo2020.link/ygopro2/api.json";
                 (new Thread(up)).Start();
             }
             UnityEngine.Debug.Log(e);
         }
     }
 
+    [System.Serializable]
+    public class Json
+    {
+        public string ver_android;
+        public string ver_windows;
+        public string ver_other;
+        public string url_upver;
+        public string url_updata;
+        public string key_qq;
+        public int key_card;
+        public string version;
+    }
+
     void CheckUpgrade()
     {
         HttpDldFile df = new HttpDldFile();
         string result = df.DownloadString(url);
-        string[] lines = result.Replace("\r", "").Split("\n");
-        VERSION = lines[0];
-        if (lines[0] != AppUpdateLog.GAME_VERSION)
+        Json json = JsonUtility.FromJson<Json>(result);
+        #if UNITY_ANDROID          //Android
+            game_version = json.ver_android;
+        #elif UNITY_STANDALONE_WIN //Windows
+            game_version = json.ver_windows;
+        #else
+            game_version = json.ver_other;
+        #endif
+        if (game_version != AppUpdateLog.GAME_VERSION)
         {
-            upurl = lines[1];
+            upurl = json.url_upver;
+            #if UNITY_ANDROID      //Android
+            QQ_KEY = json.key_qq;
+            #endif
         }
-        if (Convert.ToInt32(lines[2]) > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb") && !File.Exists(upFile))
+        if ((json.key_card > AppUpdateLog.CheckCards(Program.GAME_PATH + "cdb/cards.cdb")) && !File.Exists(upFile))
         {
-            df.Download(lines[3], upFile);
+            df.Download(json.url_updata, upFile);
         }
-        if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(lines[4])) > Convert.ToInt32(Config.ClientVersion))
-            Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(lines[4]);
+        if (Convert.ToInt32((uint)GameStringManager.helper_stringToInt(json.version)) > Convert.ToInt32(Config.ClientVersion))
+            Config.ClientVersion = (uint)GameStringManager.helper_stringToInt(json.version);
     }
 
     public override void ES_RMS(string hashCode, List<messageSystemValue> result)
@@ -89,7 +112,10 @@ public class Menu : WindowServantSP
         {
             if (result[0].value == "yes")
             {
-                Application.OpenURL(upurl);
+                if (QQ_KEY != "")
+                    JoinQQGroup(QQ_KEY);
+                else
+                    Application.OpenURL(upurl);
             }
         }
         if (hashCode == "ExtractZIP_onlyYes")
@@ -106,6 +132,33 @@ public class Menu : WindowServantSP
 #endif
             }
         }
+        if (hashCode == "Restart_onlyYes")
+        {
+            if (result[0].value == "yes")
+            {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+                AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+                jo.Call("doRestart");
+#endif
+            }
+        }
+/*
+        if (hashCode == "RMSshow_menu")
+        {
+            if (result[0].value == "left")
+            {
+                JoinQQGroup("DnxC66csVht7KgXgN-XYYi74kWa8dOPn");
+            }
+            if (result[0].value == "centre")
+            {
+                onChangeLog();
+            }
+            if (result[0].value == "right")
+            {
+                JoinQQGroup("31x6C1qnG-uYI17jSQcOB8znmNs9FC7s");
+            }
+        }
+*/
     }
 
     bool outed = false;
@@ -169,9 +222,50 @@ public class Menu : WindowServantSP
         Program.I().shiftToServant(Program.I().selectDeck);
     }
 
+    void JoinQQGroup(string key)
+    {
+#if !UNITY_EDITOR && UNITY_ANDROID //Android
+        AndroidJavaObject jo = new AndroidJavaObject("cn.ygopro2.API");
+        jo.Call("doJoinQQGroup", key);
+#else
+        Application.OpenURL("https://jq.qq.com/?_wv=1027&k=5nq6xJe");
+#endif
+    }
+/*
+    void onChangeLog()
+    {
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IPHONE)
+        InAppBrowser.OpenLocalFile("/changelog.html");// StreamingAssets/changelog.html
+#else
+        Application.OpenURL(Application.streamingAssetsPath + "/changelog.html");
+#endif
+    }
+
+    public void onMenu()
+    {
+        RMSshow_menu
+        (
+            "RMSshow_menu",
+            new messageSystemValue { hint = "left", value = "left" },
+            new messageSystemValue { hint = "centre", value = "centre" },
+            new messageSystemValue { hint = "right", value = "right" }
+        );
+    }
+*/
     public void showToast(string content)
     {
         RMSshow_onlyYes("showToast", InterString.Get(content), null);
+    }
+
+    public void Restart(string content)
+    {
+        RMSshow_yesOrNo
+        (
+            "Restart_onlyYes",
+            InterString.Get(content),
+            new messageSystemValue { hint = "yes", value = "yes" },
+            new messageSystemValue { hint = "no", value = "no" }
+        );
     }
 
     public static void deleteShell()

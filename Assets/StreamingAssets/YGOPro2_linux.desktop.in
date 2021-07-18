@@ -5,5 +5,5 @@ Version=1.035.2
 Terminal=false
 Categories=Game;CardGame;
 Path={INSTALL_PATH}
-Exec={INSTALL_PATH}/YGOPro2_linux
-Icon={INSTALL_PATH}/YGOPro2_linux_Data/Resources/UnityPlayer.png
+Exec={INSTALL_PATH}/YGOPro2
+Icon={INSTALL_PATH}/YGOPro2_Data/Resources/UnityPlayer.png
