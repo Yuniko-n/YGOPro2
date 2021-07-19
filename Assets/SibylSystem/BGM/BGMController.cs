@@ -199,8 +199,8 @@ public class BGMController : MonoBehaviour
     {
         List<string> chantType = new List<string>();
         chantType.Add(string.Format("sound/chants/{0}/{1}.mp3", type, code));
-        chantType.Add(string.Format("sound/chants/{0}/{1}.ogg", type, code));
         chantType.Add(string.Format("sound/chants/{0}/{1}.wav", type, code));
+        chantType.Add(string.Format("sound/chants/{0}/{1}.ogg", type, code));
         foreach (string path in chantType)
         {
             if (File.Exists(path))
@@ -209,9 +209,8 @@ public class BGMController : MonoBehaviour
                 {
                     IsPlaying = false;
                     PlayMusic(path);
-                    return true;
                 }
-                else
+                else if (path.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) == false)
                 {
                     PlaySound(path);
                     return true;
@@ -242,7 +241,7 @@ public class BGMController : MonoBehaviour
         string soundPath = "sound/";
         string bgmPath = soundPath + "BGM/";
         dirPath(soundPath);
-        //Unity 能使用的音频格式：.aif .wav .mp3 .ogg
+        //允许播放的音频格式：.mp3 .ogg .wav
         advantage.AddRange(Directory.GetFiles(string.Concat(bgmPath, "advantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
         deck.AddRange(Directory.GetFiles(string.Concat(bgmPath, "deck"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
         disadvantage.AddRange(Directory.GetFiles(string.Concat(bgmPath, "disadvantage"), "*.*", SearchOption.TopDirectoryOnly).Where(s => s.EndsWith(".mp3") || s.EndsWith(".ogg") || s.EndsWith(".wav")));
